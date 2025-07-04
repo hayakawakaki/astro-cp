@@ -2,8 +2,9 @@
 import { login } from "../../db/schema";
 import { useDB } from "../../db";
 
+let users = null;
 const db = await useDB();
-const users = await db.select().from(login);
+if (db) users = db.select().from(login);
 ---
 
 <html lang="en">
