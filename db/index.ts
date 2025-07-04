@@ -20,7 +20,8 @@ export async function useDB() {
     }
     catch (error) {
       console.error("Failed to connect to MySQL database:", error);
-      throw new Error("Database connection failed");
+      // throw new Error("Database connection failed");
+      db = null;
     }
   }
   return db;
