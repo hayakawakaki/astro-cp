@@ -1,7 +1,8 @@
 ---
 import { login } from "../../db/schema";
-import { db } from "../../db";
+import { useDB } from "../../db";
 
+const db = await useDB();
 const users = await db.select().from(login);
 ---
 
@@ -14,6 +15,6 @@ const users = await db.select().from(login);
     <title>Astro</title>
   </head>
   <body>
-    <h1>{users && "I'm connected to the DB!"}</h1>
+    <h1>{users ? "I'm connected to the DB!" : "Connection to the DB has failed!"}</h1>
   </body>
 </html>
