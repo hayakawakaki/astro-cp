@@ -1,10 +1,5 @@
 ---
-import { login } from "../../db/schema";
-import { useDB } from "../../db";
-
-let users = null;
-const db = await useDB();
-if (db) users = db.select().from(login);
+import BaseLayout from "@layouts/BaseLayout.astro";
 ---
 
 <html lang="en">
@@ -16,6 +11,6 @@ if (db) users = db.select().from(login);
     <title>Astro</title>
   </head>
   <body>
-    <h1>{users ? "I'm connected to the DB!" : "Connection to the DB has failed!"}</h1>
+    <BaseLayout />
   </body>
 </html>

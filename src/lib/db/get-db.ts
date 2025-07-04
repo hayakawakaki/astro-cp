@@ -3,11 +3,11 @@ import type { MySql2Database } from "drizzle-orm/mysql2";
 import { drizzle } from "drizzle-orm/mysql2";
 import mysql from "mysql2/promise";
 
-import env from "../lib/env-schema";
+import env from "@lib/env-schema";
 
 let db: MySql2Database | null;
 
-export async function useDB() {
+export async function getDB() {
   if (env.NODE_ENV === "production")
     return null;
 
@@ -23,7 +23,6 @@ export async function useDB() {
     }
     catch (error) {
       console.error("Failed to connect to MySQL database:", error);
-      // throw new Error("Database connection failed");
       db = null;
     }
   }
