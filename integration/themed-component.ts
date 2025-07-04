@@ -14,8 +14,6 @@ function themedComponentIntegration({ theme }: ThemedComponent): AstroIntegratio
     root: URL,
     theme: string,
   ): Promise<string | null> => {
-    console.warn(`[astro-themed-component] resolveThemeComponent called with: ${id}`, id);
-
     if (!id.startsWith("@theme/"))
       return null;
 
@@ -64,8 +62,6 @@ function themedComponentIntegration({ theme }: ThemedComponent): AstroIntegratio
 
     hooks: {
       "astro:config:setup": ({ config, updateConfig }) => {
-        console.warn("[astro-themed-component] astro:config:setup hook is running!");
-
         updateConfig({
           vite: {
             plugins: [
@@ -73,7 +69,6 @@ function themedComponentIntegration({ theme }: ThemedComponent): AstroIntegratio
                 name: "astro-themed-component",
                 enforce: "pre",
                 async resolveId(id: string) {
-                  console.warn("[astro-themed-component] resolveId called with:", id);
                   const resolvedPath = await resolveThemeComponent(id, config.root, theme);
                   if (resolvedPath) {
                     console.warn("[astro-themed-component] resolved:", resolvedPath);
