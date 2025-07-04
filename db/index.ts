@@ -8,6 +8,9 @@ import env from "../lib/env-schema";
 let db: MySql2Database | null;
 
 export async function useDB() {
+  if (env.NODE_ENV === "production")
+    return null;
+
   if (!db) {
     try {
       const connection = await mysql.createConnection({
