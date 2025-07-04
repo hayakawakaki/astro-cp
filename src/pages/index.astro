@@ -1,5 +1,8 @@
 ---
+import { login } from "../../db/schema";
+import { db } from "../../db";
 
+const users = await db.select().from(login);
 ---
 
 <html lang="en">
@@ -11,6 +14,6 @@
     <title>Astro</title>
   </head>
   <body>
-    <h1>Astro</h1>
+    <h1>{users && "I'm connected to the DB!"}</h1>
   </body>
 </html>
