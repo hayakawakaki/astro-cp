@@ -1,1 +1,1 @@
-export { getDB } from "./get-db";
+export { db } from "./get-db";

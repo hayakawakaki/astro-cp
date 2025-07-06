@@ -13,3 +13,10 @@ declare module "@theme/*" {
   const component: ComponentType;
   export default component;
 }
+
+declare namespace App {
+  type Locals = {
+    user: import("better-auth").User | null;
+    session: import("better-auth").Session | null;
+  };
+}

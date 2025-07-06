@@ -38,9 +38,7 @@ function themedComponentIntegration({ theme }: ThemedComponent): AstroIntegratio
         await fs.access(themePath);
         return themePath;
       }
-      catch (error) {
-        console.error(`[astro-themed-component] Error : ${error}`);
-      }
+      catch {}
     }
 
     if (theme !== "default") {
