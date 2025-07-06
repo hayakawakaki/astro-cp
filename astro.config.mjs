@@ -1,5 +1,6 @@
 import node from "@astrojs/node";
 import vue from "@astrojs/vue";
+import tailwindcss from "@tailwindcss/vite";
 // @ts-check
 import { defineConfig } from "astro/config";
 
@@ -15,4 +16,8 @@ export default defineConfig({
     themedComponentIntegration({ theme: "test-theme" }),
     vue(),
   ],
+
+  vite: {
+    plugins: [tailwindcss()],
+  },
 });
