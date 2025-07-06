@@ -47,5 +47,9 @@
     "scss",
     "pcss",
     "postcss"
-  ]
+  ],
+
+  "files.associations": {
+    "*.css": "tailwindcss"
+  }
 }
