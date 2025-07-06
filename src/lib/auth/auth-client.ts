@@ -1,26 +1,76 @@
-import { createAuthClient } from "better-auth/client";
+import type { AuthConfig, AuthService, Framework, OAuthProvider } from "@/types";
 
-export const authClient = createAuthClient({
+import { appConfig } from "@root/app-config";
+
+const defaultConfig: AuthConfig = {
   baseURL: "http://localhost:4321",
-});
+  fetchOptions: {
+    timeout: 10000,
+    retry: 2,
+    retryDelay: 1000,
+  },
+};
 
-export async function googleSignIn() {
-  await authClient.signIn.social({ provider: "google" });
-  console.warn("Google Signed In");
+async function createAuthService(
+  framework: Framework = "vue",
+  config: Partial<AuthConfig> = {},
+): Promise<AuthService> {
+  const clientConfig = { ...defaultConfig, ...config };
+  let client: any;
+  switch (framework) {
+    case "vanilla": {
+      const { createAuthClient } = await import("better-auth/client");
+      client = createAuthClient(clientConfig);
+    } break;
+    case "vue": {
+      const { createAuthClient } = await import("better-auth/vue");
+      client = createAuthClient(clientConfig);
+    } break;
+    case "svelte": {
+      const { createAuthClient } = await import("better-auth/svelte");
+      client = createAuthClient(clientConfig);
+    } break;
+    default:
+      throw new Error(`Unsupported framework: ${framework}.`);
+  }
+  return {
+    client,
+    signIn: async (provider: OAuthProvider) => {
+      try {
+        await client.signIn.social({ provider, callbackURL: "/login" });
+      }
+      catch (error) {
+        console.error(`Failed to sign in with ${provider}:`, error);
+      }
+    },
+
+    signOut: async () => {
+      try {
+        await client.signOut();
+      }
+      catch (error) {
+        console.error("Failed to sign out:", error);
+      }
+    },
+
+    getSession: async () => {
+      try {
+        return await client.getSession();
+      }
+      catch (error) {
+        console.error("Failed to get session:", error);
+      }
+    },
+
+    useSession: async () => {
+      try {
+        return client.useSession();
+      }
+      catch (error) {
+        console.error("Failed to get user session:", error);
+      }
+    },
+  };
 }
 
-export async function discordSignIn() {
-  try {
-    await authClient.signIn.social({ provider: "discord" });
-  }
-  catch (error) {
-    console.warn(`Error : ${error}`);
-  }
-  finally {
-    console.warn("Discord Signed In");
-  }
-}
-
-export async function signOut() {
-  await authClient.signOut();
-}
+export const authService = await createAuthService(appConfig.authFramework);

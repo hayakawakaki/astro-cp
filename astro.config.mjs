@@ -1,9 +1,9 @@
 import node from "@astrojs/node";
 import vue from "@astrojs/vue";
 import tailwindcss from "@tailwindcss/vite";
-// @ts-check
 import { defineConfig } from "astro/config";
 
+import { appConfig } from "./app-config";
 import themedComponentIntegration from "./integration/themed-component";
 
 // https://astro.build/config
@@ -13,10 +13,9 @@ export default defineConfig({
     mode: "standalone",
   }),
   integrations: [
-    themedComponentIntegration({ theme: "test-theme" }),
+    themedComponentIntegration({ theme: appConfig.theme }),
     vue(),
   ],
-
   vite: {
     plugins: [tailwindcss()],
   },

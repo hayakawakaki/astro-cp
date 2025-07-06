@@ -1,6 +1,4 @@
-// src/env.d.ts
 /// <reference types="astro/client" />
-
 declare module "@theme/*" {
   type ComponentType<T = any>
     = | import("astro").AstroComponentFactory<T>
@@ -14,6 +12,7 @@ declare module "@theme/*" {
   export default component;
 }
 
+/// <reference path="../.astro/types.d.ts" />
 declare namespace App {
   type Locals = {
     user: import("better-auth").User | null;
