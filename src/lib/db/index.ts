@@ -1,1 +1,2 @@
-export { db } from "./get-db";
+export { db } from "./db";
+export { loginTable, schema } from "./schema";

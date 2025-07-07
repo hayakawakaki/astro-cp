@@ -1,4 +1,4 @@
-import { boolean, mysqlTable, text, timestamp, varchar } from "drizzle-orm/mysql-core";
+import { boolean, int, mysqlEnum, mysqlTable, text, timestamp, tinyint, varchar } from "drizzle-orm/mysql-core";
 
 export const user = mysqlTable("cp_user", {
   id: varchar("id", { length: 36 }).primaryKey(),
@@ -46,9 +46,21 @@ export const verification = mysqlTable("cp_verification", {
   updatedAt: timestamp("updated_at").$defaultFn(() => /* @__PURE__ */ new Date()),
 });
 
+export const loginTable = mysqlTable("login", {
+  userid: varchar({ length: 23 }).default("").notNull(),
+  userPass: varchar("user_pass", { length: 32 }).default("").notNull(),
+  sex: mysqlEnum(["M", "F", "S"]).default("M").notNull(),
+  email: varchar({ length: 39 }).default("").notNull(),
+  groupId: tinyint("group_id").default(0).notNull(),
+  state: int().default(0).notNull(),
+  unbanTime: int("unban_time").default(0).notNull(),
+  vipTime: int("vip_time").default(0).notNull(),
+});
+
 export const schema = {
   user,
   session,
   account,
   verification,
+  loginTable,
 };

@@ -17,6 +17,9 @@ export const onRequest = defineMiddleware(async (context, next) => {
     }
   }
   else {
+    if (context.url.pathname === "/account") {
+      return context.redirect("/");
+    }
     context.locals.user = null;
     context.locals.session = null;
   }
