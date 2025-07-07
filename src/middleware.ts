@@ -6,13 +6,20 @@ export const onRequest = defineMiddleware(async (context, next) => {
   const isAuthed = await auth.api
     .getSession({
       headers: context.request.headers,
-    })
-    .catch((e) => {
-      console.error("Middleware Error", e);
-      return null;
     });
-  if (context.url.pathname === "/" && !isAuthed) {
-    return context.redirect("/login");
+
+  if (isAuthed) {
+    context.locals.user = isAuthed.user;
+    context.locals.session = isAuthed.session;
+
+    if (context.url.pathname === "/login") {
+      return context.redirect("/");
+    }
   }
+  else {
+    context.locals.user = null;
+    context.locals.session = null;
+  }
+
   return next();
 });

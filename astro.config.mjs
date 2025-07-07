@@ -1,5 +1,5 @@
+import alpinejs from "@astrojs/alpinejs";
 import node from "@astrojs/node";
-import vue from "@astrojs/vue";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
 
@@ -12,10 +12,7 @@ export default defineConfig({
   adapter: node({
     mode: "standalone",
   }),
-  integrations: [
-    themedComponentIntegration({ theme: appConfig.theme }),
-    vue(),
-  ],
+  integrations: [themedComponentIntegration({ theme: appConfig.theme }), alpinejs()],
   vite: {
     plugins: [tailwindcss()],
   },

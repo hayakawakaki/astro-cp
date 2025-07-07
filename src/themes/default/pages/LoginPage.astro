@@ -1,0 +1,39 @@
+---
+const session = Astro.locals.session;
+---
+
+<div class="w-full h-dvh flex flex-col justify-center items-center">
+  {
+    !session ? (
+      <div class="text-center">
+        <p class="mb-4">Select your login provider</p>
+        <button id="login-button" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+          Login with Discord
+        </button>
+      </div>
+    ) : (
+      <div class="text-center">
+        <p class="mb-4">Welcome back!</p>
+        <button id="logout-button" class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
+          Logout
+        </button>
+      </div>
+    )
+  }
+</div>
+
+<script>
+  import { authService } from "@lib/auth/auth-client";
+
+  const loginButton = document.getElementById("login-button");
+  const logoutButton = document.getElementById("logout-button");
+
+  loginButton?.addEventListener("click", async () => {
+    await authService.signIn("discord");
+  });
+
+  logoutButton?.addEventListener("click", async () => {
+    await authService.signOut();
+    window.location.reload();
+  });
+</script>

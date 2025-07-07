@@ -20,4 +20,11 @@ export const auth = betterAuth({
       clientSecret: env.DISCORD_CLIENT_SECRET as string,
     },
   },
+  session: {
+    expiresIn: 60 * 60 * 24 * 7,
+    cookieCache: {
+      enabled: true,
+      maxAge: 5 * 60,
+    },
+  },
 });

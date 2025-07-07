@@ -18,7 +18,7 @@ async function createAuthService(
   const clientConfig = { ...defaultConfig, ...config };
   let client: any;
   switch (framework) {
-    case "vanilla": {
+    case "vanillajs": {
       const { createAuthClient } = await import("better-auth/client");
       client = createAuthClient(clientConfig);
     } break;

@@ -1,4 +1,6 @@
-export type Framework = "vanilla" | "vue" | "react" | "svelte" | "solid";
+import type { authService } from "@/lib/auth/auth-client";
+
+export type Framework = "vanillajs" | "vue" | "react" | "svelte" | "solid";
 export type OAuthProvider = "discord" | "google";
 
 export type AuthConfig = {
@@ -15,10 +17,4 @@ export type AuthConfig = {
   plugins?: any[];
 };
 
-export type AuthService = {
-  client: any;
-  signIn: (provider: OAuthProvider) => Promise<void>;
-  signOut: () => Promise<void>;
-  getSession: () => Promise<any>;
-  useSession: () => Promise<any>;
-};
+export type Session = typeof authService.client.$Infer.Session;
