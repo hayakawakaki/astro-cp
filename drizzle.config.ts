@@ -1,10 +1,10 @@
 import { defineConfig } from "drizzle-kit";
 
-import env from "./lib/env-schema";
+import env from "@lib/env-schema";
 
 export default defineConfig({
   out: "./drizzle",
-  schema: "./src/db/schema.ts",
+  schema: "./src/lib/db/schema.ts",
   dialect: "mysql",
   dbCredentials: {
     host: env.DB_HOST,
