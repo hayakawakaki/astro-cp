@@ -1,3 +1,5 @@
+ALTER TABLE `login` ENGINE = InnoDB;
+
 CREATE TABLE `cp_account` (
 	`id` varchar(36) NOT NULL,
 	`account_id` text NOT NULL,
@@ -52,3 +54,14 @@ CREATE TABLE `cp_verification` (
 
 ALTER TABLE `cp_account` ADD CONSTRAINT `account_user_id_cp_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `cp_user`(`id`) ON DELETE no action ON UPDATE no action;
 ALTER TABLE `cp_session` ADD CONSTRAINT `session_user_id_cp_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `cp_user`(`id`) ON DELETE no action ON UPDATE no action;
+
+CREATE TABLE IF NOT EXISTS `cp_user_accounts` (
+    `account_id` INT(11) unsigned  NOT NULL,
+    `user_id` VARCHAR(255) NOT NULL,
+    PRIMARY KEY (`account_id`, `user_id`)
+);
+
+ALTER TABLE `cp_user_accounts` ADD CONSTRAINT `cp_user_accounts_account_id_fk` FOREIGN KEY (`account_id`) REFERENCES `login` (`account_id`) ON DELETE CASCADE;
+ALTER TABLE `cp_user_accounts` ADD CONSTRAINT `cp_user_accounts_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `cp_user` (`id`) ON DELETE CASCADE;
+CREATE INDEX IF NOT EXISTS `user_id_idx` ON `cp_user_accounts` (`user_id`);
+CREATE INDEX IF NOT EXISTS `account_id_idx` ON `cp_user_accounts` (`account_id`);

@@ -1,4 +1,4 @@
-import { boolean, mysqlTable, text, timestamp, varchar } from "drizzle-orm/mysql-core";
+import { boolean, date, index, int, mysqlEnum, mysqlTable, primaryKey, text, timestamp, tinyint, varchar } from "drizzle-orm/mysql-core";
 
 export const user = mysqlTable("cp_user", {
   id: varchar("id", { length: 36 }).primaryKey(),
@@ -46,9 +46,35 @@ export const verification = mysqlTable("cp_verification", {
   updatedAt: timestamp("updated_at").$defaultFn(() => /* @__PURE__ */ new Date()),
 });
 
+export const loginTable = mysqlTable("login", {
+  accountId: int("account_id", { unsigned: true }).autoincrement().primaryKey().notNull(),
+  userId: varchar("userid", { length: 23 }).notNull().default(""),
+  userPass: varchar("user_pass", { length: 32 }).notNull().default(""),
+  sex: mysqlEnum("sex", ["M", "F", "S"]).notNull().default("M"),
+  email: varchar("email", { length: 39 }).notNull().default(""),
+  groupId: tinyint("group_id").notNull().default(0),
+  state: int("state").notNull().default(0),
+  unbanTime: int("unban_time").notNull().default(0),
+  birthdate: date("birthdate"),
+  vipTime: int("vip_time").notNull().default(0),
+}, table => [
+  index("name").on(table.userId),
+]);
+
+export const userAccountsTable = mysqlTable("cp_user_accounts", {
+  accountId: int("account_id", { unsigned: true }).notNull().references(() => loginTable.accountId, { onDelete: "cascade" }),
+  userId: varchar("user_id", { length: 255 }).notNull().references(() => user.id, { onDelete: "cascade" }),
+}, table => [
+  primaryKey({ columns: [table.userId, table.accountId] }),
+  index("user_id_idx").on(table.userId),
+  index("account_id_idx").on(table.accountId),
+]);
+
 export const schema = {
   user,
   session,
   account,
   verification,
+  loginTable,
+  userAccountsTable,
 };
