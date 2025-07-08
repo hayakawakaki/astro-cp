@@ -1,35 +1,61 @@
 import type { APIRoute } from "astro";
 
 import { eq } from "drizzle-orm";
-import crypto from "node:crypto";
 import { z } from "zod";
 
-import { db, loginTable } from "@/lib/db";
+import { auth } from "@/lib/auth/auth";
+import { db, loginTable, userAccountsTable } from "@/lib/db";
 
 const accountSchema = z.object({
-  userid: z.string().min(4).max(23).regex(/^\w+$/),
-  password: z.string().min(24).optional(),
-  email: z.string().email().max(39),
-  sex: z.enum(["M", "F", "S"]).optional().default("M"),
-});
+  userId: z.string().min(4).max(23).regex(/^\w+$/),
+  password: z.string()
+    .min(10, "Password must be at least 10 characters")
+    .regex(/[a-z]/, "Password must contain at least one lowercase letter")
+    .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+    .regex(/\d/, "Password must contain at least one number")
+    .regex(/[!@#$%^&*(),.?":{}|<>]/, "Password must contain at least one special character")
+    .refine(v => !v.includes(" "), {
+      message: "Password must not include spaces",
+    }),
+  passwordConfirm: z.string().min(10),
+  email: z.string().email().optional(),
+}).refine(
+  data => data.password === data.passwordConfirm,
+  {
+    message: "Password and confirmation doesn't match",
+    path: ["passwordConfirm"],
+  },
+);
 
 export const POST: APIRoute = async ({ request }) => {
   try {
+    const session = await auth.api.getSession({
+      headers: request.headers,
+    });
+
+    if (!session) {
+      return new Response(JSON.stringify({ error: "Unauthorized request" }), { status: 401 });
+    }
+
     const body = await request.json();
     const data = accountSchema.parse(body);
-    const [isExist] = await db.select().from(loginTable).where(eq(loginTable.userid, data.userid));
+    const [isExist] = await db.select().from(loginTable).where(eq(loginTable.userId, data.userId));
 
     if (isExist) {
       return new Response(JSON.stringify({ error: "Username already taken" }), { status: 409 });
     }
 
-    const randomPassword = crypto.randomBytes(16).toString("base64");
+    // Insert into rathena login table
+    const [insertValues] = await db.insert(loginTable).values({
+      userId: data.userId,
+      userPass: data.password,
+      email: session.user.email,
+    }).$returningId();
 
-    await db.insert(loginTable).values({
-      userid: data.userid,
-      userPass: randomPassword,
-      email: data.email,
-      sex: data.sex,
+    // Insert to master account table
+    await db.insert(userAccountsTable).values({
+      accountId: insertValues.accountId,
+      userId: session.user.id,
     });
 
     return new Response(JSON.stringify({
@@ -41,6 +67,6 @@ export const POST: APIRoute = async ({ request }) => {
     if (error instanceof z.ZodError) {
       return new Response(JSON.stringify({ errors: error.errors }), { status: 400 });
     }
-    return new Response(JSON.stringify({ error: "Account creation failed. Please report to an admin." }), { status: 500 });
+    return new Response(JSON.stringify({ error: "Account creation failed" }), { status: 500 });
   }
 };

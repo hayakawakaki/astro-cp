@@ -1,4 +1,4 @@
-import { boolean, int, mysqlEnum, mysqlTable, text, timestamp, tinyint, varchar } from "drizzle-orm/mysql-core";
+import { boolean, date, index, int, mysqlEnum, mysqlTable, primaryKey, text, timestamp, tinyint, varchar } from "drizzle-orm/mysql-core";
 
 export const user = mysqlTable("cp_user", {
   id: varchar("id", { length: 36 }).primaryKey(),
@@ -47,15 +47,28 @@ export const verification = mysqlTable("cp_verification", {
 });
 
 export const loginTable = mysqlTable("login", {
-  userid: varchar({ length: 23 }).default("").notNull(),
-  userPass: varchar("user_pass", { length: 32 }).default("").notNull(),
-  sex: mysqlEnum(["M", "F", "S"]).default("M").notNull(),
-  email: varchar({ length: 39 }).default("").notNull(),
-  groupId: tinyint("group_id").default(0).notNull(),
-  state: int().default(0).notNull(),
-  unbanTime: int("unban_time").default(0).notNull(),
-  vipTime: int("vip_time").default(0).notNull(),
-});
+  accountId: int("account_id", { unsigned: true }).autoincrement().primaryKey().notNull(),
+  userId: varchar("userid", { length: 23 }).notNull().default(""),
+  userPass: varchar("user_pass", { length: 32 }).notNull().default(""),
+  sex: mysqlEnum("sex", ["M", "F", "S"]).notNull().default("M"),
+  email: varchar("email", { length: 39 }).notNull().default(""),
+  groupId: tinyint("group_id").notNull().default(0),
+  state: int("state").notNull().default(0),
+  unbanTime: int("unban_time").notNull().default(0),
+  birthdate: date("birthdate"),
+  vipTime: int("vip_time").notNull().default(0),
+}, table => [
+  index("name").on(table.userId),
+]);
+
+export const userAccountsTable = mysqlTable("cp_user_accounts", {
+  accountId: int("account_id", { unsigned: true }).notNull().references(() => loginTable.accountId, { onDelete: "cascade" }),
+  userId: varchar("user_id", { length: 255 }).notNull().references(() => user.id, { onDelete: "cascade" }),
+}, table => [
+  primaryKey({ columns: [table.userId, table.accountId] }),
+  index("user_id_idx").on(table.userId),
+  index("account_id_idx").on(table.accountId),
+]);
 
 export const schema = {
   user,
@@ -63,4 +76,5 @@ export const schema = {
   account,
   verification,
   loginTable,
+  userAccountsTable,
 };
