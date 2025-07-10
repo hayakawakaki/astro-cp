@@ -1,18 +1,31 @@
 ---
 // src/pages/item/[id].astro
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { getItemInfo } from "@/utils/item";
+import { getItemInfo, getTradeRestrictions } from "@/utils/item";
 
 const { id } = Astro.params;
-const itemID: number = parseInt(id as string);
+const itemID = parseInt(id as string);
 const item = await getItemInfo(itemID);
-
 if (!item) {
   return Astro.redirect("/404", 404);
 }
+console.log(item.Image);
 ---
 
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
 <BaseLayout>
-  <h1>{item.AegisName}</h1>
-  <p>{item.Name}</p>
+  {item.Image && <img src={`${item.Image}.webp`} alt={`${item.Name}'s Image'`} />}
+  {
+    item.Description &&
+      item.Description.map((desc) => <p>{desc.replace(/\^([0-9A-Fa-f]{6})/g, '<span style="color: #$1">')}</p>)
+  }
+  <p>Buy Price : {item.Buy}</p>
+  <p>Sell Price : {item.Sell}</p>
+  <p>Weight :{item.Weight}</p>
+  <div>
+    <h3>Trade Restriction :</h3>
+    {getTradeRestrictions(item.Trade).map((item) => <p>{item}</p>)}
+  </div>
 </BaseLayout>

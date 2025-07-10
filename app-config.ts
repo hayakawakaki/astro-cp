@@ -6,5 +6,5 @@ export const appConfig: AppConfig = {
 
   // = rAthena DB parsing
   itemDatabaseYML: ["item_db_equip.yml", "item_db_etc.yml", "item_db_usable.yml"],
-  itemDatabaseLUA: ["item_db.lua"],
+  itemDatabaseLUA: ["test.lua"],
 } as const;

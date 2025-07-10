@@ -154,7 +154,7 @@ export type ItemTrade = {
   NoAuction?: boolean;
 };
 
-type ItemDatabaseFormat = {
+type ItemDatabaseInput = {
   Id: number;
   AegisName: string;
   Name: string;
@@ -185,14 +185,32 @@ type ItemDatabaseFormat = {
   Script?: string;
   EquipScript?: string;
   UnEquipScript?: string;
+  Image?: string;
+  Description?: string[];
 };
 
-export type ItemDatabase
-  = | (ItemDatabaseFormat & { Type: "Weapon"; SubType: WeaponSubType })
-    | (ItemDatabaseFormat & { Type: "Ammo"; SubType: AmmoSubType })
-    | (ItemDatabaseFormat & { Type: "Card"; SubType?: CardSubType })
-    | (ItemDatabaseFormat & { Type: "Healing" | "Usable" | "Etc" | "Armor" | "PetEgg" | "PetArmor" | "DelayConsume" | "ShadowGear" | "Cash" });
+export type ItemDatabaseFormat
+  = | (ItemDatabaseInput & { Type: "Weapon"; SubType: WeaponSubType })
+    | (ItemDatabaseInput & { Type: "Ammo"; SubType: AmmoSubType })
+    | (ItemDatabaseInput & { Type: "Card"; SubType?: CardSubType })
+    | (ItemDatabaseInput & { Type: "Healing" | "Usable" | "Etc" | "Armor" | "PetEgg" | "PetArmor" | "DelayConsume" | "ShadowGear" | "Cash"; SubType: "None" });
 
-export type ItemDatabaseYaml = {
-  Body: ItemDatabase[];
+export type ItemYAMLReturn = {
+  Body: ItemDatabaseFormat[];
 };
+
+export type ItemDatabase = Map<number, ItemDatabaseFormat>;
+
+export type ItemInfoInput = {
+  unidentifiedDisplayName: string;
+  unidentifiedResourceName: string;
+  unidentifiedDescriptionName: string[];
+  identifiedDisplayName: string;
+  identifiedResourceName: string;
+  identifiedDescriptionName: string[];
+  slotCount: number;
+  ClassNum: number;
+  costume: boolean;
+};
+
+export type ItemInfoLUA = Map<number, ItemInfoInput>;
