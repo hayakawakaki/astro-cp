@@ -1,5 +1,4 @@
 ---
-// src/pages/item/[id].astro
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { getItemInfo, getTradeRestrictions } from "@/utils/item";
 
@@ -9,7 +8,6 @@ const item = await getItemInfo(itemID);
 if (!item) {
   return Astro.redirect("/404", 404);
 }
-console.log(item.Image);
 ---
 
 <head>
@@ -17,15 +15,26 @@ console.log(item.Image);
 </head>
 <BaseLayout>
   {item.Image && <img src={`${item.Image}.webp`} alt={`${item.Name}'s Image'`} />}
-  {
-    item.Description &&
-      item.Description.map((desc) => <p>{desc.replace(/\^([0-9A-Fa-f]{6})/g, '<span style="color: #$1">')}</p>)
-  }
-  <p>Buy Price : {item.Buy}</p>
-  <p>Sell Price : {item.Sell}</p>
-  <p>Weight :{item.Weight}</p>
+  <h2>{item.Name}</h2>
+  <div id="item-description">{item.Description && item.Description.map((desc) => <p>{desc}</p>)}</div>
   <div>
     <h3>Trade Restriction :</h3>
     {getTradeRestrictions(item.Trade).map((item) => <p>{item}</p>)}
   </div>
 </BaseLayout>
+
+<script>
+  // Replace the client's hex colors
+  const parser = [
+    { pattern: /\^([0-9A-F]{6})(.*?)\^000000/gi, replacement: "<span style='color: #$1'>$2</span>" },
+    { pattern: /\^000000/g, replacement: "" },
+  ];
+
+  document.querySelectorAll("#item-description").forEach((element) => {
+    let inner = element.innerHTML;
+    parser.forEach((match) => {
+      inner = inner.replace(match.pattern, match.replacement);
+    });
+    element.innerHTML = inner;
+  });
+</script>
