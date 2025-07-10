@@ -8,7 +8,7 @@ import { appConfig } from "@root/app-config";
 
 const itemDB: ItemDatabase[] = [];
 
-export async function parseItems() {
+export async function parseItemDB(): Promise<ItemDatabase[]> {
   // Return if already cached
   if (itemDB.length > 0)
     return itemDB;
@@ -54,8 +54,9 @@ export async function parseItems() {
   return itemDB;
 }
 
-export async function getItemInfo(id: number) {
+export async function getItemInfo(id: number): Promise<ItemDatabase | null> {
   // Should be cached already at this point.
-  const itemDB = await parseItems();
-  return itemDB.find(item => item.Id === id);
+  const itemDB = await parseItemDB();
+  const itemData = itemDB.find(item => item.Id === id);
+  return itemData || null;
 }

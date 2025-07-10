@@ -5,9 +5,7 @@ import { getItemInfo } from "@/utils/item";
 
 const { id } = Astro.params;
 const itemID: number = parseInt(id as string);
-console.log(itemID);
 const item = await getItemInfo(itemID);
-console.log(item);
 
 if (!item) {
   return Astro.redirect("/404", 404);
