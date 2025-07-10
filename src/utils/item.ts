@@ -1,30 +1,52 @@
 import yaml from "js-yaml";
-import fs from "node:fs/promises";
+import { readFile } from "node:fs/promises";
+import { extname } from "node:path";
 
 import type { ItemDatabase, ItemDatabaseYaml } from "@/types/item-db.types";
 
-let itemDB: ItemDatabase[] | null = null;
+import { appConfig } from "@root/app-config";
+
+const itemDB: ItemDatabase[] = [];
 
 export async function parseItems() {
   // Return if already cached
-  if (itemDB !== null)
+  if (itemDB.length > 0)
     return itemDB;
 
-  const [equip, etc, usable] = await Promise.all([
-    fs.readFile("./src/data/item_db_equip.yml", "utf8"),
-    fs.readFile("./src/data/item_db_etc.yml", "utf8"),
-    fs.readFile("./src/data/item_db_usable.yml", "utf8"),
-  ]);
+  if (!appConfig.itemDatabaseYML.length) {
+    throw new Error("There is no added item database yaml in the app configuration.");
+  }
 
-  const equipItems = yaml.load(equip) as ItemDatabaseYaml;
-  const etcItems = yaml.load(etc) as ItemDatabaseYaml;
-  const usableItems = yaml.load(usable) as ItemDatabaseYaml;
+  const dbList = [];
 
-  itemDB = [
-    ...equipItems.Body,
-    ...etcItems.Body,
-    ...usableItems.Body,
-  ];
+  for (let i = 0, j = 0, res; i < appConfig.itemDatabaseYML.length; ++i) {
+    const filename = appConfig.itemDatabaseYML[i];
+    const extension = extname(filename).toLowerCase();
+
+    if (extension !== ".yaml" && extension !== ".yml") {
+      console.warn(`Invalid extension for itemDatabaseYML file: ${filename}. Expected .yml/.yaml. Skipping...`);
+      continue;
+    }
+
+    try {
+      res = await readFile(`./src/data/item/${filename}`, "utf-8");
+    }
+    catch {
+      console.warn(`The item db ${filename} doesn't exist in src/data/item. Skipping...`);
+      continue;
+    }
+    dbList[j] = res;
+    j++;
+  }
+
+  if (!dbList.length) {
+    throw new Error("There is no item db yaml loaded, make sure the yaml file is in the correct folder.");
+  }
+
+  dbList.forEach((item) => {
+    const result = yaml.load(item) as ItemDatabaseYaml;
+    itemDB.push(...result.Body);
+  });
 
   // Sort for pagination
   itemDB.sort((a, b) => a.Id - b.Id);

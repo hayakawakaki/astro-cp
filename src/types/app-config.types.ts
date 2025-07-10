@@ -3,5 +3,6 @@ import type { Framework } from "@/types";
 export type AppConfig = {
   theme: string;
   authFramework: Framework;
-  passwordlessAuth: boolean;
+  itemDatabaseYML: string[];
+  itemDatabaseLUA: string[];
 };
