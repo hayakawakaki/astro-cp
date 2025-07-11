@@ -73,4 +73,4 @@ async function createAuthService(
   };
 }
 
-export const authService = await createAuthService(appConfig.authFramework);
+export const authService = await createAuthService(appConfig.AuthFramework);

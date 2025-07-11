@@ -86,7 +86,7 @@ function _parseIteminfo(ast: luaparse.Chunk) {
 }
 
 // YAML/Lua parsing
-export async function _createItemDatabase(): Promise<ItemDatabase> {
+async function _createItemDatabase(): Promise<ItemDatabase> {
   // Return if already cached
   if (_itemDB.size > 0)
     return _itemDB;

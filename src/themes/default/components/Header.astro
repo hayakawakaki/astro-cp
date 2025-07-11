@@ -1,25 +1,37 @@
 ---
 const user = Astro.locals.user;
+import { appConfig } from "@root/app-config";
 ---
 
-<header class="navbar h-16">
-  <div class="navbar-start text-2xl">Astro Project</div>
-  <div class="navbar-center gap-x-4 flex">
-    <a>Home</a>
-    <a>Database</a>
-  </div>
-  <div class="navbar-end">
-    {
-      user ? (
-        <button id="logout-button" class="btn btn-soft btn-primary">
-          Logout
-        </button>
-      ) : (
-        <a href="/login" class="btn btn-soft btn-primary">
-          Login
-        </a>
-      )
-    }
+<header class="fixed inset-0 w-full h-header bg-base-200">
+  <div class="navbar container mx-auto h-full">
+    <div class="navbar-start text-2xl">Astro Project</div>
+    <div class="navbar-center">
+      <ul class="menu menu-horizontal menu-lg font-semibold">
+        {
+          appConfig.NavItem.map((item) => (
+            <li>
+              <a href={item.url} target={item.external ? "_blank" : "_self"}>
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+    <div class="navbar-end">
+      {
+        user ? (
+          <button id="logout-button" class="btn btn-lg btn-outline btn-neutral">
+            Logout
+          </button>
+        ) : (
+          <a href="/login" class="btn btn-soft btn-primary">
+            Login
+          </a>
+        )
+      }
+    </div>
   </div>
 </header>
 

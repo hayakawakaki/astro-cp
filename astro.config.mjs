@@ -1,4 +1,3 @@
-import alpinejs from "@astrojs/alpinejs";
 import node from "@astrojs/node";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
@@ -12,7 +11,10 @@ export default defineConfig({
   adapter: node({
     mode: "standalone",
   }),
-  integrations: [themedComponentIntegration({ theme: appConfig.theme }), alpinejs()],
+  build: {
+    concurrency: 6,
+  },
+  integrations: [themedComponentIntegration({ theme: appConfig.Theme })],
   vite: {
     plugins: [tailwindcss()],
   },
