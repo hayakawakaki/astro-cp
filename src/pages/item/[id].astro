@@ -1,20 +1,36 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { getItemInfo, getTradeRestrictions } from "@/utils/item";
+import { _createItemDatabase, getTradeRestrictions } from "@/utils/item";
+export async function getStaticPaths() {
+  const itemDB = await _createItemDatabase();
 
-const { id } = Astro.params;
-const itemID = parseInt(id as string);
-const item = await getItemInfo(itemID);
-if (!item) {
-  return Astro.redirect("/404", 404);
+  // Limit for testing
+  const entries = Array.from(itemDB.entries());
+
+  return entries.map(([id, item]) => ({
+    params: { id: id.toString() },
+    props: { item },
+  }));
 }
+
+export const prerender = true;
+
+const { item } = Astro.props;
 ---
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 </head>
 <BaseLayout>
-  {item.Image && <img src={`${item.Image}.webp`} alt={`${item.Name}'s Image'`} />}
+  {
+    item.Image && (
+      <img
+        src={`/item/${item.Image}.webp`}
+        onerror={`this.onerror=null; this.src="/item/NoImage.webp"`}
+        alt={`${item.Name}'s Image`}
+      />
+    )
+  }
   <h2>{item.Name}</h2>
   <div id="item-description">{item.Description && item.Description.map((desc) => <p>{desc}</p>)}</div>
   <div>
