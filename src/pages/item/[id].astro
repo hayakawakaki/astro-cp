@@ -1,6 +1,9 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { _createItemDatabase, getTradeRestrictions } from "@/utils/item";
+
+export const prerender = true;
+
 export async function getStaticPaths() {
   const itemDB = await _createItemDatabase();
 
@@ -12,8 +15,6 @@ export async function getStaticPaths() {
     props: { item },
   }));
 }
-
-export const prerender = true;
 
 const { item } = Astro.props;
 ---
