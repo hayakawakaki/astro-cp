@@ -1,6 +1,9 @@
 @import "tailwindcss";
 @plugin "daisyui" {
-  themes:
-    dark --default,
-    light --preferlight;
+  themes: garden --default;
+}
+
+@theme {
+  --spacing-header: 5rem;
+  --spacing-main: calc(100dvh - var(--spacing-header));
 }
