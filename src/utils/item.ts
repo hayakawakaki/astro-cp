@@ -7,11 +7,11 @@ import type { ItemDatabase, ItemDatabaseFormat, ItemInfoInput, ItemInfoLUA, Item
 
 import { appConfig } from "@root/app-config";
 
-export const itemDB: ItemDatabase = new Map();
-const luaDB: ItemInfoLUA = new Map();
+const _itemDB: ItemDatabase = new Map();
+const _itemInfo: ItemInfoLUA = new Map();
 
 // = Helper for default values since defaults are handled in the rathena src
-function setItemDefaults(item: ItemDatabaseFormat): ItemDatabaseFormat {
+function _setItemDefaults(item: ItemDatabaseFormat): ItemDatabaseFormat {
   const data = {
     ...item,
     Buy: item.Buy ?? 0,
@@ -32,7 +32,7 @@ function setItemDefaults(item: ItemDatabaseFormat): ItemDatabaseFormat {
 }
 
 // https://github.com/fstirlitz/luaparse very confusing stuffs
-function parseItemLua(ast: luaparse.Chunk) {
+function _parseIteminfo(ast: luaparse.Chunk) {
   const assignment = ast.body[0] as luaparse.AssignmentStatement;
   if (!assignment)
     return; // return on empty data
@@ -80,25 +80,25 @@ function parseItemLua(ast: luaparse.Chunk) {
           }
         }
       });
-      luaDB.set(itemId, itemData as ItemInfoInput);
+      _itemInfo.set(itemId, itemData as ItemInfoInput);
     }
   });
 }
 
 // YAML/Lua parsing
-export async function parseItemData(): Promise<ItemDatabase> {
+export async function _createItemDatabase(): Promise<ItemDatabase> {
   // Return if already cached
-  if (itemDB.size > 0)
-    return itemDB;
+  if (_itemDB.size > 0)
+    return _itemDB;
 
-  if (!appConfig.itemDatabaseYML.length) {
+  if (!appConfig.ItemDatabaseYML.length) {
     throw new Error("There is no added item database yaml in the app configuration.");
   }
 
   const dbList = [];
 
-  for (let i = 0, j = 0, res; i < appConfig.itemDatabaseYML.length; ++i) {
-    const filename = appConfig.itemDatabaseYML[i];
+  for (let i = 0, j = 0, res; i < appConfig.ItemDatabaseYML.length; ++i) {
+    const filename = appConfig.ItemDatabaseYML[i];
     const extension = extname(filename).toLowerCase();
 
     if (extension !== ".yaml" && extension !== ".yml") {
@@ -121,8 +121,8 @@ export async function parseItemData(): Promise<ItemDatabase> {
     throw new Error("There is no item db yaml loaded, make sure the yaml file is in the correct folder.");
   }
 
-  for (let i = 0, res; i < appConfig.itemDatabaseLUA.length; ++i) {
-    const filename = appConfig.itemDatabaseLUA[i];
+  for (let i = 0, res; i < appConfig.ItemDatabaseLUA.length; ++i) {
+    const filename = appConfig.ItemDatabaseLUA[i];
     const extension = extname(filename).toLowerCase();
 
     if (extension !== ".lua" && extension !== ".lub") {
@@ -139,17 +139,19 @@ export async function parseItemData(): Promise<ItemDatabase> {
     }
 
     const ast = luaparse.parse(res);
-    parseItemLua(ast);
+    _parseIteminfo(ast);
   }
+
+  const itemsTemp: ItemDatabaseFormat[] = [];
 
   dbList.forEach((item) => {
     const result = yaml.load(item) as ItemYAMLReturn;
 
     // Add default values
-    const final = result.Body.map(setItemDefaults);
+    const final = result.Body.map(_setItemDefaults);
 
     final.forEach((item) => {
-      const info = luaDB.get(item.Id);
+      const info = _itemInfo.get(item.Id);
       if (info) {
         item.Description = info.identifiedDescriptionName;
         item.Image = info.identifiedResourceName;
@@ -158,20 +160,30 @@ export async function parseItemData(): Promise<ItemDatabase> {
         item.Description = ["No description added."];
         item.Image = "NoImage";
       }
-      itemDB.set(item.Id, item);
     });
+    itemsTemp.push(...final);
   });
 
-  return itemDB;
+  // Sort by Id for pagination
+  itemsTemp.sort((a, b) => a.Id - b.Id);
+
+  // Insert into a map for caching
+  itemsTemp.forEach((item) => {
+    _itemDB.set(item.Id, item);
+  });
+
+  _itemInfo.clear();
+
+  return _itemDB;
 }
 
+// Get item data
 export async function getItemInfo(id: number): Promise<ItemDatabaseFormat | null> {
   // Should be cached already at this point.
-  const itemDB = await parseItemData();
+  const itemDB = await _createItemDatabase();
   return itemDB.get(id) || null;
 }
 
-// Helper for UI display
 export function getTradeRestrictions(trade: ItemTrade | undefined): string[] {
   if (!trade)
     return ["No Restriction"];
