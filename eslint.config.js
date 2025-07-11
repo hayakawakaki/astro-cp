@@ -10,7 +10,7 @@ export default antfu({
     semi: true,
     quotes: "double",
   },
-  ignores: ["src/data/**"],
+  ignores: ["src/data/**", "docs/**"],
 }, {
   rules: {
     "ts/no-redeclare": "off",
