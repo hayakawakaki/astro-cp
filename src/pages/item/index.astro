@@ -1,6 +1,13 @@
 ---
 import ItemPage from "@theme/pages/ItemPage";
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { getItemDatabase } from "@/utils/item";
+import Pagination from "@/utils/pagination";
+
+const DB = await getItemDatabase();
+const pagination = new Pagination(DB);
+const currentPage = Number(Astro.url.searchParams.get("page")) || 1;
+const pageData = pagination.paginize({ page: currentPage, pageSize: 30 });
 ---
 
 <html lang="en">
@@ -13,7 +20,7 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
   </head>
   <body>
     <BaseLayout>
-      <ItemPage />
+      <ItemPage pagination={pageData} currentPage={currentPage} />
     </BaseLayout>
   </body>
 </html>

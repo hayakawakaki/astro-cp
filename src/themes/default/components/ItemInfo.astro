@@ -1,0 +1,34 @@
+---
+import type { ItemDatabaseFormat } from "@/types/item-db.types";
+const { item } = Astro.props;
+const itemData = item as ItemDatabaseFormat;
+import { getTradeRestrictions } from "@/utils/item";
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>{itemData.Name} - Item Database</title>
+  </head>
+  <body>
+    {
+      itemData.Image && (
+        <img
+          src={`/item/${itemData.Image}.webp`}
+          onerror="this.onerror=null; this.src='/item/NoImage.webp'"
+          alt={`${itemData.Name}'s Image`}
+        />
+      )
+    }
+    <h2>{item.Name}</h2>
+    <div id="item-description">
+      {itemData.Description?.map((item) => <p set:html={item} />)}
+    </div>
+    <div>
+      <h3>Trade Restriction :</h3>
+      {getTradeRestrictions(itemData.Trade).map((item) => <p>{item}</p>)}
+    </div>
+  </body>
+</html>

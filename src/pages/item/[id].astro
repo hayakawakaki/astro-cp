@@ -1,52 +1,16 @@
 ---
-import { getItemInfo, getTradeRestrictions } from "@/utils/item";
+import { getItemInfo } from "@/utils/item";
+import ItemInfo from "@theme/components/ItemInfo";
 
 const { id } = Astro.params;
 const itemID = parseInt(id as string);
-const item = await getItemInfo(itemID);
-if (!item) {
-  return Astro.redirect("/404", 404);
+const itemData = await getItemInfo(itemID);
+if (!itemData) {
+  return new Response(null, {
+    status: 404,
+    statusText: "This item ID doesn't exist.",
+  });
 }
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>{item.Name} - Item Database</title>
-  </head>
-  <body>
-    {
-      item.Image && (
-        <img
-          src={`/item/${item.Image}.webp`}
-          onerror="this.onerror=null; this.src='/item/NoImage.webp'"
-          alt={`${item.Name}'s Image`}
-        />
-      )
-    }
-    <h2>{item.Name}</h2>
-    <div id="item-description">{item.Description && item.Description.map((desc) => <p>{desc}</p>)}</div>
-    <div>
-      <h3>Trade Restriction :</h3>
-      {getTradeRestrictions(item.Trade).map((item) => <p>{item}</p>)}
-    </div>
-  </body>
-</html>
-
-<script>
-  // Replace the client's hex colors
-  const parser = [
-    { pattern: /\^([0-9A-F]{6})(.*?)\^000000/gi, replacement: "<span style='color: #$1'>$2</span>" },
-    { pattern: /\^000000/g, replacement: "" },
-  ];
-
-  document.querySelectorAll("#item-description").forEach((element) => {
-    let inner = element.innerHTML;
-    parser.forEach((match) => {
-      inner = inner.replace(match.pattern, match.replacement);
-    });
-    element.innerHTML = inner;
-  });
-</script>
+<ItemInfo item={itemData} />
