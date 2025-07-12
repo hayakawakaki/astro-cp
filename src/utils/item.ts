@@ -3,12 +3,116 @@ import luaparse from "luaparse";
 import { readFile } from "node:fs/promises";
 import { extname } from "node:path";
 
-import type { ItemDatabase, ItemDatabaseFormat, ItemInfoInput, ItemInfoLUA, ItemTrade, ItemYAMLReturn } from "@/types/item-db.types";
+import type { ItemDatabase, ItemDatabaseFormat, ItemInfoInput, ItemInfoLUA, ItemTrade, ItemYAMLReturn } from "@/types";
 
 import { appConfig } from "@root/app-config";
 
 const _itemDB: ItemDatabase = new Map();
-const _itemInfo: ItemInfoLUA = new Map();
+
+export async function getItemDatabase(): Promise<ItemDatabase> {
+  if (_itemDB.size > 0) {
+    return _itemDB;
+  }
+  return _createItemDatabase();
+}
+
+// Create Database
+async function _createItemDatabase(): Promise<ItemDatabase> {
+  if (_itemDB.size > 0) {
+    return _itemDB;
+  }
+
+  if (!appConfig.ItemDatabaseYML.length) {
+    throw new Error("There is no added item database yaml in the app configuration.");
+  }
+
+  const [yamlDB, itemInfo] = await Promise.all([loadYamlDB(), loadItemInfo()]);
+
+  if (!yamlDB.length) {
+    throw new Error("There is no item db yml loaded, make sure the yml file is in the correct folder.");
+  }
+
+  const itemInfoMap: ItemInfoLUA = new Map();
+
+  // Parse iteminfo
+  itemInfo.forEach((item) => {
+    const ast = luaparse.parse(item);
+    _parseIteminfo(ast, itemInfoMap);
+  });
+
+  const itemDB: ItemDatabaseFormat[] = [];
+
+  yamlDB.forEach((item) => {
+    const result = yaml.load(item) as ItemYAMLReturn;
+    // Add default values and description/image from iteminfo
+    const processed = result.Body.map((value) => {
+      const itemId = _setItemDefaults(value);
+      const clientInfo = itemInfoMap.get(itemId.Id);
+
+      if (clientInfo) {
+        itemId.Description = _processDescription(clientInfo.identifiedDescriptionName) || ["No description added."];
+        itemId.Image = clientInfo.identifiedResourceName.toLowerCase() || "NoImage";
+      }
+
+      return itemId;
+    });
+    return itemDB.push(...processed);
+  });
+
+  // Sort by Id for pagination
+  itemDB.sort((a, b) => a.Id - b.Id);
+
+  // Insert into a map for caching
+  itemDB.forEach((item) => {
+    _itemDB.set(item.Id, item);
+  });
+
+  return _itemDB;
+}
+
+async function loadYamlDB(): Promise<string[]> {
+  const files = appConfig.ItemDatabaseYML.filter((item) => {
+    const ext = extname(item);
+    if (ext !== ".yaml" && ext !== ".yml") {
+      console.warn(`loadYamlDB : Invalid extension for the input ${item}`);
+      return false;
+    }
+    return true;
+  });
+
+  const data = files.map((item: string) =>
+    readFile(`./src/data/item/${item}`, "utf-8")
+      .catch((err) => {
+        console.warn(`loadYamlDB: Failed to load ${item}: ${err}`);
+        return null;
+      }),
+  );
+
+  const result = await Promise.all(data);
+  return result.filter(item => item !== null);
+}
+
+async function loadItemInfo(): Promise<string[]> {
+  const files = appConfig.ItemDatabaseLUA.filter((item: string) => {
+    const ext = extname(item);
+    if (ext !== ".lua" && ext !== ".lub") {
+      console.warn(`loadItemInfo: Invalid Lua extension for the input ${item}`);
+      return false;
+    }
+    return true;
+  });
+
+  const data = files.map(item =>
+    readFile(`./src/data/item/${item}`, "utf-8")
+      .catch((err) => {
+        console.warn(`loadItemInfo: Failed to load ${item}: ${err}`);
+        return null;
+      }),
+  );
+
+  const result = await Promise.all(data);
+  return result.filter(item => item !== null);
+}
 
 // = Helper for default values since defaults are handled in the rathena src
 function _setItemDefaults(item: ItemDatabaseFormat): ItemDatabaseFormat {
@@ -32,7 +136,7 @@ function _setItemDefaults(item: ItemDatabaseFormat): ItemDatabaseFormat {
 }
 
 // https://github.com/fstirlitz/luaparse very confusing stuffs
-function _parseIteminfo(ast: luaparse.Chunk) {
+function _parseIteminfo(ast: luaparse.Chunk, targetMap: ItemInfoLUA) {
   const assignment = ast.body[0] as luaparse.AssignmentStatement;
   if (!assignment)
     return; // return on empty data
@@ -80,101 +184,9 @@ function _parseIteminfo(ast: luaparse.Chunk) {
           }
         }
       });
-      _itemInfo.set(itemId, itemData as ItemInfoInput);
+      targetMap.set(itemId, itemData as ItemInfoInput);
     }
   });
-}
-
-// YAML/Lua parsing
-async function _createItemDatabase(): Promise<ItemDatabase> {
-  // Return if already cached
-  if (_itemDB.size > 0)
-    return _itemDB;
-
-  if (!appConfig.ItemDatabaseYML.length) {
-    throw new Error("There is no added item database yaml in the app configuration.");
-  }
-
-  const dbList = [];
-
-  for (let i = 0, j = 0, res; i < appConfig.ItemDatabaseYML.length; ++i) {
-    const filename = appConfig.ItemDatabaseYML[i];
-    const extension = extname(filename).toLowerCase();
-
-    if (extension !== ".yaml" && extension !== ".yml") {
-      console.warn(`Invalid extension for itemDatabaseYML file: ${filename}. Expected .yml/.yaml. Skipping...`);
-      continue;
-    }
-
-    try {
-      res = await readFile(`./src/data/item/${filename}`, "utf-8");
-    }
-    catch {
-      console.warn(`The item db ${filename} doesn't exist in src/data/item. Skipping...`);
-      continue;
-    }
-    dbList[j] = res;
-    j++;
-  }
-
-  if (!dbList.length) {
-    throw new Error("There is no item db yaml loaded, make sure the yaml file is in the correct folder.");
-  }
-
-  for (let i = 0, res; i < appConfig.ItemDatabaseLUA.length; ++i) {
-    const filename = appConfig.ItemDatabaseLUA[i];
-    const extension = extname(filename).toLowerCase();
-
-    if (extension !== ".lua" && extension !== ".lub") {
-      console.warn(`Invalid extension for itemDatabaseYML file: ${filename}. Expected .yml/.yaml. Skipping...`);
-      continue;
-    }
-
-    try {
-      res = await readFile(`./src/data/item/${filename}`, "utf-8");
-    }
-    catch {
-      console.warn(`The iteminfo lua ${filename} doesn't exist in src/data/item. Skipping...`);
-      continue;
-    }
-
-    const ast = luaparse.parse(res);
-    _parseIteminfo(ast);
-  }
-
-  const itemsTemp: ItemDatabaseFormat[] = [];
-
-  dbList.forEach((item) => {
-    const result = yaml.load(item) as ItemYAMLReturn;
-
-    // Add default values
-    const final = result.Body.map(_setItemDefaults);
-
-    final.forEach((item) => {
-      const info = _itemInfo.get(item.Id);
-      if (info) {
-        item.Description = info.identifiedDescriptionName;
-        item.Image = info.identifiedResourceName;
-      }
-      else {
-        item.Description = ["No description added."];
-        item.Image = "NoImage";
-      }
-    });
-    itemsTemp.push(...final);
-  });
-
-  // Sort by Id for pagination
-  itemsTemp.sort((a, b) => a.Id - b.Id);
-
-  // Insert into a map for caching
-  itemsTemp.forEach((item) => {
-    _itemDB.set(item.Id, item);
-  });
-
-  _itemInfo.clear();
-
-  return _itemDB;
 }
 
 // Get item data
@@ -208,3 +220,22 @@ export function getTradeRestrictions(trade: ItemTrade | undefined): string[] {
 
   return restrictions;
 }
+
+function _processDescription(set: string[]) {
+  const patterns = [
+    { pattern: /\^([0-9A-F]{6})(.*?)\^000000/gi, replacement: "<span style='color: #$1'>$2</span>" },
+    { pattern: /\^000000/g, replacement: "" },
+  ];
+
+  const coloredDescription = set.map((item) => {
+    let processed = item;
+    patterns.forEach((match) => {
+      const matches = processed.match(match.pattern);
+      if (matches) {
+        processed = processed.replace(match.pattern, match.replacement);
+      }
+    });
+    return processed;
+  });
+  return coloredDescription;
+};

@@ -18,3 +18,11 @@ export type AuthConfig = {
 };
 
 export type Session = typeof authService.client.$Infer.Session;
+
+export type AuthService = {
+  client: any;
+  signIn: (provider: OAuthProvider) => Promise<void>;
+  signOut: () => Promise<void>;
+  getSession: () => Promise<Session>;
+  useSession: () => Promise<Session>;
+};
