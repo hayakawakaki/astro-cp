@@ -2,7 +2,7 @@ import node from "@astrojs/node";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
 
-import { appConfig } from "./app-config";
+import config from "./app-config";
 import themedComponentIntegration from "./integration/themed-component";
 
 // https://astro.build/config
@@ -14,7 +14,7 @@ export default defineConfig({
   build: {
     concurrency: 6,
   },
-  integrations: [themedComponentIntegration({ theme: appConfig.Theme })],
+  integrations: [themedComponentIntegration({ theme: config.Theme })],
   vite: {
     plugins: [tailwindcss()],
   },

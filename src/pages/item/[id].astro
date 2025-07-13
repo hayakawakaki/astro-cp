@@ -1,10 +1,10 @@
 ---
-import { getItemInfo } from "@/utils/item";
+import { getItemInfo } from "@/lib/rathena-db/item-db";
 import ItemInfo from "@theme/components/ItemInfo";
 
 const { id } = Astro.params;
-const itemID = parseInt(id as string);
-const itemData = await getItemInfo(itemID);
+const itemId = parseInt(id as string);
+const itemData = await getItemInfo(itemId);
 if (!itemData) {
   return new Response(null, {
     status: 404,

@@ -1,7 +1,7 @@
 ---
 import ItemPage from "@theme/pages/ItemPage";
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { getItemDatabase } from "@/utils/item";
+import { getItemDatabase } from "@/lib/rathena-db/item-db";
 import Pagination from "@/utils/pagination";
 
 const DB = await getItemDatabase();

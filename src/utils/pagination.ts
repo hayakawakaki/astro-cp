@@ -1,4 +1,17 @@
-import type { PaginationOption, PaginationReturn } from "@/types";
+type PaginationOption = {
+  page: number;
+  pageSize: number;
+};
+
+type PaginationReturn<T> = {
+  items: T[];
+  page: number;
+  pageSize: number;
+  totalItems: number;
+  totalPages: number;
+  hasNext: boolean;
+  hasPrev: boolean;
+};
 
 export default class Pagination<T> {
   private data: Map<any, T>;

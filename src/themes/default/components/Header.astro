@@ -1,6 +1,6 @@
 ---
 const user = Astro.locals.user;
-import { appConfig } from "@root/app-config";
+import config from "@root/app-config";
 ---
 
 <header class="fixed inset-0 w-full h-header bg-base-200">
@@ -9,7 +9,7 @@ import { appConfig } from "@root/app-config";
     <div class="navbar-center">
       <ul class="menu menu-horizontal menu-lg font-semibold">
         {
-          appConfig.NavItem.map((item) => (
+          config.NavItem.map((item) => (
             <li>
               <a href={item.url} target={item.external ? "_blank" : "_self"}>
                 {item.label}
