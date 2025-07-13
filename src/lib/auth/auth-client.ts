@@ -1,6 +1,6 @@
 import type { AuthConfig, AuthService, Framework, OAuthProvider } from "@/types";
 
-import { appConfig } from "@root/app-config";
+import config from "@root/app-config";
 
 const defaultConfig: AuthConfig = {
   baseURL: "http://localhost:4321",
@@ -13,9 +13,9 @@ const defaultConfig: AuthConfig = {
 
 async function createAuthService(
   framework: Framework = "vue",
-  config: Partial<AuthConfig> = {},
+  authConfig: Partial<AuthConfig> = {},
 ): Promise<AuthService> {
-  const clientConfig = { ...defaultConfig, ...config };
+  const clientConfig = { ...defaultConfig, ...authConfig };
   let client: any;
   switch (framework) {
     case "vanillajs": {
@@ -73,4 +73,4 @@ async function createAuthService(
   };
 }
 
-export const authService = await createAuthService(appConfig.AuthFramework);
+export const authService = await createAuthService(config.AuthFramework);

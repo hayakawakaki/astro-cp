@@ -2,7 +2,7 @@
 import type { ItemDatabaseFormat } from "@/types/item-db.types";
 const { item } = Astro.props;
 const itemData = item as ItemDatabaseFormat;
-import { getTradeRestrictions } from "@/utils/item";
+import { getTradeRestrictions } from "@/lib/rathena-db/item-db";
 ---
 
 <html lang="en">
