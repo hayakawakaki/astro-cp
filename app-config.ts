@@ -5,6 +5,9 @@ const appConfig: AppConfig = {
   Theme: "default",
   AuthFramework: "vanillajs",
 
+  // Server Details
+  ServerName: "AtelierCP",
+
   // UI
   NavItem: [
     { label: "Home", url: "/" },
