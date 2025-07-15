@@ -1,0 +1,30 @@
+---
+import { getMobInfo } from "@/lib/rathena-db/mob-db";
+import MobInfo from "@theme/components/MobInfo";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+const { id } = Astro.params;
+const mobId = parseInt(id as string);
+const mobData = await getMobInfo(mobId);
+if (!mobData) {
+  return new Response(null, {
+    status: 404,
+    statusText: "This mob ID doesn't exist.",
+  });
+}
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Astro</title>
+  </head>
+  <body>
+    <BaseLayout>
+      <MobInfo mob={mobData} />
+    </BaseLayout>
+  </body>
+</html>

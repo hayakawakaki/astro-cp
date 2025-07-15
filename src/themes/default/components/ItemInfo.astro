@@ -16,7 +16,7 @@ import { getTradeRestrictions } from "@/lib/rathena-db/item-db";
     {
       itemData.Image && (
         <img
-          src={`/item/${itemData.Image}.webp`}
+          src={`/images/collection/${itemData.Image}.webp`}
           onerror="this.onerror=null; this.src='/item/NoImage.webp'"
           alt={`${itemData.Name}'s Image`}
         />

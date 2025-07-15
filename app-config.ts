@@ -5,10 +5,14 @@ const appConfig: AppConfig = {
   Theme: "default",
   AuthFramework: "vanillajs",
 
+  // Server Details
+  ServerName: "AtelierCP",
+
   // UI
   NavItem: [
     { label: "Home", url: "/" },
     { label: "Item Database", url: "/item" },
+    { label: "Mob Database", url: "/mob" },
     { label: "Rate US", url: "https://ratemyserver.net", external: true },
   ],
 

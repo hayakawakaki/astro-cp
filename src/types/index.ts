@@ -19,4 +19,18 @@ export type {
   LocationType,
   WeaponSubType,
 } from "./item-db.types";
+export type {
+  MobDatabase,
+  MobDatabaseInput,
+  MobDrop,
+  MobEle,
+  MobMode,
+  MobModeRecord,
+  MobMvpDrop,
+  MobRace,
+  MobRaceGroup,
+  MobSize,
+  MobYAMLReturn,
+  RaceGroupRecord,
+} from "./mob-db.types";
 export type { PaginationOption, PaginationReturn } from "./pagination.types";
