@@ -9,6 +9,7 @@ const appConfig: AppConfig = {
   NavItem: [
     { label: "Home", url: "/" },
     { label: "Item Database", url: "/item" },
+    { label: "Mob Database", url: "/mob" },
     { label: "Rate US", url: "https://ratemyserver.net", external: true },
   ],
 

@@ -7,6 +7,7 @@ import { createLuaLoader, createYmlLoader } from "@/lib/rathena-db/db-loader";
 import config from "@root/app-config";
 
 const _itemDB: ItemDatabase = new Map();
+const _itemNameDB: ItemDatabase = new Map();
 const _loadYamlDB = createYmlLoader("ItemDatabaseYML", "item");
 const _loadItemInfo = createLuaLoader("ItemDatabaseLUA", "item");
 
@@ -57,7 +58,10 @@ async function _createItemDatabase(): Promise<ItemDatabase> {
   itemDB.sort((a, b) => a.Id - b.Id);
 
   // Insert into a map for caching
-  itemDB.map(item => _itemDB.set(item.Id, item));
+  itemDB.forEach((item) => {
+    _itemDB.set(item.Id, item);
+    _itemNameDB.set(item.AegisName, item);
+  });
 
   return _itemDB;
 }
@@ -160,7 +164,7 @@ async function getItemDatabase(): Promise<ItemDatabase> {
   if (_itemDB.size > 0) {
     return _itemDB;
   }
-  return _createItemDatabase();
+  return await _createItemDatabase();
 }
 
 // Get item data
@@ -168,6 +172,19 @@ async function getItemInfo(id: number): Promise<ItemDatabaseFormat | null> {
   // Should be cached already at this point.
   const itemDB = await getItemDatabase();
   return itemDB.get(id) || null;
+}
+
+async function getItemName(value: string | number): Promise<string | null> {
+  if (!_itemDB.size) {
+    await _createItemDatabase();
+  }
+
+  if ((typeof value) === "string") {
+    return _itemNameDB.get(value)?.Name || null;
+  }
+  else {
+    return _itemDB.get(value)?.Name || null;
+  }
 }
 
 function getTradeRestrictions(trade: ItemTrade | undefined): string[] {
@@ -195,4 +212,4 @@ function getTradeRestrictions(trade: ItemTrade | undefined): string[] {
   return restrictions;
 }
 
-export { getItemDatabase, getItemInfo, getTradeRestrictions };
+export { getItemDatabase, getItemInfo, getItemName, getTradeRestrictions };

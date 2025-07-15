@@ -20,7 +20,7 @@ const pageData = pagination.paginize({ page: currentPage, pageSize: 30 });
   </head>
   <body>
     <BaseLayout>
-      <ItemPage pagination={pageData} currentPage={currentPage} />
+      <ItemPage pageData={pageData.items} currentPage={currentPage} />
     </BaseLayout>
   </body>
 </html>

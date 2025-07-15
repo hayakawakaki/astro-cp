@@ -1,6 +1,7 @@
 ---
 import { getItemInfo } from "@/lib/rathena-db/item-db";
 import ItemInfo from "@theme/components/ItemInfo";
+import BaseLayout from "@/layouts/BaseLayout.astro";
 
 const { id } = Astro.params;
 const itemId = parseInt(id as string);

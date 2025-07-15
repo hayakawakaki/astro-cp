@@ -158,8 +158,8 @@ export type MobDatabaseInput = {
   Ai?: number;
   Class?: number;
   Modes?: MobModeRecord;
-  MvpDrops?: MobDrop[];
-  Drops?: MobMvpDrop[];
+  Drops?: MobDrop[];
+  MvpDrops?: MobMvpDrop[];
 };
 
 export type MobDatabase = Map<number, MobDatabaseInput>;

@@ -1,0 +1,34 @@
+---
+import { getItemName } from "@/lib/rathena-db/item-db";
+import type { MobDatabaseInput } from "@/types";
+
+const { mob } = Astro.props;
+const mobData = mob as MobDatabaseInput;
+---
+
+<div class="flex">
+  <div class="grow">
+    {mobData && Object.keys(mobData).map((item) => <p>{item}</p>)}
+  </div>
+  <div class="grow">
+    {mobData && Object.values(mobData).map((item) => <p>{item}</p>)}
+  </div>
+  {
+    mobData.Drops ? (
+      <div class="grow inline-flex">
+        <div>
+          {mobData.Drops.map((item) => (
+            <p>{getItemName(item.Item)}</p>
+          ))}
+        </div>
+        <div>
+          {mobData.Drops.map((item) => (
+            <p>{`${((item.Rate / 10000) * 100).toFixed(2)}%`}</p>
+          ))}
+        </div>
+      </div>
+    ) : (
+      <div class="grow">This monster has no drop.</div>
+    )
+  }
+</div>

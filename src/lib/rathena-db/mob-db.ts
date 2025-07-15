@@ -46,4 +46,4 @@ async function getMobInfo(id: number): Promise<MobDatabaseInput | null> {
   return itemDB.get(id) || null;
 }
 
-export { getMobInfo };
+export { getMobDatabase, getMobInfo };

@@ -30,7 +30,7 @@ export default class Pagination<T> {
 
     // Get current page data
     const pageKeys = this.keys.slice(startIndex, endIndex);
-    const items = pageKeys.map(key => this.data.get(key)!);
+    const items = pageKeys.map(key => this.data.get(key)!) as T[];
 
     return {
       items,
