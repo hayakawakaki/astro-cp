@@ -38,11 +38,9 @@ import config from "@root/app-config";
 <script>
   import { signOut } from "@/lib/auth/auth-client";
 
-  document.addEventListener("astro:page-load", async () => {
-    const logoutButton = document.getElementById("logout-button");
-    logoutButton?.addEventListener("click", async () => {
-      await signOut();
-      window.location.reload();
-    });
+  const logoutButton = document.getElementById("logout-button");
+  logoutButton?.addEventListener("click", async () => {
+    await signOut();
+    window.location.reload();
   });
 </script>
