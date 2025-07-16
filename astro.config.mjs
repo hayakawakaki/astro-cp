@@ -11,9 +11,6 @@ export default defineConfig({
   adapter: node({
     mode: "standalone",
   }),
-  build: {
-    concurrency: 6,
-  },
   integrations: [themedComponentIntegration({ theme: config.Theme })],
   vite: {
     plugins: [tailwindcss()],

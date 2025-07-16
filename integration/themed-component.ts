@@ -2,7 +2,6 @@ import type { AstroIntegration } from "astro";
 
 import fs from "node:fs/promises";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
 
 type ThemedComponent = {
   theme: string;
@@ -30,28 +29,15 @@ function themedComponentIntegration({ theme }: ThemedComponent): AstroIntegratio
     ];
 
     const componentPath = id.replace("@theme/", "").replace(/^\/+/, "");
-    const rootPath = fileURLToPath(root);
 
     for (const ext of extensions) {
-      const themePath = path.join(rootPath, "src/themes", theme, `${componentPath}${ext}`);
+      const themePath = path.join("src/themes", theme, `${componentPath}${ext}`);
       try {
         await fs.access(themePath);
         return themePath;
       }
       catch {}
     }
-
-    if (theme !== "default") {
-      for (const ext of extensions) {
-        const defaultPath = path.join(rootPath, "src/themes", "default", `${componentPath}${ext}`);
-        try {
-          await fs.access(defaultPath);
-          return defaultPath;
-        }
-        catch {}
-      }
-    }
-
     return null;
   };
 
