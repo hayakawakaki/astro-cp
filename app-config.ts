@@ -3,7 +3,8 @@ import type { AppConfig } from "@/types/app-config.types";
 const appConfig: AppConfig = {
   // General
   Theme: "default",
-  AuthFramework: "vanillajs",
+
+  AuthProviders: ["discord"],
 
   // Server Details
   ServerName: "AtelierCP",
