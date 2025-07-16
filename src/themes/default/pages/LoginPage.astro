@@ -23,17 +23,17 @@ const session = Astro.locals.session;
 </div>
 
 <script>
-  import { authService } from "@lib/auth/auth-client";
+  import { signIn, signOut } from "@lib/auth/auth-client";
 
   const loginButton = document.getElementById("login-button");
   const logoutButton = document.getElementById("logout-button");
 
   loginButton?.addEventListener("click", async () => {
-    await authService.signIn("discord");
+    await signIn("discord");
   });
 
   logoutButton?.addEventListener("click", async () => {
-    await authService.signOut();
+    await signOut();
     window.location.reload();
   });
 </script>

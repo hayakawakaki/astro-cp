@@ -36,12 +36,13 @@ import config from "@root/app-config";
 </header>
 
 <script>
-  import { authService } from "@/lib/auth/auth-client";
+  import { signOut } from "@/lib/auth/auth-client";
 
-  const logoutButton = document.getElementById("logout-button");
-
-  logoutButton?.addEventListener("click", async () => {
-    await authService.signOut();
-    window.location.reload();
+  document.addEventListener("astro:page-load", async () => {
+    const logoutButton = document.getElementById("logout-button");
+    logoutButton?.addEventListener("click", async () => {
+      await signOut();
+      window.location.reload();
+    });
   });
 </script>

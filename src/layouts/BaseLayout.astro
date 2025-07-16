@@ -1,8 +1,12 @@
 ---
 import "@css/tailwind.css";
+import { ClientRouter } from "astro:transitions";
 import Header from "@theme/components/Header";
 ---
 
+<head>
+  <ClientRouter />
+</head>
 <div class="container mx-auto pt-header">
   <Header />
   <main class="h-main py-2">

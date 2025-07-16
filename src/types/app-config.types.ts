@@ -1,9 +1,9 @@
-import type { Framework } from "@/types";
+import type { SocialProvider } from "better-auth/social-providers";
 
 export type AppConfig = {
   ServerName: string;
   Theme: string;
-  AuthFramework: Framework;
+  AuthProviders: SocialProvider[];
   NavItem: { label: string; url: string; external?: boolean }[];
   ItemDatabaseYML: string[];
   ItemDatabaseLUA: string[];
