@@ -1,18 +1,29 @@
 import yaml from "js-yaml";
 import luaparse from "luaparse";
 
-import type { ItemDatabase, ItemDatabaseFormat, ItemInfoInput, ItemInfoLUA, ItemTrade, ItemYAMLReturn } from "@/types";
+import type {
+  DropDatabase,
+  ItemDatabase,
+  ItemDatabaseFormat,
+  ItemInfoInput,
+  ItemInfoLUA,
+  ItemTrade,
+  ItemYAMLReturn,
+  WhoDropFormat,
+} from "@/types";
 
-import { createLuaLoader, createYmlLoader } from "@/lib/rathena-db/db-loader";
 import config from "@root/app-config";
 
-const _itemDB: ItemDatabase = new Map();
-const _itemNameDB: ItemDatabase = new Map();
+import { createLuaLoader, createYmlLoader } from "./db-loader";
+
+const _itemDB: ItemDatabase = new Map(); // Item Id lookup
+const _itemNameDB: ItemDatabase = new Map(); // Item name lookup
+const _dropDatabase: DropDatabase = new Map(); // For reverse lookup
 const _loadYamlDB = createYmlLoader("ItemDatabaseYML", "item");
 const _loadItemInfo = createLuaLoader("ItemDatabaseLUA", "item");
 
 // Create Database
-async function _createItemDatabase(): Promise<ItemDatabase> {
+async function createItemDatabase(): Promise<ItemDatabase> {
   if (_itemDB.size > 0) {
     return _itemDB;
   }
@@ -61,6 +72,7 @@ async function _createItemDatabase(): Promise<ItemDatabase> {
   itemDB.forEach((item) => {
     _itemDB.set(item.Id, item);
     _itemNameDB.set(item.AegisName, item);
+    _dropDatabase.set(item.Id, new Set());
   });
 
   return _itemDB;
@@ -159,12 +171,39 @@ function _processDescription(set: string[]) {
   return coloredDescription;
 };
 
+async function addDrop(item: number | string, mobId: number, dropRate: number) {
+  if (!_itemDB.size) {
+    await createItemDatabase();
+  }
+  let itemId;
+
+  if ((typeof item) === "string") {
+    itemId = _itemNameDB.get(item)?.Id || null;
+  }
+  else {
+    itemId = _itemDB.get(item)?.Id || null;
+  }
+
+  if (!itemId || !_itemDB.has(itemId))
+    return;
+
+  _dropDatabase.get(itemId)?.add({ mobId, dropRate });
+}
+
+async function whoDrops(itemId: number): Promise<Set<WhoDropFormat>> {
+  // Shouldn't happen but just in case
+  if (!_dropDatabase.size) {
+    return new Set();
+  }
+  return _dropDatabase.get(itemId) || new Set();
+}
+
 // Helper Functions
 async function getItemDatabase(): Promise<ItemDatabase> {
   if (_itemDB.size > 0) {
     return _itemDB;
   }
-  return await _createItemDatabase();
+  return await createItemDatabase();
 }
 
 // Get item data
@@ -176,7 +215,7 @@ async function getItemInfo(id: number): Promise<ItemDatabaseFormat | null> {
 
 async function getItemName(value: string | number): Promise<string | null> {
   if (!_itemDB.size) {
-    await _createItemDatabase();
+    await createItemDatabase();
   }
 
   if ((typeof value) === "string") {
@@ -189,7 +228,7 @@ async function getItemName(value: string | number): Promise<string | null> {
 
 function getTradeRestrictions(trade: ItemTrade | undefined): string[] {
   if (!trade)
-    return ["No Restriction"];
+    return [];
 
   const restrictions = [];
   if (trade.NoDrop)
@@ -212,4 +251,4 @@ function getTradeRestrictions(trade: ItemTrade | undefined): string[] {
   return restrictions;
 }
 
-export { getItemDatabase, getItemInfo, getItemName, getTradeRestrictions };
+export { addDrop, createItemDatabase, getItemDatabase, getItemInfo, getItemName, getTradeRestrictions, whoDrops };

@@ -1,8 +1,9 @@
 ---
-import { getItemInfo } from "@/lib/rathena-db/item-db";
+import { getItemInfo, getTradeRestrictions, whoDrops } from "@/lib/rathena-db/item-db";
 import ItemInfo from "@theme/components/ItemInfo";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 
+const { serverName } = Astro.locals;
 const { id } = Astro.params;
 const itemId = parseInt(id as string);
 const itemData = await getItemInfo(itemId);
@@ -12,6 +13,8 @@ if (!itemData) {
     statusText: "This item ID doesn't exist.",
   });
 }
+const tradeRestrictions = getTradeRestrictions(itemData.Trade);
+const dropData = await whoDrops(itemData.Id);
 ---
 
 <html lang="en">
@@ -20,11 +23,11 @@ if (!itemData) {
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
-    <title>Astro</title>
+    <title>{serverName} : Item Database - {id}</title>
   </head>
   <body>
     <BaseLayout>
-      <ItemInfo item={itemData} />
+      <ItemInfo itemData={itemData} tradeRestriction={tradeRestrictions} dropData={dropData} />
     </BaseLayout>
   </body>
 </html>
