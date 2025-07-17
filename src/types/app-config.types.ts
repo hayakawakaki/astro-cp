@@ -8,4 +8,5 @@ export type AppConfig = {
   ItemDatabaseYML: string[];
   ItemDatabaseLUA: string[];
   MobDatabaseYML: string[];
+  [key: string]: any;
 };
