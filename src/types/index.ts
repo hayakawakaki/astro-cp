@@ -1,9 +1,10 @@
 export type { AppConfig } from "./app-config.types";
-export type { AuthConfig, AuthService, Framework, OAuthProvider } from "./auth-client.types";
+export type { AuthConfig, Framework } from "./auth-client.types";
 export type {
   AmmoSubType,
   CardSubType,
   ClassType,
+  DropDatabase,
   GenderType,
   ItemDatabase,
   ItemDatabaseFormat,
@@ -18,6 +19,7 @@ export type {
   JobType,
   LocationType,
   WeaponSubType,
+  WhoDropFormat,
 } from "./item-db.types";
 export type {
   MobDatabase,
@@ -33,4 +35,3 @@ export type {
   MobYAMLReturn,
   RaceGroupRecord,
 } from "./mob-db.types";
-export type { PaginationOption, PaginationReturn } from "./pagination.types";

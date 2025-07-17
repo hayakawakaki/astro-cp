@@ -199,8 +199,6 @@ export type ItemYAMLReturn = {
   Body: ItemDatabaseFormat[];
 };
 
-export type ItemDatabase = Map<number | string, ItemDatabaseFormat>;
-
 export type ItemInfoInput = {
   unidentifiedDisplayName: string;
   unidentifiedResourceName: string;
@@ -213,4 +211,11 @@ export type ItemInfoInput = {
   costume: boolean;
 };
 
+export type WhoDropFormat = {
+  mobId: number;
+  dropRate: number;
+};
+
 export type ItemInfoLUA = Map<number, ItemInfoInput>;
+export type ItemDatabase = Map<number | string, ItemDatabaseFormat>;
+export type DropDatabase = Map<number, Set<WhoDropFormat>>;

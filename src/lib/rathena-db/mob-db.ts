@@ -2,14 +2,16 @@ import yaml from "js-yaml";
 
 import type { MobDatabase, MobDatabaseInput, MobYAMLReturn } from "@/types";
 
-import { createYmlLoader } from "@/lib/rathena-db/db-loader";
 import config from "@root/app-config";
+
+import { createYmlLoader } from "./db-loader";
+import { addDrop } from "./item-db";
 
 const _mobDB: MobDatabase = new Map();
 const _loadYamlDB = createYmlLoader("MobDatabaseYML", "mob");
 
 // Create Database
-async function _createMobDatabase(): Promise<MobDatabase> {
+async function createMobDatabase(): Promise<MobDatabase> {
   if (_mobDB.size > 0) {
     return _mobDB;
   }
@@ -29,7 +31,12 @@ async function _createMobDatabase(): Promise<MobDatabase> {
   // Need sort here for multiple yaml support and pagination
   mobDB.sort((a, b) => a.Id - b.Id);
 
-  mobDB.map(item => _mobDB.set(item.Id, item));
+  mobDB.forEach((item) => {
+    _mobDB.set(item.Id, item);
+    item.Drops?.forEach((drop) => {
+      addDrop(drop.Item, item.Id, drop.Rate);
+    });
+  });
 
   return _mobDB;
 }
@@ -38,7 +45,7 @@ async function getMobDatabase(): Promise<MobDatabase> {
   if (_mobDB.size > 0) {
     return _mobDB;
   }
-  return _createMobDatabase();
+  return createMobDatabase();
 }
 
 async function getMobInfo(id: number): Promise<MobDatabaseInput | null> {
@@ -46,4 +53,4 @@ async function getMobInfo(id: number): Promise<MobDatabaseInput | null> {
   return itemDB.get(id) || null;
 }
 
-export { getMobDatabase, getMobInfo };
+export { createMobDatabase, getMobDatabase, getMobInfo };
