@@ -3,6 +3,7 @@ import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
 
 import config from "./app-config";
+import preloadDatabase from "./integration/db-preload";
 import themedComponentIntegration from "./integration/themed-component";
 
 // https://astro.build/config
@@ -11,7 +12,10 @@ export default defineConfig({
   adapter: node({
     mode: "standalone",
   }),
-  integrations: [themedComponentIntegration({ theme: config.Theme })],
+  integrations: [
+    themedComponentIntegration({ theme: config.Theme }),
+    preloadDatabase(),
+  ],
   vite: {
     plugins: [tailwindcss()],
   },
