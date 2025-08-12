@@ -1,7 +1,7 @@
 ---
 import { getMobInfo } from "@/lib/rathena-db/mob-db";
-import MobInfo from "@theme/components/MobInfo";
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { getItemName } from "@/lib/rathena-db/item-db";
 
 const { id } = Astro.params;
 const mobId = parseInt(id as string);
@@ -12,6 +12,8 @@ if (!mobData) {
     statusText: "This mob ID doesn't exist.",
   });
 }
+
+const serverName = Astro.locals.serverName;
 ---
 
 <html lang="en">
@@ -20,11 +22,19 @@ if (!mobData) {
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
-    <title>Astro</title>
+    <title>{serverName} \ Mob \ {mobData.Name}</title>
   </head>
   <body>
     <BaseLayout>
-      <MobInfo mob={mobData} />
+      <div class="flex">
+        <div class="flex min-h-64 min-w-64 border-amber-200 border-2 items-center justify-center">
+          <img
+            src=`/images/mob/${mobData.AegisName.toLowerCase()}.png`
+            alt=`${mobData.Name}'s Image'`
+            class="object-contain"
+          />
+        </div>
+      </div>
     </BaseLayout>
   </body>
 </html>
