@@ -26,3 +26,4 @@ pnpm-debug.log*
 # item/mob images
 public/images/item
 public/images/collection
+public/images/mob

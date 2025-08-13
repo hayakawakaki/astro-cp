@@ -1,9 +1,10 @@
 @import "tailwindcss";
-@plugin "daisyui" {
-  themes: garden --default;
-}
 
 @theme {
-  --spacing-header: 5rem;
-  --spacing-main: calc(100dvh - var(--spacing-header));
+  --spacing-v-space: var(--vertical-space);
+  --spacing-header: var(--header-height);
+  --spacing-header-padding: calc(var(--header-height) + var(--vertical-space));
+  --spacing-logo: var(--logo-height);
+  --spacing-body: calc(var(--main-height) - (var(--spacing-v-space) * 2));
+  --spacing-padding: var(--app-padding);
 }
