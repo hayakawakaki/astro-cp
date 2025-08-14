@@ -12,9 +12,12 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@astrojs/alpinejs": "^0.4.8",
     "@astrojs/node": "^9.3.0",
     "@tailwindcss/vite": "^4.1.11",
+    "@types/alpinejs": "^3.13.11",
     "@types/luaparse": "^0.2.12",
+    "alpinejs": "^3.14.9",
     "astro": "^5.11.0",
     "better-auth": "^1.2.12",
     "dotenv": "^17.0.1",

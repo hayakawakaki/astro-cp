@@ -1,3 +1,4 @@
+import alpinejs from "@astrojs/alpinejs";
 import node from "@astrojs/node";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
@@ -15,6 +16,7 @@ export default defineConfig({
   integrations: [
     themedComponentIntegration({ theme: config.Theme }),
     preloadDatabase(),
+    alpinejs(),
   ],
   vite: {
     plugins: [tailwindcss()],
