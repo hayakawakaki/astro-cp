@@ -1,4 +1,5 @@
 ---
+import config from "~/app-config";
 import Dropdown from "@/ui/Dropdown.astro";
 import Button from "@/ui/Button.astro";
 
@@ -17,6 +18,7 @@ type Props = {
 };
 
 const { links } = Astro.props;
+const { user } = Astro.locals;
 ---
 
 <Fragment>
@@ -50,5 +52,15 @@ const { links } = Astro.props;
       }
     })
   }
-  <Button variant="secondary" href="/login"> Login </Button>
+  {
+    !user?.id ? (
+      <Button variant="secondary" size="md" href="/login">
+        Login
+      </Button>
+    ) : (
+      <Button variant="secondary" size="md" href="/account">
+        View Account
+      </Button>
+    )
+  }
 </Fragment>

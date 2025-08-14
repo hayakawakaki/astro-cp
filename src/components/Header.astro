@@ -1,80 +1,22 @@
 ---
+import Navigation from "@/components/Navigation.astro";
+import Dropdown from "@/components/ui/Dropdown.astro";
+import config from "~/app-config";
+
 const { user, serverName } = Astro.locals;
-import config from "@root/app-config";
 ---
 
-<header class="fixed inset-0 text-xl font-semibold h-max bg-neutral-200">
+<header class="fixed inset-0 text-lg font-semibold h-max bg-primary-50 px-padding">
   <div class="container flex items-center justify-between mx-auto h-header py-v-space">
     <a href="/" class="content-center">
       <img class="max-h-8" src="/logo.png" alt={`${serverName}'s Logo'`} />
     </a>
-    <div class="space-x-6">
-      <nav class="inline-block space-x-6">
-        {
-          config.NavItem.map((item) => (
-            <a href={item.url} target={item.external ? "_blank" : "_self"}>
-              {item.label}
-            </a>
-          ))
-        }
-      </nav>
-      <el-dropdown class="content-center inline-block">
-        <button class="inline-flex w-full justify-center gap-x-1.5 rounded-md px-3 py-2">Account</button>
-        <el-menu
-          anchor="bottom end"
-          popover
-          class="w-56 origin-top-right divide-y divide-white/10 rounded-md bg-gray-800 outline-1 -outline-offset-1 outline-white/10 transition transition-discrete [--anchor-gap:--spacing(2)] data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
-        >
-          <div class="py-1">
-            <a
-              href="#"
-              class="block px-4 py-2 text-sm text-gray-300 focus:bg-white/5 focus:text-white focus:outline-hidden"
-              >Edit</a
-            >
-            <a
-              href="#"
-              class="block px-4 py-2 text-sm text-gray-300 focus:bg-white/5 focus:text-white focus:outline-hidden"
-              >Duplicate</a
-            >
-          </div>
-          <div class="py-1">
-            <a
-              href="#"
-              class="block px-4 py-2 text-sm text-gray-300 focus:bg-white/5 focus:text-white focus:outline-hidden"
-              >Archive</a
-            >
-            <a
-              href="#"
-              class="block px-4 py-2 text-sm text-gray-300 focus:bg-white/5 focus:text-white focus:outline-hidden"
-              >Move</a
-            >
-          </div>
-          <div class="py-1">
-            <a
-              href="#"
-              class="block px-4 py-2 text-sm text-gray-300 focus:bg-white/5 focus:text-white focus:outline-hidden"
-              >Share</a
-            >
-            <a
-              href="#"
-              class="block px-4 py-2 text-sm text-gray-300 focus:bg-white/5 focus:text-white focus:outline-hidden"
-              >Add to favorites</a
-            >
-          </div>
-          <div class="py-1">
-            <a
-              href="#"
-              class="block px-4 py-2 text-sm text-gray-300 focus:bg-white/5 focus:text-white focus:outline-hidden"
-              >Delete</a
-            >
-          </div>
-        </el-menu>
-      </el-dropdown>
-    </div>
+    <nav class="hidden lg:flex lg:items-center lg:gap-x-6">
+      <Navigation links={config.NavItem} />
+    </nav>
   </div>
 </header>
 
-<script src="https://cdn.jsdelivr.net/npm/@tailwindplus/elements@1" type="module" is:inline></script>
 <script>
   import { signOut } from "@/lib/auth/auth-client";
 
