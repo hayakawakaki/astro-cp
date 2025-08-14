@@ -1,6 +1,8 @@
 ---
-import "@css/variables.css";
-import "@css/tailwind.css";
+// Tailwind Imports
+import "@/css/variables.css";
+import "@/css/tailwind.css";
+
 import { ClientRouter } from "astro:transitions";
 const { serverName } = Astro.locals;
 ---
@@ -18,3 +20,6 @@ const { serverName } = Astro.locals;
     <slot />
   </body>
 </html>
+
+<!-- Tailwind Components -->
+<script src="https://cdn.jsdelivr.net/npm/@tailwindplus/elements@1" type="module" is:inline></script>

@@ -2,7 +2,7 @@ import { readFile } from "node:fs/promises";
 import { extname } from "node:path";
 
 import { pipe } from "@/utils/global-functions";
-import config from "@root/app-config";
+import config from "~/app-config";
 
 type FileType = "yml" | "lua";
 type LoaderFunction = () => Promise<string[]>;
