@@ -16,8 +16,6 @@ function themedComponentIntegration({ theme }: ThemedComponent): AstroIntegratio
     if (!id.startsWith("@theme/"))
       return null;
 
-    console.warn("[astro-themed-component] Debug : Starts with @theme");
-
     const extensions = [
       ".astro",
       ".vue",
@@ -56,7 +54,15 @@ function themedComponentIntegration({ theme }: ThemedComponent): AstroIntegratio
                   const resolvedPath = await resolveThemeComponent(id, config.root, theme);
                   if (resolvedPath) {
                     console.warn("[astro-themed-component] resolved:", resolvedPath);
-                    return { id: resolvedPath };
+                    const absolutePath = path.resolve(resolvedPath);
+                    return absolutePath;
+                  }
+                  return null;
+                },
+                async load(id: string) {
+                  if (id.includes(path.join("src", "themes", theme))) {
+                    this.addWatchFile(id);
+                    return null;
                   }
                   return null;
                 },
