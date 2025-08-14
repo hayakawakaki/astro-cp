@@ -16,8 +16,6 @@ function themedComponentIntegration({ theme }: ThemedComponent): AstroIntegratio
     if (!id.startsWith("@theme/"))
       return null;
 
-    console.warn("[astro-themed-component] Debug : Starts with @theme");
-
     const extensions = [
       ".astro",
       ".vue",
