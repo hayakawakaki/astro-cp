@@ -2,19 +2,19 @@
 const session = Astro.locals.session;
 ---
 
-<div class="w-full h-dvh flex flex-col justify-center items-center">
+<div class="flex flex-col items-center justify-center w-full h-dvh">
   {
     !session ? (
       <div class="text-center">
         <p class="mb-4">Select your login provider</p>
-        <button id="login-button" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+        <button id="login-button" class="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600">
           Login with Discord
         </button>
       </div>
     ) : (
       <div class="text-center">
         <p class="mb-4">Welcome back!</p>
-        <button id="logout-button" class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
+        <button id="logout-button" class="px-4 py-2 text-white bg-red-500 rounded hover:bg-red-600">
           Logout
         </button>
       </div>
@@ -23,7 +23,7 @@ const session = Astro.locals.session;
 </div>
 
 <script>
-  import { signIn, signOut } from "@lib/auth/auth-client";
+  import { signIn, signOut } from "@/lib/auth/auth-client";
 
   const loginButton = document.getElementById("login-button");
   const logoutButton = document.getElementById("logout-button");

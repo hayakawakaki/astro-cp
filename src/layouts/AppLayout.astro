@@ -1,0 +1,25 @@
+---
+// Tailwind Imports
+import "@/css/variables.css";
+import "@/css/tailwind.css";
+
+import { ClientRouter } from "astro:transitions";
+const { serverName } = Astro.locals;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{serverName}</title>
+    <ClientRouter />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
+
+<!-- Tailwind Components -->
+<script src="https://cdn.jsdelivr.net/npm/@tailwindplus/elements@1" type="module" is:inline></script>

@@ -1,0 +1,50 @@
+---
+import type { NavLink } from "@/types/app-config.types";
+
+type Props = {
+  label?: string;
+  links: NavLink[];
+  class?: string;
+};
+
+const { label, links, class: className } = Astro.props;
+---
+
+<div x-data="{ open: false, position: 'center' }" @click.outside="open = false" class="relative inline-block">
+  <button class="flex items-center" @click="open = !open;">
+    <span class={className}>
+      <slot name="label">
+        {label || "Add Default Label"}
+      </slot>
+    </span>
+    <svg
+      class="inline-block h-6 -mx-1 duration-200 fill-primary-900"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 -960 960 960"
+    >
+      <path d="M480-360 280-560h400L480-360Z"></path>
+    </svg>
+  </button>
+
+  <div
+    x-ref="dropdown"
+    x-show="open"
+    x-transition
+    @click="open = false"
+    class="absolute mt-4 bg-white border rounded-md shadow-lg border-primary-200 top-full"
+    x-bind:class="position === 'center' ? 'left-1/2 -translate-x-1/2' : position === 'right' ? 'right-0' : 'left-0'"
+    style="display: none;"
+  >
+    {
+      links.map((link) => (
+        <a
+          href={link.url}
+          target={link.external ? "_blank" : "_self"}
+          class="block px-4 py-2 text-sm transition-colors text-font hover:bg-primary-100 whitespace-nowrap"
+        >
+          {link.label}
+        </a>
+      ))
+    }
+  </div>
+</div>

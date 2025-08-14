@@ -1,5 +1,3 @@
-ALTER TABLE `login` ENGINE = InnoDB;
-
 CREATE TABLE `cp_account` (
 	`id` varchar(36) NOT NULL,
 	`account_id` text NOT NULL,

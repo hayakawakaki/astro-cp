@@ -1,20 +1,11 @@
 ---
-import BaseLayout from "@layouts/BaseLayout.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
 import IndexPage from "@theme/pages/IndexPage";
 const { serverName } = Astro.locals;
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="generator" content={Astro.generator} />
-    <title>{serverName} | Home</title>
-  </head>
-  <body>
-    <BaseLayout>
-      <IndexPage />
-    </BaseLayout>
-  </body>
-</html>
+<title>{serverName} \ Home</title>
+
+<BaseLayout>
+  <IndexPage />
+</BaseLayout>

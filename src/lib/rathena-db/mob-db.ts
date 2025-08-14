@@ -2,7 +2,7 @@ import yaml from "js-yaml";
 
 import type { MobDatabase, MobDatabaseInput, MobYAMLReturn } from "@/types";
 
-import config from "@root/app-config";
+import config from "~/app-config";
 
 import { createYmlLoader } from "./db-loader";
 import { addDrop } from "./item-db";

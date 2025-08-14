@@ -1,0 +1,66 @@
+---
+import config from "~/app-config";
+import Dropdown from "@/ui/Dropdown.astro";
+import Button from "@/ui/Button.astro";
+
+import type { NavLink, NavLinkGroup, ConfigNav } from "@/types/app-config.types";
+
+const isGroup = (item: NavLink | NavLinkGroup): item is NavLinkGroup => {
+  return "links" in item;
+};
+
+const isActive = (path: string) => {
+  return Astro.url.pathname === path || Astro.url.pathname.startsWith(path + "/");
+};
+
+type Props = {
+  links: ConfigNav;
+};
+
+const { links } = Astro.props;
+const { user } = Astro.locals;
+---
+
+<Fragment>
+  {
+    links.map((item) => {
+      if (!isGroup(item)) {
+        const isCurrentPage = isActive(item.url);
+        return (
+          <a
+            href={item.url}
+            target={item.external ? "_blank" : "_self"}
+            class={`relative pb-1 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:transition-all after:duration-300 ${
+              isCurrentPage ? "after:w-full after:bg-zinc-900" : "after:w-0 after:bg-zinc-600 hover:after:w-full"
+            }`}
+          >
+            {item.label}
+          </a>
+        );
+      } else {
+        const isCurrentPage = item.links.some((item) => isActive(item.url));
+        return (
+          <Dropdown
+            links={item.links}
+            class={`relative pb-1 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:transition-all after:duration-300 ${
+              isCurrentPage ? "after:w-full after:bg-zinc-900" : "after:w-0 after:bg-zinc-600 hover:after:w-full"
+            }`}
+          >
+            <Fragment slot="label">{item.label}</Fragment>
+          </Dropdown>
+        );
+      }
+    })
+  }
+  {
+    !user?.id ? (
+      <Button variant="secondary" size="md" href="/login">
+        Login
+      </Button>
+    ) : (
+      <Button variant="secondary" size="md" href="/account">
+        View Account
+      </Button>
+    )
+  }
+</Fragment>

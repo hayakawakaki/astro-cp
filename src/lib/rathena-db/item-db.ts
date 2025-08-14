@@ -12,7 +12,7 @@ import type {
   WhoDropFormat,
 } from "@/types";
 
-import config from "@root/app-config";
+import config from "~/app-config";
 
 import { createLuaLoader, createYmlLoader } from "./db-loader";
 

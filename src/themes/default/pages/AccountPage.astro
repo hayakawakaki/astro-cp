@@ -1,36 +1,38 @@
 ---
 export const prerender = true;
-import "@css/tailwind.css";
+import BaseLayout from "@/layouts/BaseLayout.astro";
 import { actions, isInputError } from "astro:actions";
 const result = Astro.getActionResult(actions.createAccount);
 const inputErrors = isInputError(result?.error) ? result.error.fields : {};
 ---
 
-<div class="flex w-full min-h-dvh justify-center items-center text-2xl text-white">
-  <form
-    class="card card-xl w-72 h-60 bg-zinc-900 p-4 gap-y-4"
-    id="create-account"
-    action={actions.createAccount}
-    method="POST"
-  >
-    <input class="bg-zinc-700" type="text" name="userId" placeholder="Username" aria-describedby="error" required />
-    <input
-      class="bg-zinc-700"
-      type="password"
-      name="password"
-      placeholder="Password"
-      aria-describedby="error"
-      required
-    />
-    <input
-      class="bg-zinc-700"
-      type="password"
-      name="passwordConfirm"
-      placeholder="Confirm Password"
-      aria-describedby="error"
-      required
-    />
-    <button class="btn btn-soft btn-accent" type="submit">Create Account</button>
-    {inputErrors.password && <p id="error">{inputErrors.password.join(",")}</p>}
-  </form>
-</div>
+<BaseLayout>
+  <div class="flex items-center justify-center w-full text-2xl text-white min-h-dvh">
+    <form
+      class="p-4 card card-xl w-72 h-60 bg-zinc-900 gap-y-4"
+      id="create-account"
+      action={actions.createAccount}
+      method="POST"
+    >
+      <input class="bg-zinc-700" type="text" name="userId" placeholder="Username" aria-describedby="error" required />
+      <input
+        class="bg-zinc-700"
+        type="password"
+        name="password"
+        placeholder="Password"
+        aria-describedby="error"
+        required
+      />
+      <input
+        class="bg-zinc-700"
+        type="password"
+        name="passwordConfirm"
+        placeholder="Confirm Password"
+        aria-describedby="error"
+        required
+      />
+      <button class="btn btn-soft btn-accent" type="submit">Create Account</button>
+      {inputErrors.password && <p id="error">{inputErrors.password.join(",")}</p>}
+    </form>
+  </div>
+</BaseLayout>

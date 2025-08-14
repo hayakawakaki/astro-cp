@@ -1,7 +1,7 @@
 import { defineMiddleware } from "astro:middleware";
 
-import { auth } from "@lib/auth/auth";
-import config from "@root/app-config";
+import { auth } from "@/lib/auth/auth";
+import config from "~/app-config";
 
 export const onRequest = defineMiddleware(async (context, next) => {
   // Skip auth check during prerendering/build time

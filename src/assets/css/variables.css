@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+:root {
+  --header-height: 4rem;
+  --logo-height: calc(var(--header-height) - 2.5rem);
+  --main-height: calc(100dvh - var(--header-height));
+  --app-padding: 1rem;
+  --vertical-space: 1rem;
+}
+
+@media screen and (min-width: theme(--breakpoint-md)) {
+  :root {
+    --header-height: 5rem;
+    --logo-height: calc(var(--header-height) - 3rem);
+  }
+}
+
+@media screen and (min-width: theme(--breakpoint-lg)) {
+  :root {
+    --app-padding: 2rem;
+    --header-height: 6rem;
+    --logo-height: calc(var(--header-height) - 3.5rem);
+  }
+}
+
+@media screen and (min-width: theme(--breakpoint-xl)) {
+  :root {
+    --app-padding: 0;
+  }
+}

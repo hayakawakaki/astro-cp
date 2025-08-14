@@ -1,7 +1,7 @@
 import { drizzle } from "drizzle-orm/mysql2";
 import mysql from "mysql2/promise";
 
-import env from "@lib/env-schema";
+import env from "@/lib/env-schema";
 
 const connection = mysql.createPool({
   host: env.DB_HOST,
