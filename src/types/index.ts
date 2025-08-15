@@ -35,3 +35,6 @@ export type {
   MobYAMLReturn,
   RaceGroupRecord,
 } from "./mob-db.types";
+export type {
+  ServerStatusReturn,
+} from "./server-status.types";

@@ -13,6 +13,21 @@ export type NavLinkGroup = {
 
 export type ConfigNav = Array<NavLink | NavLinkGroup>;
 
+export type ServerStatusOption
+  = {
+    includeGM: true;
+    includeVendor: boolean;
+    vipUserLevel: number;
+    gepardCheck: boolean;
+  }
+  | {
+    includeGM: false;
+    minGMLevel: number;
+    includeVendor: boolean;
+    vipUserLevel: number;
+    gepardCheck: boolean;
+  };
+
 export type AppConfig = {
   ServerName: string;
   Theme: string;
@@ -22,4 +37,6 @@ export type AppConfig = {
   ItemDatabaseLUA: string[];
   MobDatabaseYML: string[];
   AccountLink: NavLinkGroup;
+  ServerStatusOption: ServerStatusOption;
+  [key: string]: any; // For custom values
 };

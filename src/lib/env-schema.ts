@@ -3,7 +3,11 @@ import { expand } from "dotenv-expand";
 import { z, ZodError } from "zod";
 
 const EnvSchema = z.object({
-  NODE_ENV: z.string().default("development"),
+  // Host Schemas
+  SERVER_HOST: z.string().default("127.0.0.1"),
+  MAP_PORT: z.string(),
+  CHAR_PORT: z.string(),
+  LOGIN_PORT: z.string(),
   DB_HOST: z.string().default("127.0.0.1"),
   DB_USERNAME: z.string(),
   DB_PASSWORD: z.string(),
@@ -14,6 +18,9 @@ const EnvSchema = z.object({
   DISCORD_CLIENT_SECRET: z.string().optional(),
   GOOGLE_CLIENT_ID: z.string().optional(),
   GOOGLE_CLIENT_SECRET: z.string().optional(),
+
+  // Node Schemas
+  NODE_ENV: z.string().default("development"),
 });
 
 expand(config());
