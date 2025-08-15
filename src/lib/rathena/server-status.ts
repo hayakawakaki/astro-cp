@@ -95,14 +95,13 @@ async function _getOnlineCount(isMapOnline: boolean): Promise<number> {
 }
 
 async function _getServerStatus(): Promise<ServerStatusReturn> {
-  // Check all servers in parallel
   const [loginStatus, charStatus, mapStatus] = await Promise.all([
     _checkServerPort(Number(env.LOGIN_PORT)),
     _checkServerPort(Number(env.CHAR_PORT)),
     _checkServerPort(Number(env.MAP_PORT)),
   ]);
 
-  // Only get player count if map server is online
+  // Skip check if map is down
   const onlineCount = await _getOnlineCount(mapStatus);
 
   return {
@@ -113,7 +112,7 @@ async function _getServerStatus(): Promise<ServerStatusReturn> {
   };
 }
 
-// = Cache status value
+// Cache values
 class ServerStatusCache {
   private cache: ServerStatusReturn | null = null;
   private lastFetch: number = 0;
@@ -137,5 +136,5 @@ class ServerStatusCache {
   }
 }
 
-// = Create dedicated caches to your needs or just reuse this one
+// Create additional caches if you need shorter cache duration
 export const serverStatus = new ServerStatusCache(30000);
