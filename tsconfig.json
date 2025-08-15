@@ -4,10 +4,10 @@
     "jsx": "preserve",
     "baseUrl": ".",
     "paths": {
-      "~/*": ["./*"],
       "@/*": ["./src/*"],
       "@/css/*": ["./src/assets/css/*"],
-      "@/ui/*": ["./src/components/ui/*"]
+      "@/ui/*": ["./src/components/ui/*"],
+      "~/*": ["./*"]
     }
   },
   "include": [

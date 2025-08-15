@@ -1,4 +1,4 @@
-import { boolean, date, index, int, mysqlEnum, mysqlTable, primaryKey, text, timestamp, tinyint, varchar } from "drizzle-orm/mysql-core";
+import { boolean, char, date, index, int, mysqlEnum, mysqlTable, primaryKey, smallint, text, timestamp, tinyint, unique, varchar } from "drizzle-orm/mysql-core";
 
 export const user = mysqlTable("cp_user", {
   id: varchar("id", { length: 36 }).primaryKey(),
@@ -46,6 +46,7 @@ export const verification = mysqlTable("cp_verification", {
   updatedAt: timestamp("updated_at").$defaultFn(() => /* @__PURE__ */ new Date()),
 });
 
+// Rathena tables
 export const loginTable = mysqlTable("login", {
   accountId: int("account_id", { unsigned: true }).autoincrement().primaryKey().notNull(),
   userId: varchar("userid", { length: 23 }).notNull().default(""),
@@ -57,6 +58,7 @@ export const loginTable = mysqlTable("login", {
   unbanTime: int("unban_time").notNull().default(0),
   birthdate: date("birthdate"),
   vipTime: int("vip_time").notNull().default(0),
+  uniqueId: int("last_unique_id", { unsigned: true }),
 }, table => [
   index("name").on(table.userId),
 ]);
@@ -70,11 +72,57 @@ export const userAccountsTable = mysqlTable("cp_user_accounts", {
   index("account_id_idx").on(table.accountId),
 ]);
 
+export const charTable = mysqlTable("char", {
+  charId: int("char_id").autoincrement().notNull(),
+  accountId: int("account_id").default(0).notNull(),
+  charNum: tinyint("char_num").default(0).notNull(),
+  name: varchar({ length: 30 }).default("'").notNull(),
+  class: smallint().notNull(),
+  baseLevel: smallint("base_level").default(1).notNull(),
+  jobLevel: smallint("job_level").default(1).notNull(),
+  zeny: int().default(0).notNull(),
+  guildId: int("guild_id").default(0).notNull(),
+  hair: tinyint().default(0).notNull(),
+  hairColor: smallint("hair_color").notNull(),
+  clothesColor: smallint("clothes_color").notNull(),
+  body: smallint().notNull(),
+  weapon: smallint().notNull(),
+  shield: smallint().notNull(),
+  headTop: smallint("head_top").notNull(),
+  headMid: smallint("head_mid").notNull(),
+  headBottom: smallint("head_bottom").notNull(),
+  robe: smallint().notNull(),
+  online: tinyint().default(0).notNull(),
+  sex: mysqlEnum(["M", "F"]).notNull(),
+}, table => [
+  index("account_id").on(table.accountId),
+  index("guild_id").on(table.guildId),
+  index("online").on(table.online),
+  unique("name_key").on(table.name),
+]);
+
+export const vendingTable = mysqlTable("vendings", {
+  id: int().notNull(),
+  accountId: int("account_id").notNull(),
+  charId: int("char_id").notNull(),
+  sex: mysqlEnum(["F", "M"]).default("M").notNull(),
+  map: varchar({ length: 20 }).notNull(),
+  x: smallint().notNull(),
+  y: smallint().notNull(),
+  title: varchar({ length: 80 }).notNull(),
+  bodyDirection: char("body_direction", { length: 1 }).default("4").notNull(),
+  headDirection: char("head_direction", { length: 1 }).default("0").notNull(),
+  sit: char({ length: 1 }).default("1").notNull(),
+  autotrade: tinyint().notNull(),
+});
+
 export const schema = {
   user,
   session,
   account,
   verification,
   loginTable,
+  charTable,
   userAccountsTable,
+  vendingTable,
 };

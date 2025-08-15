@@ -4,11 +4,20 @@ const appConfig: AppConfig = {
   // General
   Theme: "default",
   AuthProviders: ["discord"],
-
-  // Server Details
   ServerName: "AtelierCP",
+  ServerStatusOption: {
+    vipUserLevel: 5,
+    includeGM: true,
+    includeVendor: false,
+    gepardCheck: false,
+  },
 
-  // Navigation
+  // Database
+  ItemDatabaseYML: ["item_db_equip.yml", "item_db_etc.yml", "item_db_usable.yml"],
+  ItemDatabaseLUA: ["iteminfo.lua"],
+  MobDatabaseYML: ["mob_db.yml"],
+
+  // UI Related
   NavItem: [
     { label: "Home", url: "/" },
     { label: "Download", url: "/download" },
@@ -30,11 +39,6 @@ const appConfig: AppConfig = {
       { label: "Purchase History", url: "/history" },
     ],
   },
-
-  // Database
-  ItemDatabaseYML: ["item_db_equip.yml", "item_db_etc.yml", "item_db_usable.yml"],
-  ItemDatabaseLUA: ["iteminfo.lua"],
-  MobDatabaseYML: ["mob_db.yml"],
 } as const;
 
 export default appConfig;

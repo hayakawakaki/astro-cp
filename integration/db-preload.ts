@@ -6,8 +6,8 @@ function preloadDatabase(): AstroIntegration {
     hooks: {
       "astro:server:setup": async ({ server }) => {
         try {
-          const { createItemDatabase } = await server.ssrLoadModule("/src/lib/rathena-db/item-db.ts");
-          const { createMobDatabase } = await server.ssrLoadModule("/src/lib/rathena-db/mob-db.ts");
+          const { createItemDatabase } = await server.ssrLoadModule("/src/lib/rathena/item-db.ts");
+          const { createMobDatabase } = await server.ssrLoadModule("/src/lib/rathena/mob-db.ts");
           await createItemDatabase();
           await createMobDatabase();
         }
