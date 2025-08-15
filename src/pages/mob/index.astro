@@ -1,7 +1,7 @@
 ---
 import MobPage from "@theme/pages/MobPage";
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { getMobDatabase } from "@/lib/rathena-db/mob-db";
+import { getMobDatabase } from "@/lib/rathena";
 import Pagination from "@/utils/pagination";
 
 const DB = await getMobDatabase();
