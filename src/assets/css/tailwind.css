@@ -3,10 +3,11 @@
 @theme {
   --spacing-v-space: var(--vertical-space);
   --spacing-header: var(--header-height);
-  --spacing-header-padding: calc(var(--header-height) + var(--vertical-space));
+  --spacing-header-padding: calc(var(--header-height) + var(--spacing-v-space));
   --spacing-logo: var(--logo-height);
   --spacing-body: calc(var(--main-height) - (var(--spacing-v-space) * 2));
   --spacing-padding: var(--app-padding);
+  --spacing-bento: calc((var(--spacing-body) / 8));
 
   --color-primary-50: oklch(98% 0.02 290);
   --color-primary-100: oklch(96% 0.04 290);
@@ -38,7 +39,8 @@
   --color-accent-700: oklch(55% 0.2 50);
   --color-accent-800: oklch(45% 0.18 50);
   --color-accent-900: oklch(35% 0.15 50);
-
   --color-font: oklch(20% 0.05 290);
   --color-background: oklch(98% 0.02 290);
+
+  --font-primary: "Rubik", "sans-serif";
 }
