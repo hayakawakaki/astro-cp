@@ -9,6 +9,7 @@ const appConfig: AppConfig = {
     vipUserLevel: 5,
     includeGM: true,
     includeVendor: false,
+    gepardCheck: false,
   },
 
   // Database

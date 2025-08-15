@@ -73,12 +73,21 @@ async function _getOnlineCount(isMapOnline: boolean): Promise<number> {
       }
     }
 
-    const result = await db
-      .select({ count: sql<number>`COUNT(*)` })
-      .from(charTable)
-      .where(and(...conditions));
-
-    return result[0]?.count || 0;
+    if (config.ServerStatusOption.gepardCheck) {
+      const result = await db
+        .selectDistinct({ uniqueId: loginTable.uniqueId })
+        .from(charTable)
+        .innerJoin(loginTable, eq(charTable.accountId, loginTable.accountId))
+        .where(and(...conditions));
+      return result.length;
+    }
+    else {
+      const result = await db
+        .select({ count: sql<number>`COUNT(*)` })
+        .from(charTable)
+        .where(and(...conditions));
+      return result[0]?.count || 0;
+    }
   }
   catch {
     return 0;
