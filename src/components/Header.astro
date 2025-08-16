@@ -1,15 +1,15 @@
 ---
 import Navigation from "@/components/Navigation.astro";
-import Dropdown from "@/components/ui/Dropdown.astro";
 import config from "~/app-config";
+import { Image } from "astro:assets";
 
 const { user, serverName } = Astro.locals;
 ---
 
-<header class="fixed inset-0 text-lg font-semibold h-max bg-primary-50 px-padding">
+<header class="fixed inset-0 z-10 text-lg font-medium h-max bg-primary-50 px-padding font-primary">
   <div class="container flex items-center justify-between mx-auto h-header py-v-space">
     <a href="/" class="content-center">
-      <img class="max-h-8" src="/logo.png" alt={`${serverName}'s Logo'`} />
+      <Image src="/logo.png" alt={`${serverName}'s Logo'`} height={32} width={108} loading="eager" />
     </a>
     <nav class="hidden lg:flex lg:items-center lg:gap-x-6">
       <Navigation links={config.NavItem} />

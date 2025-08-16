@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import Title from "@/components/Title.astro";
 import IndexPage from "@theme/pages/IndexPage";
 const { serverName } = Astro.locals;
 ---
@@ -7,5 +8,6 @@ const { serverName } = Astro.locals;
 <title>{serverName} \ Home</title>
 
 <BaseLayout>
+  <Title label="Home Page" />
   <IndexPage />
 </BaseLayout>
