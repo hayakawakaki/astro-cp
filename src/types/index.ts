@@ -36,5 +36,6 @@ export type {
   RaceGroupRecord,
 } from "./mob-db.types";
 export type {
+  OnlineCount,
   ServerStatusReturn,
 } from "./server-status.types";
