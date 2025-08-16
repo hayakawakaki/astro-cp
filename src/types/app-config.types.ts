@@ -13,23 +13,28 @@ export type NavLinkGroup = {
 
 export type ConfigNav = Array<NavLink | NavLinkGroup>;
 
-export type ServerStatusOption
-  = {
-    includeGM: true;
-    includeVendor: boolean;
-    vipUserLevel: number;
-    gepardCheck: boolean;
-  }
-  | {
-    includeGM: false;
-    minGMLevel: number;
-    includeVendor: boolean;
-    vipUserLevel: number;
-    gepardCheck: boolean;
+export type ServerInfo = {
+  type: "Classic" | "Pre-Renewal" | "Renewal";
+  maxLevel: number;
+  maxJob: number;
+  rates: {
+    exp: number;
+    drop: number;
+    card: number;
   };
+};
+
+export type ServerStatusOption = {
+  includeGM: boolean;
+  minGMLevel: number;
+  includeVendor: boolean;
+  vipUserLevel: number;
+  gepardCheck: boolean;
+};
 
 export type AppConfig = {
   ServerName: string;
+  ServerInfo: ServerInfo;
   Theme: string;
   AuthProviders: SocialProvider[];
   NavItem: ConfigNav;

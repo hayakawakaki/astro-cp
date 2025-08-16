@@ -7,11 +7,21 @@ const appConfig: AppConfig = {
   ServerName: "AtelierCP",
   ServerStatusOption: {
     vipUserLevel: 5,
+    minGMLevel: 2,
     includeGM: true,
     includeVendor: false,
     gepardCheck: false,
   },
-
+  ServerInfo: {
+    type: "Renewal",
+    maxLevel: 275,
+    maxJob: 60,
+    rates: {
+      exp: 100,
+      drop: 100,
+      card: 100,
+    },
+  },
   // Database
   ItemDatabaseYML: ["item_db_equip.yml", "item_db_etc.yml", "item_db_usable.yml"],
   ItemDatabaseLUA: ["iteminfo.lua"],
@@ -31,7 +41,6 @@ const appConfig: AppConfig = {
       ],
     },
   ],
-
   AccountLink: {
     label: "Account",
     links: [
@@ -39,6 +48,7 @@ const appConfig: AppConfig = {
       { label: "Purchase History", url: "/history" },
     ],
   },
+
 } as const;
 
 export default appConfig;
