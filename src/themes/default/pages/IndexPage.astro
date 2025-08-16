@@ -82,42 +82,46 @@ const data = config.ServerInfo;
       >
         Map
       </Badge>
-
-      variant="outline" outlineColor="gray" size="md" class="font-semibold rounded-2xl" dot={
-        charStatus ? "green" : "red"
-      }
-      > Char
+      <Badge
+        variant="outline"
+        outlineColor="gray"
+        size="md"
+        class="font-semibold rounded-2xl"
+        dot={charStatus ? "green" : "red"}
+      >
+        Char
+      </Badge>
+      <Badge
+        variant="outline"
+        outlineColor="gray"
+        size="md"
+        class="font-semibold rounded-2xl"
+        dot={loginStatus ? "green" : "red"}
+      >
+        Login
+      </Badge>
     </div>
-    <Badge
-      variant="outline"
-      outlineColor="gray"
-      size="md"
-      class="font-semibold rounded-2xl"
-      dot={loginStatus ? "green" : "red"}
-    >
-      Login
-    </Badge>
   </BentoItem>
-</BentoGrid>
-<BentoItem
-  baseCol={12}
-  baseRow={4}
-  class="relative overflow-hidden flex flex-col items-center *:z-0 justify-center p-4 text-center bg-accent-50 rounded-3xl gap-y-2 lg:col-span-4 lg:row-span-3 lg:justify-center"
+  <BentoItem
+    baseCol={12}
+    baseRow={4}
+    class="relative overflow-hidden flex flex-col items-center *:z-0 justify-center p-4 text-center bg-accent-50 rounded-3xl gap-y-2 lg:col-span-4 lg:row-span-3 lg:justify-center"
+  >
+    <Image
+      src="/background/online.webp"
+      alt="Logo"
+      width={200}
+      height={200}
+      loading="eager"
+      class="absolute bottom-0 right-0 w-auto opacity-[3%] max-h-48"
+    />
+    <h3 class="text-xl font-semibold">Online Counter</h3>
+    <div class="flex flex-wrap items-center justify-center gap-2">
+      <Badge size="lg" bgColor="green" class="font-semibold">Total : {totalOnlineCount}</Badge>
+      <Badge size="lg" bgColor="yellow" class="font-semibold">Gepard : {uniqueCount}</Badge>
+      <Badge size="lg" bgColor="indigo" class="font-semibold">Online : {onlineCount}</Badge>
+      <Badge size="lg" bgColor="purple" class="font-semibold">Vendor : {vendorCount}</Badge>
+      <Badge size="lg" bgColor="red" class="font-semibold">GM : {gmCount}</Badge>
+    </div>
+  </BentoItem></BentoGrid
 >
-  <Image
-    src="/background/online.webp"
-    alt="Logo"
-    width={200}
-    height={200}
-    loading="eager"
-    class="absolute bottom-0 right-0 w-auto opacity-[3%] max-h-48"
-  />
-  <h3 class="text-xl font-semibold">Online Counter</h3>
-  <div class="flex flex-wrap items-center justify-center gap-2">
-    <Badge size="lg" bgColor="green" class="font-semibold">Total : {totalOnlineCount}</Badge>
-    <Badge size="lg" bgColor="yellow" class="font-semibold">Gepard : {uniqueCount}</Badge>
-    <Badge size="lg" bgColor="indigo" class="font-semibold">Online : {onlineCount}</Badge>
-    <Badge size="lg" bgColor="purple" class="font-semibold">Vendor : {vendorCount}</Badge>
-    <Badge size="lg" bgColor="red" class="font-semibold">GM : {gmCount}</Badge>
-  </div>
-</BentoItem>

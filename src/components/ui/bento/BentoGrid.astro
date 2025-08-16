@@ -6,11 +6,6 @@ type Props = {
 const { class: className } = Astro.props;
 ---
 
-<<<<<<< Updated upstream
-<div class={`grid grid-cols-8 ${className}`}>
-  =======
-  <div class={`grid grid-cols-12 ${className}`}>
-    >>>>>>> Stashed changes
-    <slot />
-  </div>
+<div class={`grid grid-cols-12 ${className}`}>
+  <slot />
 </div>
