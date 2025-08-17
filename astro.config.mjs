@@ -5,7 +5,7 @@ import { defineConfig } from "astro/config";
 
 import config from "./app-config";
 import preloadDatabase from "./integration/db-preload";
-import themedComponentIntegration from "./integration/themed-component";
+import themeIntegration from "./integration/themes";
 
 // https://astro.build/config
 export default defineConfig({
@@ -14,7 +14,7 @@ export default defineConfig({
     mode: "standalone",
   }),
   integrations: [
-    themedComponentIntegration({ theme: config.Theme }),
+    themeIntegration({ theme: config.Theme }),
     preloadDatabase(),
     alpinejs(),
   ],
