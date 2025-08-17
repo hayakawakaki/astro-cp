@@ -1,10 +1,13 @@
 ---
-import MobPage from "@theme/pages/MobPage";
+import MobPage from "~theme/pages/MobPage";
+
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { getMobDatabase } from "@/lib/rathena";
 import Pagination from "@/utils/pagination";
 
+import { getMobDatabase } from "@/lib/rathena";
+
 const DB = await getMobDatabase();
+
 const pagination = new Pagination(DB);
 const currentPage = Number(Astro.url.searchParams.get("page")) || 1;
 const pageData = pagination.paginize({ page: currentPage, pageSize: 30 });

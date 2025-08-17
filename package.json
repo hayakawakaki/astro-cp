@@ -9,7 +9,9 @@
     "astro": "astro",
     "lint": "eslint",
     "lint:fix": "eslint --fix",
-    "prepare": "husky"
+    "prepare": "husky",
+    "test": "vitest",
+    "test:themes": "vitest run tests/theme-integration.test.ts"
   },
   "dependencies": {
     "@astrojs/alpinejs": "^0.4.8",
@@ -38,10 +40,13 @@
     "eslint": "^9.30.1",
     "eslint-plugin-astro": "^1.3.1",
     "eslint-plugin-format": "^1.0.1",
+    "glob": "^11.0.3",
     "husky": "^9.1.7",
+    "jsdom": "^26.1.0",
     "lint-staged": "^16.1.2",
     "prettier-plugin-astro": "^0.14.1",
-    "tsx": "^4.20.3"
+    "tsx": "^4.20.3",
+    "vitest": "^3.2.4"
   },
   "lint-staged": {
     "*": "pnpm lint"
