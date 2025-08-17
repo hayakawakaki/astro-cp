@@ -4,8 +4,8 @@ import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
 
 import config from "./app-config";
-import preloadDatabase from "./integration/db-preload";
-import themeIntegration from "./integration/themes";
+import preloadrathenadb from "./integration/db-preload";
+import theme from "./integration/theme-integration";
 
 // https://astro.build/config
 export default defineConfig({
@@ -14,11 +14,15 @@ export default defineConfig({
     mode: "standalone",
   }),
   integrations: [
-    themeIntegration({ theme: config.Theme }),
-    preloadDatabase(),
+    theme({ theme: config.Theme }),
+    preloadrathenadb(),
     alpinejs(),
   ],
   vite: {
     plugins: [tailwindcss()],
+    test: {
+      environment: "jsdom",
+      include: ["tests/**/*.test.ts"],
+    },
   },
 });
