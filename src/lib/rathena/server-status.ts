@@ -216,5 +216,6 @@ class ServerStatusCache {
   }
 }
 
-// Create additional caches if you need shorter cache duration
+// Create additional caches or edit this if you need shorter cache duration
+// new ServerStatusCache(duration in ms);
 export const serverStatus = new ServerStatusCache(60000);

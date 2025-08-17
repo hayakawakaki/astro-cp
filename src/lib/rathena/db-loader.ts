@@ -26,7 +26,7 @@ const _loadDatabase: DatabaseLoader = (fileType: FileType) => (configKey: string
   });
 
   const data = files.map((item: string) =>
-    readFile(`./src/data/${folderPath}/${item}`, "utf-8")
+    readFile(`./src/assets/rathena_db/${folderPath}/${item}`, "utf-8")
       .catch((err) => {
         console.warn(`loadDB(${fileType}): Failed to load ${item}: ${err}`);
         return null;

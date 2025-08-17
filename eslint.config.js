@@ -10,7 +10,7 @@ export default antfu({
     semi: true,
     quotes: "double",
   },
-  ignores: ["src/data/**", "docs/**"],
+  ignores: ["src/assets/rathena_db/**", "docs/**"],
 }, {
   rules: {
     "ts/no-redeclare": "off",

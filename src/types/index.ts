@@ -18,10 +18,6 @@ export type {
   ItemYAMLReturn,
   JobType,
   LocationType,
-  WeaponSubType,
-  WhoDropFormat,
-} from "./item-db.types";
-export type {
   MobDatabase,
   MobDatabaseInput,
   MobDrop,
@@ -33,9 +29,9 @@ export type {
   MobRaceGroup,
   MobSize,
   MobYAMLReturn,
-  RaceGroupRecord,
-} from "./mob-db.types";
-export type {
   OnlineCount,
+  RaceGroupRecord,
   ServerStatusReturn,
-} from "./server-status.types";
+  WeaponSubType,
+  WhoDropFormat,
+} from "./rathena-lib.types";
