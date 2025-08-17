@@ -1,4 +1,4 @@
-name: Lint Action
+name: Theme Validation
 
 on:
   pull_request:
