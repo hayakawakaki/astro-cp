@@ -1,0 +1,6 @@
+@import "tailwindcss";
+@import "./tailwind.css" layer(theme);
+
+body {
+  @apply font-primary text-font min-h-dvh h-full overscroll-none;
+}
