@@ -1,10 +1,10 @@
 ---
-import BentoGrid from "@/ui/Bento/BentoGrid.astro";
-import BentoItem from "@/ui/Bento/BentoItem.astro";
+import config from "~/app-config";
 import Button from "@/ui/Button.astro";
 import Badge from "@/ui/Badge.astro";
+import BentoGrid from "@/ui/bento/BentoGrid.astro";
+import BentoItem from "@/ui/bento/BentoItem.astro";
 import { serverStatus } from "@/lib/rathena";
-import config from "~/app-config";
 import { Image } from "astro:assets";
 
 const { loginStatus, charStatus, mapStatus, totalOnlineCount, onlineCount, vendorCount, gmCount, uniqueCount } =
@@ -123,5 +123,5 @@ const data = config.ServerInfo;
       <Badge size="lg" bgColor="purple" class="font-semibold">Vendor : {vendorCount}</Badge>
       <Badge size="lg" bgColor="red" class="font-semibold">GM : {gmCount}</Badge>
     </div>
-  </BentoItem></BentoGrid
->
+  </BentoItem>
+</BentoGrid>
