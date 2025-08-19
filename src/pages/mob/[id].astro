@@ -3,6 +3,8 @@ import { getMobInfo } from "@/lib/rathena";
 import MobInfo from "~theme/components/MobInfo";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 
+const { serverName } = Astro.locals;
+
 const { id } = Astro.params;
 const mobId = parseInt(id as string);
 const mobData = await getMobInfo(mobId);
@@ -14,17 +16,8 @@ if (!mobData) {
 }
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="generator" content={Astro.generator} />
-    <title>Astro</title>
-  </head>
-  <body>
-    <BaseLayout>
-      <MobInfo mob={mobData} />
-    </BaseLayout>
-  </body>
-</html>
+<title>{serverName} \ Mob \ {mobData.Name}</title>
+
+<BaseLayout>
+  <MobInfo mobData={mobData} />
+</BaseLayout>
