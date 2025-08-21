@@ -27,6 +27,7 @@ export type {
   MobMvpDrop,
   MobRace,
   MobRaceGroup,
+  MobSearch,
   MobSize,
   MobYAMLReturn,
   OnlineCount,

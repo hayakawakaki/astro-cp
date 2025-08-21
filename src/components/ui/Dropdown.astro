@@ -10,7 +10,7 @@ type Props = {
 const { label, links, class: className } = Astro.props;
 ---
 
-<div x-data="{ open: false, position: 'center' }" @click.outside="open = false" class="relative inline-block">
+<div x-data="{ open: false, position: 'center' }" @click.outside="open = false" class="relative inline-block z-50">
   <button class="flex items-center" @click="open = !open;">
     <span class={className}>
       <slot name="label">

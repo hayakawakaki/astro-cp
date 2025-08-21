@@ -4,8 +4,11 @@ import type { MobDatabase, MobDatabaseInput, MobYAMLReturn } from "@/types";
 
 import config from "~/app-config";
 
+import type { JobNames } from "./job-names";
+
 import { createYmlLoader } from "./db-loader";
 import { addDrop } from "./item-db";
+import { jobNames } from "./job-names";
 
 const _mobDB: MobDatabase = new Map();
 const _loadYamlDB = createYmlLoader("MobDatabaseYML", "mob");
@@ -25,7 +28,19 @@ async function createMobDatabase(): Promise<MobDatabase> {
 
   yamlDB.forEach((item) => {
     const result = yaml.load(item) as MobYAMLReturn;
-    result.Body.map(item => mobDB.push(item));
+
+    result.Body.map((value) => {
+      const key = value.AegisName.toLowerCase() as JobNames;
+
+      if (jobNames[key] !== key.toLowerCase()) {
+        value.AegisName = jobNames[key];
+      }
+      else {
+        value.AegisName = key;
+      }
+
+      return mobDB.push(value);
+    });
   });
 
   // Need sort here for multiple yaml support and pagination
@@ -53,4 +68,22 @@ async function getMobInfo(id: number): Promise<MobDatabaseInput | null> {
   return itemDB.get(id) || null;
 }
 
-export { createMobDatabase, getMobDatabase, getMobInfo };
+// Helper for the db search
+async function searchMobs(query: string, limit: number = 10): Promise<MobDatabaseInput[]> {
+  const mobDB = await getMobDatabase();
+  const searchValue = query.toLowerCase();
+  const found: MobDatabaseInput[] = [];
+
+  // for loop to use break
+  for (const mob of mobDB.values()) {
+    if (mob.Name?.toLowerCase().includes(searchValue) || mob.Id.toString().includes(searchValue)) {
+      found.push(mob);
+      if (found.length >= limit)
+        break;
+    }
+  }
+
+  return found;
+}
+
+export { createMobDatabase, getMobDatabase, getMobInfo, searchMobs };

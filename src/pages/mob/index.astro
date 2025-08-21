@@ -1,5 +1,5 @@
 ---
-import MobPage from "~theme/pages/MobPage";
+import MobPage from "~theme/pages/mob/Page";
 
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Pagination from "@/utils/pagination";
@@ -13,12 +13,12 @@ const DB = await getMobDatabase();
 
 const pagination = new Pagination(DB);
 const currentPage = Number(Astro.url.searchParams.get("page")) || 1;
-const pageData = pagination.paginize({ page: currentPage, pageSize: 30 });
+const pageData = pagination.paginize({ page: currentPage, pageSize: 20 });
 ---
 
 <title>{serverName} \ Mob</title>
 
 <BaseLayout>
   <Title label="Mob Database Page" />
-  <MobPage pageData={pageData.items} currentPage={currentPage} />
+  <MobPage pageData={pageData} currentPage={currentPage} />
 </BaseLayout>

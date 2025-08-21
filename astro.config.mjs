@@ -16,7 +16,7 @@ export default defineConfig({
   integrations: [
     theme({ theme: config.Theme }),
     preloadrathenadb(),
-    alpinejs(),
+    alpinejs({ entrypoint: "/src/lib/alpine/entrypoint" }),
   ],
   vite: {
     plugins: [tailwindcss()],

@@ -1,0 +1,18 @@
+---
+import { getItemName } from "@/lib/rathena";
+import type { MobDatabaseInput } from "@/types";
+
+import BentoItem from "@/ui/bento/BentoItem.astro";
+import BentoGrid from "@/ui/bento/BentoGrid.astro";
+
+const { mobData } = Astro.props;
+const data = mobData as MobDatabaseInput;
+---
+
+<BentoGrid>
+  <BentoItem baseCol={12} baseRow={3}>
+    {data.AegisName}
+    <img class="object-none" src=`/images/mob/${data.AegisName}.avif` alt={`${data.Name}'s Sprite`} class="" />
+    <h2>{data.Name}</h2>
+  </BentoItem>
+</BentoGrid>

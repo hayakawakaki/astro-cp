@@ -62,7 +62,7 @@ async function createItemDatabase(): Promise<ItemDatabase> {
 
       return itemId;
     });
-    return itemDB.push(...processed);
+    itemDB.push(...processed);
   });
 
   // Need sort here for multiple yaml support and pagination

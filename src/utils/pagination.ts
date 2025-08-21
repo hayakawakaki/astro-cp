@@ -1,9 +1,9 @@
-type PaginationOption = {
+export type PaginationOption = {
   page: number;
   pageSize: number;
 };
 
-type PaginationReturn<T> = {
+export type PaginationReturn<T> = {
   items: T[];
   page: number;
   pageSize: number;

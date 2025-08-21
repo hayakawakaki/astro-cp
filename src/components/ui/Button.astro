@@ -10,6 +10,7 @@ type Props = {
   class?: string;
   id?: string;
   ariaLabel?: string;
+  [key: string]: any;
 };
 
 const {
@@ -22,6 +23,7 @@ const {
   class: className = "",
   id,
   ariaLabel,
+  ...props
 } = Astro.props;
 
 const baseStyles =
@@ -51,6 +53,7 @@ const Element = href ? "a" : "button";
 ---
 
 <Element
+  {...props}
   class={buttonClasses}
   type={!href ? type : undefined}
   disabled={!href ? disabled : undefined}
