@@ -2,12 +2,11 @@
 import ItemInfo from "~theme/components/ItemInfo";
 
 import BaseLayout from "@/layouts/BaseLayout.astro";
-
 import { getItemInfo, getTradeRestrictions, whoDrops } from "@/lib/rathena";
 
 const { serverName } = Astro.locals;
 const { id } = Astro.params;
-const itemId = parseInt(id as string);
+const itemId = Number.parseInt(id as string);
 const itemData = await getItemInfo(itemId);
 if (!itemData) {
   return new Response(null, {

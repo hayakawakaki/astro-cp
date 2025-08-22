@@ -1,12 +1,12 @@
 ---
-import Button from "@/ui/Button.astro";
-import VSpace from "@/components/VSpace.astro";
-import DatabaseSearch from "@/components/forms/DatabaseSearch.astro";
+import { Image } from "astro:assets";
 
 import type { MobDatabaseInput } from "@/types";
 import type { PaginationReturn } from "@/utils/pagination";
 
-import { Image } from "astro:assets";
+import DatabaseSearch from "@/components/forms/DatabaseSearch.astro";
+import VSpace from "@/components/VSpace.astro";
+import Button from "@/ui/Button.astro";
 
 type Props = {
   pageData: PaginationReturn<MobDatabaseInput>;
@@ -29,7 +29,7 @@ const maxPage = pageData.totalPages;
       placeholder="Search Mob"
       display={{ id: "id", name: "name" }}
       key="id"
-      onSelect="(item) => window.open(`/mob/${item.id}`, '_blank')"
+      onSelect="(item) => window.open('/mob/' + item.id, '_blank')"
       maxResults={10}
       inputClass="h-10 w-24 md:w-60 focus:placeholder:opacity-0"
     >
@@ -44,12 +44,14 @@ const maxPage = pageData.totalPages;
         class="w-10 cursor-pointer rounded-tl-md rounded-bl-md"
         variant="secondary"
         disabled={!pageData.hasPrev}
-        x-on:click="window.location.href = '/mob?page=' + (currentPage - 1)"
+        @click="window.location.href = '/mob?page=' + (currentPage - 1)"
       >
         <span>«</span>
       </Button>
 
-      <label class="h-full border border-primary-200 max-w-32 focus-within:border-primary-300">
+      <label
+        class="h-full border border-primary-200 max-w-32 focus-within:border-primary-300"
+      >
         <span class="sr-only">Current Page</span>
         <input
           type="number"
@@ -58,14 +60,14 @@ const maxPage = pageData.totalPages;
           class="content-center w-full h-full text-sm font-medium text-center bg-transparent placeholder:text-font focus:placeholder:opacity-0 outline-0"
           placeholder={`${currentPage}`}
           @keyup="if (parseInt(value) > maxPage) value = maxPage"
-          @keyup.enter="window.location.href = `/mob?page=${value}`"
+          @keyup.enter="window.location.href = '/mob?page=' + value"
         />
       </label>
       <Button
         class="w-10 cursor-pointer rounded-tr-md rounded-br-md"
         variant="secondary"
         disabled={!pageData.hasNext}
-        x-on:click="window.location.href = '/mob?page=' + (currentPage + 1)"
+        @click="window.location.href = '/mob?page=' + (currentPage + 1)"
       >
         <span>»</span>
       </Button>
@@ -88,27 +90,36 @@ const maxPage = pageData.totalPages;
     {
       pageData.items.map((item, index) => (
         <Fragment>
-          <div class="h-full col-span-6 md:col-span-4 place-items-center border-primary-200">
+          <div class="h-full col-span-6 md:col-span-4 border-primary-200">
             <Image
               width={250}
               height={250}
               src={`/images/mob/${item.AegisName}.avif`}
-              alt={`${item.Name} Sprite'`}
+              alt={`${item.Name} Sprite`}
               loading={index > 5 ? "lazy" : "eager"}
-              class="object-contain w-auto max-h-full"
+              class="object-contain w-auto max-h-full mx-auto"
               onerror="this.onerror=null; this.src='/images/mob/poring.avif'"
             />
           </div>
-          <p class="hidden md:block md:col-span-2 border-primary-200">{item.Id}</p>
-          <p class="h-full col-span-9 text-center md:col-span-4 border-primary-200">{item.Name}</p>
-          <p class="hidden md:block md:col-span-2 border-primary-200">{item.Size}</p>
-          <p class="hidden md:block md:col-span-3 border-primary-200">{item.Race}</p>
+          <p class="hidden md:block md:col-span-2 border-primary-200">
+            {item.Id}
+          </p>
+          <p class="h-full col-span-9 text-center md:col-span-4 border-primary-200">
+            {item.Name}
+          </p>
+          <p class="hidden md:block md:col-span-2 border-primary-200">
+            {item.Size}
+          </p>
+          <p class="hidden md:block md:col-span-3 border-primary-200">
+            {item.Race}
+          </p>
           <p class="hidden md:block md:col-span-2 border-primary-200">{`${item.Element} ${item.ElementLevel}`}</p>
           <div class="grid w-full col-span-5 md:col-span-3 place-items-center">
             <Button
               variant="secondary"
               class="h-12 text-center rounded-lg w-18 md:h-12 md:w-24 lg:w-32"
               href={`/mob/${item.Id}`}
+              target="_blank"
             >
               View Details
             </Button>

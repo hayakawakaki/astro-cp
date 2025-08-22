@@ -23,7 +23,7 @@
   }
 }
 
-@media screen and (min-width: theme(--breakpoint-xl)) {
+@media screen and (min-width: theme(--breakpoint-2xl)) {
   :root {
     --app-padding: 0;
   }

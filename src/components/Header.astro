@@ -1,9 +1,10 @@
 ---
-import Navigation from "@/components/Navigation.astro";
-import config from "~/app-config";
 import { Image } from "astro:assets";
 
-const { user, serverName } = Astro.locals;
+import Navigation from "@/components/Navigation.astro";
+import config from "~/app-config";
+
+const { serverName } = Astro.locals;
 ---
 
 <header class="fixed inset-0 z-50 text-lg font-medium h-max bg-primary-50 px-padding font-primary">
@@ -16,13 +17,3 @@ const { user, serverName } = Astro.locals;
     </nav>
   </div>
 </header>
-
-<script>
-  import { signOut } from "@/lib/auth/auth-client";
-
-  const logoutButton = document.getElementById("logout-button");
-  logoutButton?.addEventListener("click", async () => {
-    await signOut();
-    window.location.reload();
-  });
-</script>

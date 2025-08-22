@@ -1,14 +1,14 @@
 ---
 import MobIdPage from "~theme/pages/mob/Id";
-import BaseLayout from "@/layouts/BaseLayout.astro";
-import Title from "@/components/Title.astro";
 
+import Title from "@/components/Title.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
 import { getMobInfo } from "@/lib/rathena";
 
 const { serverName } = Astro.locals;
 
 const { id } = Astro.params;
-const mobId = parseInt(id as string);
+const mobId = Number.parseInt(id as string);
 const mobData = await getMobInfo(mobId);
 if (!mobData) {
   return new Response(null, {
@@ -21,6 +21,6 @@ if (!mobData) {
 <title>{serverName} \ Mob \ {mobData.Name}</title>
 
 <BaseLayout>
-  <Title label="Mob Database Page" />
+  <Title label=`Mob Database - ${mobData.Name}` />
   <MobIdPage mobData={mobData} />
 </BaseLayout>

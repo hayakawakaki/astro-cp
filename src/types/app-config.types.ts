@@ -1,9 +1,17 @@
 import type { SocialProvider } from "better-auth/social-providers";
 
-export type NavLink = {
+export type NavLink
+= | {
   label: string;
   url: string;
   external?: boolean;
+  action?: never;
+}
+| {
+  label: string;
+  action: string;
+  url?: never;
+  external?: never;
 };
 
 export type NavLinkGroup = {

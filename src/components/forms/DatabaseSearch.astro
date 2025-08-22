@@ -37,7 +37,7 @@ const config = {
 ---
 
 <div
-  x-data={`searchable(${JSON.stringify(config).replace('\"onSelect\":\"' + onSelect + '\"', '\"onSelect\":' + onSelect)})`}
+  x-data={`searchable(${JSON.stringify(config).replace(`"onSelect":"${onSelect}"`, `"onSelect":${onSelect}`)})`}
   class="relative"
   @click.away="onClickAway"
 >
@@ -60,7 +60,8 @@ const config = {
         stroke-linecap="round"
         stroke-linejoin="round"
         stroke-width="2.5"
-        d="m21 21l-4.343-4.343m0 0A8 8 0 1 0 5.343 5.343a8 8 0 0 0 11.314 11.314"></path>
+        d="m21 21l-4.343-4.343m0 0A8 8 0 1 0 5.343 5.343a8 8 0 0 0 11.314 11.314"
+      ></path>
     </svg>
     <input
       id={id}
@@ -73,7 +74,7 @@ const config = {
       class=`bg-transparent outline-none font-medium text-sm md:text-base placeholder:font-medium ${inputClass}`
       type="search"
       :placeholder="placeholder"
-      autocomplete="off"
+        autocomplete="off"
     />
   </label>
 
@@ -86,7 +87,7 @@ const config = {
     x-transition:leave="transition ease-in duration-75"
     x-transition:leave-start="opacity-100 scale-100"
     x-transition:leave-end="opacity-0 scale-95"
-    class=`absolute z-50 mt-1 border rounded-md w-full bg-background border-primary-200 ${dropDownClass}`
+    class=`absolute z-50 mt-1 border rounded-md w-80 md:w-full bg-background border-primary-200 ${dropDownClass}`
     x-cloak
   >
     <!-- Dropdown contents -->
@@ -97,8 +98,8 @@ const config = {
             @click="onSelectItem(item)"
             @mouseenter="selectedIndex = index"
             :class="{'bg-primary-50': selectedIndex === index}"
-            class="flex items-center justify-between w-full p-2 text-sm text-left transition-colors hover:bg-secondary-200"
-            type="button"
+              class="flex items-center justify-between w-full p-2 text-sm text-right transition-colors hover:bg-secondary-200"
+              type="button"
           >
             <slot name="display">
               <span x-text="getDisplay(item, 'id')"></span>
