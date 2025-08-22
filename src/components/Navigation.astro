@@ -1,17 +1,16 @@
 ---
-import config from "~/app-config";
-import Dropdown from "@/ui/Dropdown.astro";
+import type { ConfigNav, NavLink, NavLinkGroup } from "@/types/app-config.types";
+
 import Button from "@/ui/Button.astro";
+import Dropdown from "@/ui/Dropdown.astro";
 
-import type { NavLink, NavLinkGroup, ConfigNav } from "@/types/app-config.types";
-
-const isGroup = (item: NavLink | NavLinkGroup): item is NavLinkGroup => {
+function isGroup(item: NavLink | NavLinkGroup): item is NavLinkGroup {
   return "links" in item;
-};
+}
 
-const isActive = (path: string) => {
-  return Astro.url.pathname === path || Astro.url.pathname.startsWith(path + "/");
-};
+function isActive(path: string) {
+  return Astro.url.pathname === path || Astro.url.pathname.startsWith(`${path}/`);
+}
 
 type Props = {
   links: ConfigNav;
@@ -25,7 +24,7 @@ const { user } = Astro.locals;
   {
     links.map((item) => {
       if (!isGroup(item)) {
-        const isCurrentPage = isActive(item.url);
+        const isCurrentPage = item.url ? isActive(item.url) : false;
         return (
           <a
             href={item.url}
@@ -37,29 +36,36 @@ const { user } = Astro.locals;
             {item.label}
           </a>
         );
-      } else {
-        const isCurrentPage = item.links.some((item) => isActive(item.url));
+      }
+ else {
+        const isCurrentPage = item.links.some((link) => {
+          return link.url && isActive(link.url);
+        });
         return (
           <Dropdown
             links={item.links}
             class={`relative pb-1 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:transition-all after:duration-300 ${
               isCurrentPage ? "after:w-full after:bg-zinc-900" : "after:w-0 after:bg-zinc-600 hover:after:w-full"
             }`}
+            arrow
           >
-            <Fragment slot="label">{item.label}</Fragment>
+            <span slot="label">{item.label}</span>
           </Dropdown>
         );
       }
     })
   }
   {
-    !user?.id ? (
-      <Button variant="secondary" size="md" href="/login">
+    // @click breaks the IDE styling for some reason
+    !user?.id
+? (
+      <Button variant="secondary" size="lg" class="w-32 rounded-xl" x-data x-on:click="$store.auth.signIn('discord')">
         Login
       </Button>
-    ) : (
-      <Button variant="secondary" size="md" href="/account">
-        View Account
+    )
+: (
+      <Button variant="secondary" size="lg" class="w-32 rounded-xl" x-data x-on:click="$store.auth.signOut();">
+        Logout
       </Button>
     )
   }

@@ -390,6 +390,12 @@ export type MobYAMLReturn = {
   Body: MobDatabaseInput[];
 };
 
+export type MobSearch = {
+  id: number;
+  name: string;
+  aegisName: string;
+};
+
 export type OnlineCount = {
   onlineCount: number;
   totalOnlineCount: number;

@@ -2,9 +2,8 @@
 import ItemPage from "~theme/pages/ItemPage";
 
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import Pagination from "@/utils/pagination";
-
 import { getItemDatabase } from "@/lib/rathena";
+import Pagination from "@/utils/pagination";
 
 const DB = await getItemDatabase();
 const pagination = new Pagination(DB);

@@ -1,0 +1,122 @@
+---
+type Props = {
+  id: string;
+  endpoint: string;
+  placeholder?: string;
+  display?: Record<string, string>;
+  key?: string;
+  minChars?: number;
+  maxResults?: number;
+  onSelect?: string;
+  inputClass?: string;
+  dropDownClass?: string;
+};
+
+const {
+  id,
+  endpoint,
+  placeholder = "Search.",
+  display = { id: "id" },
+  key = "id",
+  minChars = 2,
+  maxResults,
+  onSelect = "",
+  inputClass = "",
+  dropDownClass = "",
+} = Astro.props;
+
+const config = {
+  endpoint,
+  placeholder,
+  display,
+  key,
+  minChars,
+  maxResults,
+  onSelect,
+};
+---
+
+<div
+  x-data={`searchable(${JSON.stringify(config).replace(`"onSelect":"${onSelect}"`, `"onSelect":${onSelect}`)})`}
+  class="relative"
+  @click.away="onClickAway"
+>
+  <label
+    class="flex items-center px-2 border rounded-md gap-x-2 border-primary-200 focus-within:outline-1 focus-within:outline-primary-300"
+  >
+    <!-- Astro console is pretty noisy with this -->
+    <span class="sr-only">{placeholder}</span>
+    <svg
+      @click="$refs.searchInput.focus()"
+      class="h-4 opacity-50 cursor-pointer"
+      xmlns="http://www.w3.org/2000/svg"
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+    >
+      <path
+        fill="none"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2.5"
+        d="m21 21l-4.343-4.343m0 0A8 8 0 1 0 5.343 5.343a8 8 0 0 0 11.314 11.314"
+      ></path>
+    </svg>
+    <input
+      id={id}
+      name={id}
+      x-ref="searchInput"
+      x-model="search"
+      @input.debounce.300ms="fetchResults"
+      @focus="onFocus"
+      @keydown="onKeydown"
+      class=`bg-transparent outline-none font-medium text-sm md:text-base placeholder:font-medium ${inputClass}`
+      type="search"
+      :placeholder="placeholder"
+        autocomplete="off"
+    />
+  </label>
+
+  <!-- Search dropdown -->
+  <div
+    x-show="isOpen && filteredResults.length > 0"
+    x-transition:enter="transition ease-out duration-100"
+    x-transition:enter-start="opacity-0 scale-95"
+    x-transition:enter-end="opacity-100 scale-100"
+    x-transition:leave="transition ease-in duration-75"
+    x-transition:leave-start="opacity-100 scale-100"
+    x-transition:leave-end="opacity-0 scale-95"
+    class=`absolute z-50 mt-1 border rounded-md w-80 md:w-full bg-background border-primary-200 ${dropDownClass}`
+    x-cloak
+  >
+    <!-- Dropdown contents -->
+    <ul x-show="filteredResults.length > 0" class="w-full h-full py-1 overflow-auto">
+      <template x-for="(item, index) in filteredResults" :key="item[key]">
+        <li>
+          <button
+            @click="onSelectItem(item)"
+            @mouseenter="selectedIndex = index"
+            :class="{'bg-primary-50': selectedIndex === index}"
+              class="flex items-center justify-between w-full p-2 text-sm text-right transition-colors hover:bg-secondary-200"
+              type="button"
+          >
+            <slot name="display">
+              <span x-text="getDisplay(item, 'id')"></span>
+            </slot>
+          </button>
+        </li>
+      </template>
+    </ul>
+  </div>
+
+  <!-- No result -->
+  <div
+    x-show="isOpen && search.length >= minChars && filteredResults.length === 0"
+    x-transition
+    class=`absolute z-50 p-2 mt-1 text-sm border w-full rounded-md bg-background border-primary-200 ${dropDownClass}`
+    x-cloak
+  >
+    No result found.
+  </div>
+</div>

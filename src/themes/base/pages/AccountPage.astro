@@ -1,7 +1,9 @@
 ---
-export const prerender = true;
-import BaseLayout from "@/layouts/BaseLayout.astro";
 import { actions, isInputError } from "astro:actions";
+
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+export const prerender = true;
 const result = Astro.getActionResult(actions.createAccount);
 const inputErrors = isInputError(result?.error) ? result.error.fields : {};
 ---

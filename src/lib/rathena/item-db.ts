@@ -62,7 +62,7 @@ async function createItemDatabase(): Promise<ItemDatabase> {
 
       return itemId;
     });
-    return itemDB.push(...processed);
+    itemDB.push(...processed);
   });
 
   // Need sort here for multiple yaml support and pagination
@@ -213,6 +213,14 @@ async function getItemInfo(id: number): Promise<ItemDatabaseFormat | null> {
   return itemDB.get(id) || null;
 }
 
+// Todo: Merge this into one function
+async function getItemId(value: string): Promise<string | null> {
+  if (!_itemDB.size) {
+    await createItemDatabase();
+  }
+  return _itemNameDB.get(value)?.Name || null;
+}
+
 async function getItemName(value: string | number): Promise<string | null> {
   if (!_itemDB.size) {
     await createItemDatabase();
@@ -223,6 +231,19 @@ async function getItemName(value: string | number): Promise<string | null> {
   }
   else {
     return _itemDB.get(value)?.Name || null;
+  }
+}
+
+async function getItemSprite(value: string | number): Promise<string | null> {
+  if (!_itemDB.size) {
+    await createItemDatabase();
+  }
+
+  if ((typeof value) === "string") {
+    return _itemNameDB.get(value)?.Image || null;
+  }
+  else {
+    return _itemDB.get(value)?.Image || null;
   }
 }
 
@@ -251,4 +272,4 @@ function getTradeRestrictions(trade: ItemTrade | undefined): string[] {
   return restrictions;
 }
 
-export { addDrop, createItemDatabase, getItemDatabase, getItemInfo, getItemName, getTradeRestrictions, whoDrops };
+export { addDrop, createItemDatabase, getItemDatabase, getItemId, getItemInfo, getItemName, getItemSprite, getTradeRestrictions, whoDrops };

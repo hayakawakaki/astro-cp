@@ -1,5 +1,6 @@
 ---
 import type { ItemDatabaseFormat } from "@/types";
+
 type Props = {
   pageData: ItemDatabaseFormat[];
   currentPage: number;
@@ -27,7 +28,7 @@ const { pageData, currentPage } = Astro.props;
   </div>
   <div class="grow">
     <div class="flex flex-col">
-      {pageData.map((item) => <a href={`/item/${item.Id}`}>{item.Name}</a>)}
+      {pageData.map(item => <a href={`/item/${item.Id}`}>{item.Name}</a>)}
     </div>
   </div>
 </div>

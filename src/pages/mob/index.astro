@@ -1,22 +1,23 @@
 ---
-import MobPage from "~theme/pages/MobPage";
+import MobPage from "~theme/pages/mob/Page";
 
+import Title from "@/components/Title.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { getMobDatabase } from "@/lib/rathena";
 import Pagination from "@/utils/pagination";
 
-import { getMobDatabase } from "@/lib/rathena";
+const { serverName } = Astro.locals;
 
 const DB = await getMobDatabase();
 
 const pagination = new Pagination(DB);
 const currentPage = Number(Astro.url.searchParams.get("page")) || 1;
-const pageData = pagination.paginize({ page: currentPage, pageSize: 30 });
+const pageData = pagination.paginize({ page: currentPage, pageSize: 20 });
 ---
 
-<head>
-  <title>Astro</title>
-</head>
+<title>{serverName} \ Mob</title>
 
 <BaseLayout>
-  <MobPage pageData={pageData.items} currentPage={currentPage} />
+  <Title label="Mob Database Page" />
+  <MobPage pageData={pageData} currentPage={currentPage} />
 </BaseLayout>

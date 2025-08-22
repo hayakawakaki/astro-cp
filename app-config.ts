@@ -37,7 +37,6 @@ const appConfig: AppConfig = {
       links: [
         { label: "Item Database", url: "/item" },
         { label: "Mob Database", url: "/mob" },
-        { label: "Enchant Database", url: "/enchant" },
       ],
     },
   ],
@@ -46,6 +45,7 @@ const appConfig: AppConfig = {
     links: [
       { label: "View Accounts", url: "/dashboard" },
       { label: "Purchase History", url: "/history" },
+      { label: "Logout", action: "logout" },
     ],
   },
 

@@ -15,6 +15,9 @@ async function signIn(targetProvider: SocialProvider) {
   await authClient.signIn.social({ provider: targetProvider });
 }
 
-const signOut = authClient.signOut;
+async function signOut() {
+  await authClient.signOut();
+  window.location.reload();
+}
 
 export { signIn, signOut };

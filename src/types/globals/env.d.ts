@@ -6,3 +6,7 @@ declare namespace App {
     serverName: import("../../../app-config").ServerName | "NO NAME";
   };
 }
+
+type Window = {
+  Alpine: import("alpinejs").Alpine;
+};
