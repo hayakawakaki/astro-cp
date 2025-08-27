@@ -1,7 +1,7 @@
 ---
 import { Image } from "astro:assets";
 
-import type { MobDatabaseInput } from "@/types";
+import type { MobDatabaseFormat } from "@/rathena";
 import type { PaginationReturn } from "@/utils/pagination";
 
 import DatabaseSearch from "@/components/forms/DatabaseSearch.astro";
@@ -9,7 +9,7 @@ import VSpace from "@/components/VSpace.astro";
 import Button from "@/ui/Button.astro";
 
 type Props = {
-  pageData: PaginationReturn<MobDatabaseInput>;
+  pageData: PaginationReturn<MobDatabaseFormat>;
   currentPage: number;
 };
 

@@ -3,14 +3,14 @@ import luaparse from "luaparse";
 
 import type {
   DropDatabase,
+  GetItemDatabase,
   ItemDatabase,
   ItemDatabaseFormat,
   ItemInfoInput,
   ItemInfoLUA,
   ItemTrade,
   ItemYAMLReturn,
-  WhoDropFormat,
-} from "@/types";
+} from "@/rathena";
 
 import config from "~/app-config";
 
@@ -23,7 +23,7 @@ const _loadYamlDB = createYmlLoader("ItemDatabaseYML", "item");
 const _loadItemInfo = createLuaLoader("ItemDatabaseLUA", "item");
 
 // Create Database
-async function createItemDatabase(): Promise<ItemDatabase> {
+export async function _createItemDatabase(): Promise<ItemDatabase> {
   if (_itemDB.size > 0) {
     return _itemDB;
   }
@@ -171,10 +171,11 @@ function _processDescription(set: string[]) {
   return coloredDescription;
 };
 
-async function addDrop(item: number | string, mobId: number, dropRate: number) {
+export async function _addDrop(item: number | string, mobId: number, dropRate: number) {
   if (!_itemDB.size) {
-    await createItemDatabase();
+    await _createItemDatabase();
   }
+
   let itemId;
 
   if ((typeof item) === "string") {
@@ -190,86 +191,34 @@ async function addDrop(item: number | string, mobId: number, dropRate: number) {
   _dropDatabase.get(itemId)?.add({ mobId, dropRate });
 }
 
-async function whoDrops(itemId: number): Promise<Set<WhoDropFormat>> {
-  // Shouldn't happen but just in case
-  if (!_dropDatabase.size) {
-    return new Set();
+// Just pass the value and check if it's string or number to know which cache to get data from
+export async function _getItemDatabase(value?: GetItemDatabase): Promise<ItemDatabase> {
+  if (!_itemDB.size) {
+    await _createItemDatabase();
   }
-  return _dropDatabase.get(itemId) || new Set();
-}
-
-// Helper Functions
-async function getItemDatabase(): Promise<ItemDatabase> {
-  if (_itemDB.size > 0) {
+  if (!value || (typeof value) === "number") {
     return _itemDB;
   }
-  return await createItemDatabase();
-}
-
-// Get item data
-async function getItemInfo(id: number): Promise<ItemDatabaseFormat | null> {
-  // Should be cached already at this point.
-  const itemDB = await getItemDatabase();
-  return itemDB.get(id) || null;
-}
-
-// Todo: Merge this into one function
-async function getItemId(value: string): Promise<string | null> {
-  if (!_itemDB.size) {
-    await createItemDatabase();
-  }
-  return _itemNameDB.get(value)?.Name || null;
-}
-
-async function getItemName(value: string | number): Promise<string | null> {
-  if (!_itemDB.size) {
-    await createItemDatabase();
-  }
-
-  if ((typeof value) === "string") {
-    return _itemNameDB.get(value)?.Name || null;
-  }
   else {
-    return _itemDB.get(value)?.Name || null;
+    return _itemNameDB;
   }
 }
 
-async function getItemSprite(value: string | number): Promise<string | null> {
-  if (!_itemDB.size) {
-    await createItemDatabase();
+export async function _getDropDatabase(): Promise<DropDatabase> {
+  if (!_dropDatabase.size) {
+    await _createItemDatabase();
   }
-
-  if ((typeof value) === "string") {
-    return _itemNameDB.get(value)?.Image || null;
-  }
-  else {
-    return _itemDB.get(value)?.Image || null;
-  }
+  return _dropDatabase;
 }
 
-function getTradeRestrictions(trade: ItemTrade | undefined): string[] {
-  if (!trade)
-    return [];
-
-  const restrictions = [];
-  if (trade.NoDrop)
-    restrictions.push("No Drop");
-  if (trade.NoTrade)
-    restrictions.push("No Trade");
-  if (trade.NoSell)
-    restrictions.push("No Sell");
-  if (trade.NoMail)
-    restrictions.push("No Mail");
-  if (trade.NoCart)
-    restrictions.push("No Cart");
-  if (trade.NoStorage)
-    restrictions.push("No Storage");
-  if (trade.NoGuildStorage)
-    restrictions.push("No Guild Storage");
-  if (trade.NoAuction)
-    restrictions.push("No Auction");
-
-  return restrictions;
-}
-
-export { addDrop, createItemDatabase, getItemDatabase, getItemId, getItemInfo, getItemName, getItemSprite, getTradeRestrictions, whoDrops };
+export const _tradeDisplay: Record<keyof Omit<ItemTrade, "Override">, string> = {
+  NoDrop: "No Drop",
+  NoTrade: "No Trade",
+  TradePartner: "Trade Partner",
+  NoSell: "No Sell",
+  NoCart: "No Cart",
+  NoStorage: "No Storage",
+  NoGuildStorage: "No Guild Storage",
+  NoMail: "No Mail",
+  NoAuction: "No Auction",
+};

@@ -1,20 +1,18 @@
 import yaml from "js-yaml";
 
-import type { MobDatabase, MobDatabaseInput, MobYAMLReturn } from "@/types";
+import type { JobNames, MobDatabase, MobDatabaseFormat, MobYAMLReturn } from "@/rathena";
 
 import config from "~/app-config";
 
-import type { JobNames } from "./job-names";
-
+import { jobNames } from "./client-jobnames";
+import { _addDrop } from "./db-item";
 import { createYmlLoader } from "./db-loader";
-import { addDrop } from "./item-db";
-import { jobNames } from "./job-names";
 
 const _mobDB: MobDatabase = new Map();
 const _loadYamlDB = createYmlLoader("MobDatabaseYML", "mob");
 
 // Create Database
-async function createMobDatabase(): Promise<MobDatabase> {
+export async function _createMobDatabase(): Promise<MobDatabase> {
   if (_mobDB.size > 0) {
     return _mobDB;
   }
@@ -24,12 +22,13 @@ async function createMobDatabase(): Promise<MobDatabase> {
   }
 
   const yamlDB = await _loadYamlDB();
-  const mobDB: MobDatabaseInput[] = [];
+  const mobDB: MobDatabaseFormat[] = [];
 
   yamlDB.forEach((item) => {
     const result = yaml.load(item) as MobYAMLReturn;
 
     result.Body.map((value) => {
+      // get the sprite it uses in the client-jobnames
       const key = value.AegisName.toLowerCase() as JobNames;
 
       if (jobNames[key] !== key.toLowerCase()) {
@@ -49,41 +48,16 @@ async function createMobDatabase(): Promise<MobDatabase> {
   mobDB.forEach((item) => {
     _mobDB.set(item.Id, item);
     item.Drops?.forEach((drop) => {
-      addDrop(drop.Item, item.Id, drop.Rate);
+      _addDrop(drop.Item, item.Id, drop.Rate);
     });
   });
 
   return _mobDB;
 }
 
-async function getMobDatabase(): Promise<MobDatabase> {
+export async function _getMobDatabase(): Promise<MobDatabase> {
   if (_mobDB.size > 0) {
     return _mobDB;
   }
-  return createMobDatabase();
+  return _createMobDatabase();
 }
-
-async function getMobInfo(id: number): Promise<MobDatabaseInput | null> {
-  const itemDB = await getMobDatabase();
-  return itemDB.get(id) || null;
-}
-
-// Helper for the db search
-async function searchMobs(query: string, limit: number = 10): Promise<MobDatabaseInput[]> {
-  const mobDB = await getMobDatabase();
-  const searchValue = query.toLowerCase();
-  const found: MobDatabaseInput[] = [];
-
-  // for loop to use break
-  for (const mob of mobDB.values()) {
-    if (mob.Name?.toLowerCase().includes(searchValue) || mob.Id.toString().includes(searchValue)) {
-      found.push(mob);
-      if (found.length >= limit)
-        break;
-    }
-  }
-
-  return found;
-}
-
-export { createMobDatabase, getMobDatabase, getMobInfo, searchMobs };
