@@ -17,7 +17,6 @@ export type {
   GenderType,
   GetDBInfo,
   GetDBInfoReturn,
-  GetItemDatabase,
   ItemDatabase,
   ItemDatabaseFormat,
   ItemDelay,

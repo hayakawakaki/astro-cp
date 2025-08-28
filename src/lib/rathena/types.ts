@@ -219,7 +219,6 @@ export type WhoDropFormat = {
 export type ItemInfoLUA = Map<number, ItemInfoInput>;
 export type ItemDatabase = Map<number | string, ItemDatabaseFormat>;
 export type DropDatabase = Map<number, Set<WhoDropFormat>>;
-export type GetItemDatabase = string | number | undefined;
 
 export type MobSize = "Small" | "Medium" | "Large";
 

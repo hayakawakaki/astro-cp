@@ -6,10 +6,9 @@ import config from "~/app-config";
 
 import { jobNames } from "./client-jobnames";
 import { _addDrop } from "./db-item";
-import { createYmlLoader } from "./db-loader";
+import { _loadMobDB } from "./db-loader";
 
 const _mobDB: MobDatabase = new Map();
-const _loadYamlDB = createYmlLoader("MobDatabaseYML", "mob");
 
 // Create Database
 export async function _createMobDatabase(): Promise<MobDatabase> {
@@ -21,7 +20,7 @@ export async function _createMobDatabase(): Promise<MobDatabase> {
     throw new Error("There is no added item database yaml in the app configuration.");
   }
 
-  const yamlDB = await _loadYamlDB();
+  const yamlDB = await _loadMobDB();
   const mobDB: MobDatabaseFormat[] = [];
 
   yamlDB.forEach((item) => {

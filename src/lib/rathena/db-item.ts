@@ -14,13 +14,11 @@ import type {
 
 import config from "~/app-config";
 
-import { createLuaLoader, createYmlLoader } from "./db-loader";
+import { _loadItemDB, _loadItemInfo } from "./db-loader";
 
 const _itemDB: ItemDatabase = new Map(); // Item Id lookup
 const _itemNameDB: ItemDatabase = new Map(); // Item name lookup
 const _dropDatabase: DropDatabase = new Map(); // For reverse lookup
-const _loadYamlDB = createYmlLoader("ItemDatabaseYML", "item");
-const _loadItemInfo = createLuaLoader("ItemDatabaseLUA", "item");
 
 // Create Database
 export async function _createItemDatabase(): Promise<ItemDatabase> {
@@ -32,7 +30,7 @@ export async function _createItemDatabase(): Promise<ItemDatabase> {
     throw new Error("There is no added item database yaml in the app configuration.");
   }
 
-  const [yamlDB, itemInfo] = await Promise.all([_loadYamlDB(), _loadItemInfo()]);
+  const [yamlDB, itemInfo] = await Promise.all([_loadItemDB(), _loadItemInfo()]);
 
   if (!yamlDB.length) {
     throw new Error("There is no item db yml loaded, make sure the yml file is in the correct folder.");
