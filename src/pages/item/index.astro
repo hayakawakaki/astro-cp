@@ -2,13 +2,10 @@
 import ItemPage from "~theme/pages/ItemPage";
 
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { getItemDatabase } from "@/lib/rathena";
-import Pagination from "@/utils/pagination";
+import { paginatedItemDB } from "@/rathena";
 
-const DB = await getItemDatabase();
-const pagination = new Pagination(DB);
 const currentPage = Number(Astro.url.searchParams.get("page")) || 1;
-const pageData = pagination.paginize({ page: currentPage, pageSize: 30 });
+const pageData = await paginatedItemDB({ page: currentPage, pageSize: 30 });
 ---
 
 <head>
@@ -16,5 +13,5 @@ const pageData = pagination.paginize({ page: currentPage, pageSize: 30 });
 </head>
 
 <BaseLayout>
-  <ItemPage pageData={pageData.items} currentPage={currentPage} />
+  <ItemPage pageData={pageData?.items} currentPage={currentPage} />
 </BaseLayout>

@@ -19,12 +19,14 @@ const _loadDatabase: DatabaseLoader = (fileType: FileType) => (configKey: string
   const files = targetConfig.filter((item) => {
     const ext = extname(item);
     if (!validExtensions.includes(ext)) {
+      // Should I just throw an error here so it gets fixed before build time?
       console.warn(`loadDatabase (${fileType}): Invalid extension for ${item}, expected: ${validExtensions.join(", ")}`);
       return false;
     }
     return true;
   });
 
+  // Same as above
   const data = files.map((item: string) =>
     readFile(`./src/assets/rathena_db/${folderPath}/${item}`, "utf-8")
       .catch((err) => {
@@ -54,12 +56,14 @@ function _createLoader(fileType: FileType, configKey: string, folderPath: string
   )(fileType);
 }
 
-function createYmlLoader(configKey: string, dataPath: string): LoaderFunction {
+function _createYmlLoader(configKey: string, dataPath: string): LoaderFunction {
   return _createLoader("yml", configKey, dataPath);
 }
 
-function createLuaLoader(configKey: string, dataPath: string): LoaderFunction {
+function _createLuaLoader(configKey: string, dataPath: string): LoaderFunction {
   return _createLoader("lua", configKey, dataPath);
 }
 
-export { createLuaLoader, createYmlLoader };
+export const _loadItemDB = _createYmlLoader("ItemDatabaseYML", "item");
+export const _loadItemInfo = _createLuaLoader("ItemDatabaseLUA", "item");
+export const _loadMobDB = _createYmlLoader("MobDatabaseYML", "mob");

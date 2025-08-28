@@ -3,16 +3,12 @@ import MobPage from "~theme/pages/mob/Page";
 
 import Title from "@/components/Title.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { getMobDatabase } from "@/lib/rathena";
-import Pagination from "@/utils/pagination";
+import { paginatedMobDB } from "@/rathena";
 
 const { serverName } = Astro.locals;
 
-const DB = await getMobDatabase();
-
-const pagination = new Pagination(DB);
 const currentPage = Number(Astro.url.searchParams.get("page")) || 1;
-const pageData = pagination.paginize({ page: currentPage, pageSize: 20 });
+const pageData = await paginatedMobDB({ page: currentPage, pageSize: 20 });
 ---
 
 <title>{serverName} \ Mob</title>

@@ -1,14 +1,14 @@
 ---
 import { Image } from "astro:assets";
 
-import type { MobDatabaseInput } from "@/types";
+import type { MobDatabaseFormat } from "@/rathena";
 
-import { getItemName, getItemSprite } from "@/lib/rathena";
+import { getItemInfo } from "@/rathena";
 import BentoGrid from "@/ui/bento/BentoGrid.astro";
 import BentoItem from "@/ui/bento/BentoItem.astro";
 
 const { mobData } = Astro.props;
-const data = mobData as MobDatabaseInput;
+const data = mobData as MobDatabaseFormat;
 
 function attackDisplay(): `${number}~${number}` {
   if (!data.Attack2) {
@@ -65,7 +65,11 @@ const tableData: { label: string; output: string }[] = [
     baseRow={7}
     class="relative flex flex-col items-center h-full py-2 mt-4 font-medium border lg:mt-0 lg:py-4 rounded-2xl border-primary-200 md:row-span-5 lg:row-span-6 lg:col-span-4 lg:col-start-3"
   >
-    <h3 class="absolute content-center text-xl -translate-x-1/2 bg-background left-1/2 -top-3.5">Status</h3>
+    <h3
+      class="absolute content-center text-xl -translate-x-1/2 bg-background left-1/2 -top-3.5"
+    >
+      Status
+    </h3>
     <section class="grid w-full h-full grid-cols-3 grid-rows-5">
       {
         tableData.map(item => (
@@ -88,9 +92,9 @@ const tableData: { label: string; output: string }[] = [
             Drops
           </h3>
           {data.Drops.map(async (drop) => {
-            const name = await getItemName(drop.Item);
-            const image = await getItemSprite(drop.Item);
-            const url = await getItemName(drop.Item);
+            const name = await getItemInfo(drop.Item, "Name");
+            const image = await getItemInfo(drop.Item, "Image");
+            const url = await getItemInfo(drop.Item, "AegisName");
             return (
               <div class="flex items-center justify-between row-span-1 px-2">
                 <a class="flex items-center h-full gap-2" href={`/item/${url}`}>
@@ -102,7 +106,9 @@ const tableData: { label: string; output: string }[] = [
                     alt={`${name}'s Sprite'`}
                     loading="lazy"
                   />
-                  <span class="text-sm font-medium break-words text-secondary-700">{name}</span>
+                  <span class="text-sm font-medium break-words text-secondary-700">
+                    {name}
+                  </span>
                 </a>
                 <p>{`${((drop.Rate / 10000) * 100).toFixed(2)}%`}</p>
               </div>

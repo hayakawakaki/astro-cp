@@ -338,7 +338,7 @@ export type MobMode
 
 export type MobModeRecord = Partial<Record<MobMode, boolean>>;
 
-export type MobDatabaseInput = {
+export type MobDatabaseFormat = {
   Id: number;
   AegisName: string;
   Name: string;
@@ -384,10 +384,10 @@ export type MobDatabaseInput = {
   MvpDrops?: MobMvpDrop[];
 };
 
-export type MobDatabase = Map<number, MobDatabaseInput>;
+export type MobDatabase = Map<number, MobDatabaseFormat>;
 
 export type MobYAMLReturn = {
-  Body: MobDatabaseInput[];
+  Body: MobDatabaseFormat[];
 };
 
 export type MobSearch = {
@@ -409,3 +409,12 @@ export type ServerStatusReturn = {
   charStatus: boolean;
   mapStatus: boolean;
 } & OnlineCount;
+
+export type GetDBInfo<T> = keyof T | undefined;
+export type GetDBInfoReturn<T, K> = K extends undefined
+  ? T
+  : K extends keyof T
+    ? T[K]
+    : never;
+
+export type { JobNames } from "./client-jobnames";
