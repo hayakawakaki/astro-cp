@@ -112,6 +112,9 @@ export type LocationType
     | "Both_Hand"
     | "Both_Accessory";
 
+export type WeaponLevel = 1 | 2 | 3 | 4 | 5;
+export type ArmorLevel = 1 | 2;
+
 export type ItemFlags = {
   BuyingStore?: boolean;
   DeadBranch?: boolean;
@@ -170,7 +173,6 @@ type ItemDatabaseInput = {
   Classes?: ClassType | ClassType[];
   Gender?: GenderType;
   Locations?: LocationType | LocationType[];
-  WeaponLevel?: number;
   EquipLevelMin?: number;
   EquipLevelMax?: number;
   Refineable?: boolean;
@@ -190,8 +192,8 @@ type ItemDatabaseInput = {
 };
 
 export type ItemDatabaseFormat
-  = | (ItemDatabaseInput & { Type: "Weapon"; SubType: WeaponSubType })
-    | (ItemDatabaseInput & { Type: "Ammo"; SubType: AmmoSubType })
+  = | (ItemDatabaseInput & { Type: "Weapon"; SubType: WeaponSubType; WeaponLevel: WeaponLevel })
+    | (ItemDatabaseInput & { Type: "Ammo"; SubType: AmmoSubType; ArmorLevel: ArmorLevel })
     | (ItemDatabaseInput & { Type: "Card"; SubType?: CardSubType })
     | (ItemDatabaseInput & { Type: "Healing" | "Usable" | "Etc" | "Armor" | "PetEgg" | "PetArmor" | "DelayConsume" | "ShadowGear" | "Cash"; SubType: "None" });
 
