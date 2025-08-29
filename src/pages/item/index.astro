@@ -4,13 +4,13 @@ import ItemPage from "~theme/pages/ItemPage";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { paginatedItemDB } from "@/rathena";
 
+const { serverName } = Astro.locals;
+
 const currentPage = Number(Astro.url.searchParams.get("page")) || 1;
 const pageData = await paginatedItemDB({ page: currentPage, pageSize: 30 });
 ---
 
-<head>
-  <title>Item Page</title>
-</head>
+<title>{serverName} \ Item Database</title>
 
 <BaseLayout>
   <ItemPage pageData={pageData?.items} currentPage={currentPage} />
