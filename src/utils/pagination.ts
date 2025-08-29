@@ -1,6 +1,7 @@
 export type PaginationOption = {
   page: number;
   pageSize: number;
+  filter?: (item: any) => boolean;
 };
 
 export type PaginationReturn<T> = {
@@ -23,13 +24,22 @@ export default class Pagination<T> {
   }
 
   public paginize(options: PaginationOption): PaginationReturn<T> {
-    const totalItems = this.keys.length;
+    let filteredKeys = this.keys;
+
+    if (options.filter) {
+      filteredKeys = this.keys.filter((key) => {
+        const item = this.data.get(key);
+        return item && options.filter!(item);
+      });
+    }
+
+    const totalItems = filteredKeys.length;
     const totalPages = Math.ceil(totalItems / options.pageSize);
     const startIndex = (options.page - 1) * options.pageSize;
     const endIndex = startIndex + options.pageSize;
 
     // Get current page data
-    const pageKeys = this.keys.slice(startIndex, endIndex);
+    const pageKeys = filteredKeys.slice(startIndex, endIndex);
     const items = pageKeys.map(key => this.data.get(key)!) as T[];
 
     return {
