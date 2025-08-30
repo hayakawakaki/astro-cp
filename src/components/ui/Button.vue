@@ -40,7 +40,7 @@ const props = withDefaults(defineProps<Button>(), {
 const attrs = useAttrs();
 
 const buttonClasses = computed(() => {
-  const base = "inline-flex items-center justify-center gap-2 font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50";
+  const base = "inline-flex items-center justify-center gap-2 font-medium transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50";
 
   const sizes = {
     xs: "h-7 px-2 text-xs",
@@ -61,13 +61,13 @@ const buttonClasses = computed(() => {
       error: "bg-red-500 text-white hover:bg-red-600 focus-visible:ring-red-500",
     },
     outline: {
-      primary: "border-2 border-primary-500 text-primary-600 hover:bg-primary-50 focus-visible:ring-primary-500",
-      secondary: "border-2 border-secondary-500 text-secondary-600 hover:bg-secondary-50 focus-visible:ring-secondary-500",
-      accent: "border-2 border-accent-500 text-accent-600 hover:bg-accent-50 focus-visible:ring-accent-500",
-      info: "border-2 border-blue-500 text-blue-600 hover:bg-blue-50 focus-visible:ring-blue-500",
-      success: "border-2 border-green-500 text-green-600 hover:bg-green-50 focus-visible:ring-green-500",
-      warning: "border-2 border-amber-500 text-amber-600 hover:bg-amber-50 focus-visible:ring-amber-500",
-      error: "border-2 border-red-500 text-red-600 hover:bg-red-50 focus-visible:ring-red-500",
+      primary: "border-2 border-primary-500 text-primary-600 hover:bg-primary-100 focus-visible:ring-primary-500",
+      secondary: "border-2 border-secondary-500 text-secondary-600 hover:bg-secondary-100 focus-visible:ring-secondary-500",
+      accent: "border-2 border-accent-500 text-accent-600 hover:bg-accent-100 focus-visible:ring-accent-500",
+      info: "border-2 border-blue-500 text-blue-600 hover:bg-blue-100 focus-visible:ring-blue-500",
+      success: "border-2 border-green-500 text-green-600 hover:bg-green-100 focus-visible:ring-green-500",
+      warning: "border-2 border-amber-500 text-amber-600 hover:bg-amber-100 focus-visible:ring-amber-500",
+      error: "border-2 border-red-500 text-red-600 hover:bg-red-100 focus-visible:ring-red-500",
     },
     subtle: {
       primary: "bg-primary-100 text-primary-700 hover:bg-primary-200 focus-visible:ring-primary-500",
