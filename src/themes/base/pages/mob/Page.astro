@@ -6,7 +6,7 @@ import type { PaginationReturn } from "@/utils/pagination";
 
 import DatabaseSearch from "@/components/forms/DatabaseSearch.astro";
 import VSpace from "@/components/VSpace.astro";
-import Button from "@/ui/Button.astro";
+import Button from "@/ui/Button.vue";
 
 type Props = {
   pageData: PaginationReturn<MobDatabaseFormat>;
@@ -42,7 +42,8 @@ const maxPage = pageData.totalPages;
     <div class="flex items-center h-10 grow md:grow-0" x-data="{value: ''}">
       <Button
         class="w-10 cursor-pointer rounded-tl-md rounded-bl-md"
-        variant="secondary"
+        variant="solid"
+        color="secondary"
         disabled={!pageData.hasPrev}
         @click="window.location.href = '/mob?page=' + (currentPage - 1)"
       >
@@ -65,7 +66,8 @@ const maxPage = pageData.totalPages;
       </label>
       <Button
         class="w-10 cursor-pointer rounded-tr-md rounded-br-md"
-        variant="secondary"
+        variant="solid"
+        color="secondary"
         disabled={!pageData.hasNext}
         @click="window.location.href = '/mob?page=' + (currentPage + 1)"
       >
@@ -116,7 +118,8 @@ const maxPage = pageData.totalPages;
           <p class="hidden md:block md:col-span-2 border-primary-200">{`${item.Element} ${item.ElementLevel}`}</p>
           <div class="grid w-full col-span-5 md:col-span-3 place-items-center">
             <Button
-              variant="secondary"
+              variant="solid"
+              color="secondary"
               class="h-12 text-center rounded-lg w-18 md:h-12 md:w-24 lg:w-32"
               href={`/mob/${item.Id}`}
               target="_blank"
