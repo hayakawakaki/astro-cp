@@ -1,5 +1,6 @@
 import alpinejs from "@astrojs/alpinejs";
 import node from "@astrojs/node";
+import vue from "@astrojs/vue";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
 
@@ -16,6 +17,7 @@ export default defineConfig({
   integrations: [
     theme({ theme: config.Theme }),
     preloadrathenadb(),
+    vue(),
     alpinejs({ entrypoint: "/src/lib/alpine/entrypoint" }),
   ],
   vite: {
