@@ -1,7 +1,7 @@
 ---
 import type { ConfigNav, NavLink, NavLinkGroup } from "@/types/app-config.types";
 
-import Button from "@/ui/Button.astro";
+import Button from "@/ui/Button.vue";
 import Dropdown from "@/ui/Dropdown.astro";
 
 function isGroup(item: NavLink | NavLinkGroup): item is NavLinkGroup {
@@ -59,12 +59,12 @@ const { user } = Astro.locals;
     // @click breaks the IDE styling for some reason
     !user?.id
 ? (
-      <Button variant="secondary" size="lg" class="w-32 rounded-xl" x-data x-on:click="$store.auth.signIn('discord')">
+      <Button variant="solid" color="secondary" size="lg" class="w-32 rounded-xl">
         Login
       </Button>
     )
 : (
-      <Button variant="secondary" size="lg" class="w-32 rounded-xl" x-data x-on:click="$store.auth.signOut();">
+      <Button variant="solid" size="lg" class="w-32 rounded-xl">
         Logout
       </Button>
     )

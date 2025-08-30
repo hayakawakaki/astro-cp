@@ -5,7 +5,7 @@ import { serverStatus } from "@/lib/rathena";
 import Badge from "@/ui/Badge.astro";
 import BentoGrid from "@/ui/bento/BentoGrid.astro";
 import BentoItem from "@/ui/bento/BentoItem.astro";
-import Button from "@/ui/Button.astro";
+import Button from "@/ui/Button.vue";
 
 const { loginStatus, charStatus, mapStatus, totalOnlineCount, onlineCount, vendorCount, gmCount, uniqueCount }
   = await serverStatus.getStatus();
@@ -39,7 +39,8 @@ const { serverName, user } = Astro.locals;
     <p class="text-lg font-semibold">A rathena control panel built on top of Astro</p>
     <div class="inline-flex items-end justify-center w-full gap-2">
       <Button
-        variant="secondary"
+        variant="solid"
+        color="secondary"
         size="lg"
         class="h-14 min-w-36 md:min-w-40 rounded-4xl md:text-lg"
         href="https://discord.gg"
@@ -48,12 +49,12 @@ const { serverName, user } = Astro.locals;
       {
         user?.id
 ? (
-          <Button href="/account" variant="primary" size="lg" class="h-14 min-w-36 md:min-w-40 rounded-4xl md:text-lg">
+          <Button href="/account" variant="solid" color="primary" size="lg" class="h-14 min-w-36 md:min-w-40 rounded-4xl md:text-lg">
             View Account
           </Button>
         )
 : (
-          <Button href="/login" variant="primary" size="lg" class="h-14 min-w-36 md:min-w-40 rounded-4xl md:text-lg">
+          <Button href="/login" variant="solid" color="primary" size="lg" class="h-14 min-w-36 md:min-w-40 rounded-4xl md:text-lg">
             Play Now
           </Button>
         )
