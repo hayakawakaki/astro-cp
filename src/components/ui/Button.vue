@@ -30,7 +30,6 @@ type Button
     target?: never;
   };
 
-// capture non-props attributes, maybe arias or other event related actions
 defineOptions({
   inheritAttrs: false,
 });

@@ -28,6 +28,7 @@ export type UIColor
 export type UIVariant
 = | "solid"
   | "outline"
+  | "subtle"
   | "ghost";
 
 export type UISize
