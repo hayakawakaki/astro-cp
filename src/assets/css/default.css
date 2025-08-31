@@ -3,10 +3,11 @@
 
 html {
   @apply min-h-svh h-full scroll-smooth overscroll-none;
+  scrollbar-gutter: stable both-edges;
 }
 
 body {
-  @apply font-primary text-font min-h-svh h-full overscroll-none;
+  @apply font-primary text-font min-h-svh h-full overscroll-none bg-background;
 }
 
 @layer utilities {
