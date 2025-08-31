@@ -37,7 +37,7 @@ const { user } = Astro.locals;
           </a>
         );
       }
- else {
+      else {
         const isCurrentPage = item.links.some((link) => {
           return link.url && isActive(link.url);
         });
@@ -56,15 +56,14 @@ const { user } = Astro.locals;
     })
   }
   {
-    // @click breaks the IDE styling for some reason
     !user?.id
-? (
-      <Button variant="solid" color="secondary" size="lg" class="w-32 rounded-xl">
+  ? (
+      <Button variant="solid" color="secondary" size="xl" class="w-32 rounded-xl" id="login-button" x-data x-on:click="$store.auth.signIn('discord')">
         Login
       </Button>
     )
-: (
-      <Button variant="solid" size="lg" class="w-32 rounded-xl">
+  : (
+      <Button variant="solid" color="secondary" size="xl" class="w-32 rounded-xl" id="logout-button" x-data x-on:click="$store.auth.signOut()">
         Logout
       </Button>
     )
