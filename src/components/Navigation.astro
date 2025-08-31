@@ -1,8 +1,8 @@
 ---
-import type { ConfigNav, NavLink, NavLinkGroup } from "@/types/app-config.types";
+import type { ConfigNav, NavLink, NavLinkGroup } from "@/types";
 
 import Button from "@/ui/Button.vue";
-import Dropdown from "@/ui/Dropdown.astro";
+import Dropdown from "@/ui/Dropdown.vue";
 
 function isGroup(item: NavLink | NavLinkGroup): item is NavLinkGroup {
   return "links" in item;
@@ -43,13 +43,17 @@ const { user } = Astro.locals;
         });
         return (
           <Dropdown
+            client:load
             links={item.links}
-            class={`relative pb-1 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:transition-all after:duration-300 ${
-              isCurrentPage ? "after:w-full after:bg-zinc-900" : "after:w-0 after:bg-zinc-600 hover:after:w-full"
-            }`}
+            class="pb-1"
             arrow
           >
-            <span slot="label">{item.label}</span>
+            <span
+              class={`relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:transition-all after:duration-300 ${
+              isCurrentPage ? "after:w-full after:bg-zinc-900" : "after:w-0 after:bg-zinc-600 hover:after:w-full"
+            }`}
+              slot="label"
+            >{item.label}</span>
           </Dropdown>
         );
       }
