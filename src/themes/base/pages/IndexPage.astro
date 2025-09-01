@@ -2,13 +2,21 @@
 import { Image } from "astro:assets";
 
 import { serverStatus } from "@/lib/rathena";
-import Badge from "@/ui/Badge.astro";
+import Badge from "@/ui/Badge.vue";
 import BentoGrid from "@/ui/bento/BentoGrid.astro";
 import BentoItem from "@/ui/bento/BentoItem.astro";
-import Button from "@/ui/Button.astro";
+import Button from "@/ui/Button.vue";
 
-const { loginStatus, charStatus, mapStatus, totalOnlineCount, onlineCount, vendorCount, gmCount, uniqueCount }
-  = await serverStatus.getStatus();
+const {
+  loginStatus,
+  charStatus,
+  mapStatus,
+  totalOnlineCount,
+  onlineCount,
+  vendorCount,
+  gmCount,
+  uniqueCount,
+} = await serverStatus.getStatus();
 
 const { serverName, user } = Astro.locals;
 ---
@@ -36,10 +44,13 @@ const { serverName, user } = Astro.locals;
       class="absolute bottom-0 right-0 w-auto opacity-5 max-h-72"
     />
     <p class="text-xl font-semibold">Welcome to {serverName}</p>
-    <p class="text-lg font-semibold">A rathena control panel built on top of Astro</p>
+    <p class="text-lg font-semibold">
+      A rathena control panel built on top of Astro
+    </p>
     <div class="inline-flex items-end justify-center w-full gap-2">
       <Button
-        variant="secondary"
+        variant="solid"
+        color="secondary"
         size="lg"
         class="h-14 min-w-36 md:min-w-40 rounded-4xl md:text-lg"
         href="https://discord.gg"
@@ -48,12 +59,24 @@ const { serverName, user } = Astro.locals;
       {
         user?.id
 ? (
-          <Button href="/account" variant="primary" size="lg" class="h-14 min-w-36 md:min-w-40 rounded-4xl md:text-lg">
+          <Button
+            href="/account"
+            variant="solid"
+            color="primary"
+            size="lg"
+            class="h-14 min-w-36 md:min-w-40 rounded-4xl md:text-lg"
+          >
             View Account
           </Button>
         )
 : (
-          <Button href="/login" variant="primary" size="lg" class="h-14 min-w-36 md:min-w-40 rounded-4xl md:text-lg">
+          <Button
+            href="/login"
+            variant="solid"
+            color="primary"
+            size="lg"
+            class="h-14 min-w-36 md:min-w-40 rounded-4xl md:text-lg"
+          >
             Play Now
           </Button>
         )
@@ -77,28 +100,34 @@ const { serverName, user } = Astro.locals;
     <div class="flex items-center justify-center gap-x-2">
       <Badge
         variant="outline"
-        outlineColor="gray"
+        color="gray"
         size="md"
         class="font-semibold rounded-2xl"
-        dot={mapStatus ? "green" : "red"}
+        dot
+        dotColor={mapStatus ? "green" : "red"}
+        dotPosition="left"
       >
         Map
       </Badge>
       <Badge
         variant="outline"
-        outlineColor="gray"
+        color="gray"
         size="md"
         class="font-semibold rounded-2xl"
-        dot={charStatus ? "green" : "red"}
+        dot
+        dotColor={charStatus ? "green" : "red"}
+        dotPosition="left"
       >
         Char
       </Badge>
       <Badge
         variant="outline"
-        outlineColor="gray"
+        color="gray"
         size="md"
         class="font-semibold rounded-2xl"
-        dot={loginStatus ? "green" : "red"}
+        dot
+        dotColor={loginStatus ? "green" : "red"}
+        dotPosition="left"
       >
         Login
       </Badge>
@@ -119,11 +148,19 @@ const { serverName, user } = Astro.locals;
     />
     <h3 class="text-xl font-semibold">Online Counter</h3>
     <div class="flex flex-wrap items-center justify-center gap-2">
-      <Badge size="lg" bgColor="green" class="font-semibold">Total : {totalOnlineCount}</Badge>
-      <Badge size="lg" bgColor="yellow" class="font-semibold">Gepard : {uniqueCount}</Badge>
-      <Badge size="lg" bgColor="indigo" class="font-semibold">Online : {onlineCount}</Badge>
-      <Badge size="lg" bgColor="purple" class="font-semibold">Vendor : {vendorCount}</Badge>
-      <Badge size="lg" bgColor="red" class="font-semibold">GM : {gmCount}</Badge>
+      <Badge variant="subtle" size="lg" color="green" class="font-semibold">
+        Total : {totalOnlineCount}</Badge
+      >
+      <Badge variant="subtle" size="lg" color="yellow" class="font-semibold">
+        Gepard : {uniqueCount}</Badge
+      >
+      <Badge variant="subtle" size="lg" color="indigo" class="font-semibold">
+        Online : {onlineCount}</Badge
+      >
+      <Badge variant="subtle" size="lg" color="purple" class="font-semibold">
+        Vendor : {vendorCount}</Badge
+      >
+      <Badge size="lg" color="red" class="font-semibold">GM : {gmCount}</Badge>
     </div>
   </BentoItem>
 </BentoGrid>

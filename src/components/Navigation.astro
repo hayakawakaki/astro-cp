@@ -1,8 +1,8 @@
 ---
-import type { ConfigNav, NavLink, NavLinkGroup } from "@/types/app-config.types";
+import type { ConfigNav, NavLink, NavLinkGroup } from "@/types";
 
-import Button from "@/ui/Button.astro";
-import Dropdown from "@/ui/Dropdown.astro";
+import Button from "@/ui/Button.vue";
+import Dropdown from "@/ui/Dropdown.vue";
 
 function isGroup(item: NavLink | NavLinkGroup): item is NavLinkGroup {
   return "links" in item;
@@ -37,34 +37,37 @@ const { user } = Astro.locals;
           </a>
         );
       }
- else {
+      else {
         const isCurrentPage = item.links.some((link) => {
           return link.url && isActive(link.url);
         });
         return (
           <Dropdown
+            client:load
             links={item.links}
-            class={`relative pb-1 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:transition-all after:duration-300 ${
-              isCurrentPage ? "after:w-full after:bg-zinc-900" : "after:w-0 after:bg-zinc-600 hover:after:w-full"
-            }`}
+            class="pb-1"
             arrow
           >
-            <span slot="label">{item.label}</span>
+            <span
+              class={`relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:transition-all after:duration-300 ${
+              isCurrentPage ? "after:w-full after:bg-zinc-900" : "after:w-0 after:bg-zinc-600 hover:after:w-full"
+            }`}
+              slot="label"
+            >{item.label}</span>
           </Dropdown>
         );
       }
     })
   }
   {
-    // @click breaks the IDE styling for some reason
     !user?.id
-? (
-      <Button variant="secondary" size="lg" class="w-32 rounded-xl" x-data x-on:click="$store.auth.signIn('discord')">
+  ? (
+      <Button variant="solid" color="secondary" size="xl" class="w-32 rounded-xl" id="login-button" x-data x-on:click="$store.auth.signIn('discord')">
         Login
       </Button>
     )
-: (
-      <Button variant="secondary" size="lg" class="w-32 rounded-xl" x-data x-on:click="$store.auth.signOut();">
+  : (
+      <Button variant="solid" color="secondary" size="xl" class="w-32 rounded-xl" id="logout-button" x-data x-on:click="$store.auth.signOut()">
         Logout
       </Button>
     )

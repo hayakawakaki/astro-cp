@@ -4,9 +4,9 @@ import { Image } from "astro:assets";
 import type { MobDatabaseFormat } from "@/rathena";
 import type { PaginationReturn } from "@/utils/pagination";
 
-import DatabaseSearch from "@/components/forms/DatabaseSearch.astro";
+import DatabaseSearch from "@/components/forms/DatabaseSearch.vue";
 import VSpace from "@/components/VSpace.astro";
-import Button from "@/ui/Button.astro";
+import Button from "@/ui/Button.vue";
 
 type Props = {
   pageData: PaginationReturn<MobDatabaseFormat>;
@@ -24,25 +24,20 @@ const maxPage = pageData.totalPages;
     class="col-span-20 w-full flex justify-between items-center gap-2 px-2 py-1 sticky top-[var(--spacing-header-padding)] left-0 h-14 bg-background border z-10 border-primary-200"
   >
     <DatabaseSearch
-      id="mobSearch"
+      client:load
+      id="mob-search"
       endpoint="/api/rathena/mob-search"
+      baseURL="/mob"
       placeholder="Search Mob"
-      display={{ id: "id", name: "name" }}
-      key="id"
-      onSelect="(item) => window.open('/mob/' + item.id, '_blank')"
       maxResults={10}
-      inputClass="h-10 w-24 md:w-60 focus:placeholder:opacity-0"
-    >
-      <Fragment slot="display">
-        <span x-text="'#' + getDisplay(item, 'id')"></span>
-        <span x-text="getDisplay(item, 'name')"></span>
-      </Fragment>
-    </DatabaseSearch>
+      inputClass="w-24 h-10 md:w-60 focus:placeholder:opacity-0"
+    />
 
     <div class="flex items-center h-10 grow md:grow-0" x-data="{value: ''}">
       <Button
         class="w-10 cursor-pointer rounded-tl-md rounded-bl-md"
-        variant="secondary"
+        variant="solid"
+        color="secondary"
         disabled={!pageData.hasPrev}
         @click="window.location.href = '/mob?page=' + (currentPage - 1)"
       >
@@ -65,7 +60,8 @@ const maxPage = pageData.totalPages;
       </label>
       <Button
         class="w-10 cursor-pointer rounded-tr-md rounded-br-md"
-        variant="secondary"
+        variant="solid"
+        color="secondary"
         disabled={!pageData.hasNext}
         @click="window.location.href = '/mob?page=' + (currentPage + 1)"
       >
@@ -116,7 +112,8 @@ const maxPage = pageData.totalPages;
           <p class="hidden md:block md:col-span-2 border-primary-200">{`${item.Element} ${item.ElementLevel}`}</p>
           <div class="grid w-full col-span-5 md:col-span-3 place-items-center">
             <Button
-              variant="secondary"
+              variant="solid"
+              color="secondary"
               class="h-12 text-center rounded-lg w-18 md:h-12 md:w-24 lg:w-32"
               href={`/mob/${item.Id}`}
               target="_blank"

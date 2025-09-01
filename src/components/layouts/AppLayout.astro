@@ -28,3 +28,10 @@ const { serverName } = Astro.locals;
     <slot />
   </body>
 </html>
+
+<style is:global>
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 150ms;
+}
+</style>
