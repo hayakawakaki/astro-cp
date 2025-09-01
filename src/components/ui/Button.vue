@@ -23,7 +23,6 @@ type Button
     target?: "_blank" | "_self" | "_parent" | "_top";
   }
   | ButtonBase & {
-    action: () => void;
     href?: never;
     disabled?: boolean;
     type?: "button" | "submit" | "reset";
