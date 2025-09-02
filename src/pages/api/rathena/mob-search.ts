@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro";
 
-import type { MobSearch } from "@/types";
+import type { MobSearch } from "@/rathena";
 
 import { searchMobs } from "@/lib/rathena";
 

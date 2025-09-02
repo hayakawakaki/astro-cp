@@ -1,5 +1,5 @@
 ---
-import ItemInfo from "~theme/components/ItemInfo";
+import ItemIdPage from "~theme/pages/item/Id";
 
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { getItemInfo, getTradeRestrictions, whoDrops } from "@/lib/rathena";
@@ -22,5 +22,5 @@ const dropData = await whoDrops(itemData.Id);
 <title>{serverName} \ Item Database \ {itemData.Name}</title>
 
 <BaseLayout>
-  <ItemInfo itemData={itemData} tradeRestriction={tradeRestrictions} dropData={dropData} />
+  <ItemIdPage itemData={itemData} tradeRestriction={tradeRestrictions} dropData={dropData} />
 </BaseLayout>

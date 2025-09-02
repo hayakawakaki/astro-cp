@@ -3,7 +3,6 @@ import luaparse from "luaparse";
 
 import type {
   DropDatabase,
-  GetItemDatabase,
   ItemDatabase,
   ItemDatabaseFormat,
   ItemInfoInput,
@@ -126,17 +125,17 @@ function _parseIteminfo(ast: luaparse.Chunk, targetMap: ItemInfoLUA) {
                 break;
 
               case "TableConstructorExpression": // description
-                (itemData as any)[propName] = propValue.fields.map((f) => {
+                (itemData as any)[propName] = propValue.fields.map((line) => {
                   let value;
-                  switch (f.type) {
+                  switch (line.type) {
                     case "TableValue":
-                      value = (f as luaparse.TableValue).value;
+                      value = (line as luaparse.TableValue).value;
                       break;
                     case "TableKeyString":
-                      value = (f as luaparse.TableKeyString).value;
+                      value = (line as luaparse.TableKeyString).value;
                       break;
                     case "TableKey":
-                      value = (f as luaparse.TableKey).value;
+                      value = (line as luaparse.TableKey).value;
                       break;
                   }
                   return (itemData as any)[propName] = (value as luaparse.StringLiteral).raw.slice(1, -1); ;
@@ -190,7 +189,7 @@ export async function _addDrop(item: number | string, mobId: number, dropRate: n
 }
 
 // Just pass the value and check if it's string or number to know which cache to get data from
-export async function _getItemDatabase(value?: GetItemDatabase): Promise<ItemDatabase> {
+export async function _getItemDatabase(value?: number | string): Promise<ItemDatabase> {
   if (!_itemDB.size) {
     await _createItemDatabase();
   }

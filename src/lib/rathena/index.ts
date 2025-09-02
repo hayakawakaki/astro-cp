@@ -4,7 +4,8 @@ export {
   getTradeRestrictions,
   paginatedItemDB,
   paginatedMobDB,
-  searchMobs,
+  searchItem,
+  searchMob,
   whoDrops,
 } from "./db-utils";
 export { serverStatus } from "./server-status";

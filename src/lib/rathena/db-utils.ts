@@ -39,7 +39,7 @@ function _createPaginatedDBFunction<DBFormat>(getDB: () => Promise<Map<any, DBFo
 export const getMobInfo = _createDBGetFunction<MobDatabaseFormat>(_getMobDatabase);
 export const paginatedMobDB = _createPaginatedDBFunction<MobDatabaseFormat>(_getMobDatabase);
 
-export async function searchMobs(search: string, limit: number = 10): Promise<MobDatabaseFormat[]> {
+export async function searchMob(search: string, limit: number = 10): Promise<MobDatabaseFormat[]> {
   const query = search.toLowerCase();
   if (query.trim() === "") {
     return [];
@@ -84,4 +84,24 @@ export async function whoDrops(itemId: number): Promise<Set<WhoDropFormat> | und
     return new Set();
 
   return db.get(itemId);
+}
+
+export async function searchItem(search: string, limit: number = 10): Promise<ItemDatabaseFormat[]> {
+  const query = search.toLowerCase();
+  if (query.trim() === "") {
+    return [];
+  }
+
+  const db = await _getItemDatabase();
+  const result: ItemDatabaseFormat[] = [];
+
+  for (const item of db.values()) {
+    if (item.Name?.toLowerCase().includes(query) || item.Id.toString().includes(query)) {
+      result.push(item);
+      if (result.length >= limit)
+        break;
+    }
+  }
+
+  return result;
 }

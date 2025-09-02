@@ -1,0 +1,47 @@
+---
+import { Image } from "astro:assets";
+
+import type { ItemDatabaseFormat } from "@/rathena";
+import type { PaginationReturn } from "@/utils/pagination";
+
+type Props = {
+  pageData: PaginationReturn<ItemDatabaseFormat>;
+  currentPage: number;
+};
+
+const { pageData } = Astro.props;
+---
+
+<div class="grid grid-cols-5 border select-none no-scrollbar border-primary-200">
+  <table class="col-span-5 text-sm text-center">
+    <thead class="text-sm uppercase border-b border-primary-200">
+      <tr class="sticky top-0 z-20 h-12 divide-x divide-primary-200 bg-background">
+        <th class="w-16">Sprite</th>
+        <th class="w-20">ID</th>
+        <th>Name</th>
+        <th>Type</th>
+        <th class="hidden md:table-cell">Subtype</th>
+        <th class="hidden w-24 md:table-cell">Weight</th>
+        <th>Buy</th>
+        <th>Sell</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-primary-200">
+      {
+        pageData.items.map(item => (
+          <tr class="h-12 divide-x divide-primary-200">
+            <td><Image class="w-auto col-span-1 mx-auto max-h-6" src={`/images/item/${item.Image}.webp`} alt={`${item.Name}s`} width={24} height={24} /></td>
+            <td>{item.Id}</td>
+            <td class="text-secondary-600"><a href={`/item/${item.Id}`} target="_blank">{`${item.Name}${item.Slots ? ` [ ${item.Slots} ]` : ""}`}</a></td>
+            <td>{item.Type}</td>
+            <td class="hidden md:table-cell">{item.SubType || "None"}</td>
+            <td class="hidden md:table-cell">{item.Weight ? item.Weight / 10 : 0 }</td>
+            <td>{item.Buy || 0}</td>
+            <td>{item.Sell || 0}</td>
+          </tr>
+        ),
+        )
+      }
+    </tbody>
+  </table>
+</div>
