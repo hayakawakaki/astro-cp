@@ -2,7 +2,7 @@ import type { APIRoute } from "astro";
 
 import type { MobSearch } from "@/rathena";
 
-import { searchMobs } from "@/lib/rathena";
+import { searchMob } from "@/lib/rathena";
 
 export const GET: APIRoute = async ({ request, url }) => {
   const origin = request.headers.get("origin");
@@ -22,7 +22,7 @@ export const GET: APIRoute = async ({ request, url }) => {
 
   const limit = Number(url.searchParams.get("limit") || "5");
 
-  const results = await searchMobs(query, limit);
+  const results = await searchMob(query, limit);
 
   if (!results?.length) {
     return new Response(JSON.stringify([]), {

@@ -1,9 +1,9 @@
-import type { GetDBInfo, GetDBInfoReturn, ItemDatabaseFormat, ItemTrade, MobDatabaseFormat, WhoDropFormat } from "@/rathena";
+import type { GetDBInfo, GetDBInfoReturn, ItemDatabaseFormat, ItemTrade, ItemType, MobDatabaseFormat, WhoDropFormat } from "@/rathena";
 import type { PaginationOption, PaginationReturn } from "@/utils/pagination";
 
 import Pagination from "@/utils/pagination";
 
-import { _getDropDatabase, _getItemDatabase, _tradeDisplay } from "./db-item";
+import { _getDropDatabase, _getItemDatabase, _tradeDisplay, _typeDisplay } from "./db-item";
 import { _getMobDatabase } from "./db-mob";
 
 // = Curried functions
@@ -63,7 +63,7 @@ export async function searchMob(search: string, limit: number = 10): Promise<Mob
 export const getItemInfo = _createDBGetFunction<ItemDatabaseFormat>(_getItemDatabase);
 export const paginatedItemDB = _createPaginatedDBFunction<ItemDatabaseFormat>(_getItemDatabase);
 
-export function getTradeRestrictions(trade: ItemTrade | undefined): string[] {
+export function getTradeRestrictionsDisplay(trade: ItemTrade | undefined): string[] {
   if (!trade)
     return [];
 
@@ -76,6 +76,10 @@ export function getTradeRestrictions(trade: ItemTrade | undefined): string[] {
   });
 
   return restrictions;
+}
+
+export function getItemTypeDisplay(type: ItemType) {
+  return _typeDisplay[type] || "Unknown Type";
 }
 
 export async function whoDrops(itemId: number): Promise<Set<WhoDropFormat> | undefined> {

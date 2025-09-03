@@ -189,6 +189,20 @@ type ItemDatabaseInput = {
   Description?: string[];
 };
 
+export type ItemType
+ = | "Weapon"
+   | "Ammo"
+   | "Card"
+   | "Healing"
+   | "Usable"
+   | "Etc"
+   | "Armor"
+   | "PetEgg"
+   | "PetArmor"
+   | "DelayConsume"
+   | "ShadowGear"
+   | "Cash";
+
 export type ItemDatabaseFormat
   = | (ItemDatabaseInput & { Type: "Weapon"; SubType: WeaponSubType })
     | (ItemDatabaseInput & { Type: "Ammo"; SubType: AmmoSubType })

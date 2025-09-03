@@ -8,6 +8,7 @@ import type {
   ItemInfoInput,
   ItemInfoLUA,
   ItemTrade,
+  ItemType,
   ItemYAMLReturn,
 } from "@/rathena";
 
@@ -218,4 +219,19 @@ export const _tradeDisplay: Record<keyof Omit<ItemTrade, "Override">, string> = 
   NoGuildStorage: "No Guild Storage",
   NoMail: "No Mail",
   NoAuction: "No Auction",
+};
+
+export const _typeDisplay: Record<ItemType, string> = {
+  Healing: "Potion/Food",
+  Usable: "Usable",
+  Etc: "Etc",
+  Weapon: "Weapon",
+  Armor: "Armor",
+  Card: "Card",
+  PetEgg: "Pet Egg",
+  PetArmor: "Pet Equipment",
+  Ammo: "Arrow/Ammunition",
+  DelayConsume: "Buff/Box/Action",
+  ShadowGear: "Shadow Equipment",
+  Cash: "Cash Usable",
 };
