@@ -4,44 +4,103 @@ import { Image } from "astro:assets";
 import type { ItemDatabaseFormat } from "@/rathena";
 import type { PaginationReturn } from "@/utils/pagination";
 
+import DatabaseSearch from "@/components/forms/DatabaseSearch.vue";
+import Pagination from "@/components/ui/Pagination.vue";
+import { getItemTypeDisplay } from "@/rathena";
+import ScrollProgress from "@/ui/ScrollProgress.vue";
+
 type Props = {
   pageData: PaginationReturn<ItemDatabaseFormat>;
   currentPage: number;
 };
 
-const { pageData } = Astro.props;
+const { pageData, currentPage } = Astro.props;
+
+const pageItems = pageData.items;
+const { items, ...pageControl } = pageData;
 ---
 
-<div class="grid grid-cols-5 border select-none no-scrollbar border-primary-200">
-  <table class="col-span-5 text-sm text-center">
-    <thead class="text-sm uppercase border-b border-primary-200">
-      <tr class="sticky top-0 z-20 h-12 divide-x divide-primary-200 bg-background">
-        <th class="w-16">Sprite</th>
-        <th class="w-20">ID</th>
-        <th>Name</th>
-        <th>Type</th>
-        <th class="hidden md:table-cell">Subtype</th>
-        <th class="hidden w-24 md:table-cell">Weight</th>
-        <th>Buy</th>
-        <th>Sell</th>
+<ScrollProgress
+  color="secondary"
+  size="sm"
+  position="bottom"
+  class="border select-none h-body border-primary-300"
+  client:load
+>
+  <div
+    class="sticky top-0 z-20 flex items-center justify-between gap-x-2 px-2 pr-2 border-r min-h-12 border-primary-300 bg-background shadow-primary-300 shadow-[0_1px_0_0]"
+  >
+    <DatabaseSearch
+      client:load
+      id="mob-search"
+      endpoint="/api/rathena/item-search"
+      baseURL="/item"
+      placeholder="Search Item"
+      maxResults={10}
+      inputClass="w-full h-8 md:w-72 focus:placeholder:opacity-0"
+    />
+    <Pagination
+      targetURL="item"
+      pageData={pageControl}
+      currentPage={currentPage}
+      color="secondary"
+      size="sm"
+      client:load
+    />
+  </div>
+  <table class="w-full text-sm text-center">
+    <thead
+      class="sticky top-12 text-sm uppercase shadow-[0_1px_0_0] shadow-primary-300"
+    >
+      <tr class="z-20 divide-x h-7 divide-primary-300 bg-secondary-200 *:px-1">
+        <th class="w-32">ID</th>
+        <th class="w-auto md:w-[30rem]">Name</th>
+        <th class="hidden w-32 md:table-cell">Type</th>
+        <th class="hidden w-32 md:table-cell">Subtype</th>
+        <th class="hidden w-32 md:table-cell">Weight</th>
+        <th class="hidden w-32 md:table-cell">Buy</th>
+        <th class="hidden w-32 md:table-cell">Sell</th>
       </tr>
     </thead>
-    <tbody class="divide-y divide-primary-200">
+    <tbody class="font-medium divide-y divide-primary-300">
       {
-        pageData.items.map(item => (
-          <tr class="h-12 divide-x divide-primary-200">
-            <td><Image class="w-auto col-span-1 mx-auto max-h-6" src={`/images/item/${item.Image}.webp`} alt={`${item.Name}s`} width={24} height={24} /></td>
-            <td>{item.Id}</td>
-            <td class="text-secondary-600"><a href={`/item/${item.Id}`} target="_blank">{`${item.Name}${item.Slots ? ` [ ${item.Slots} ]` : ""}`}</a></td>
-            <td>{item.Type}</td>
-            <td class="hidden md:table-cell">{item.SubType || "None"}</td>
-            <td class="hidden md:table-cell">{item.Weight ? item.Weight / 10 : 0 }</td>
-            <td>{item.Buy || 0}</td>
-            <td>{item.Sell || 0}</td>
+        pageItems.map((item, index) => (
+          <tr class="divide-x h-10 divide-primary-300 *:px-1">
+            <td class="text-secondary-500">
+              <a href={`/item/${item.Id}`} target="_blank" class="w-full">
+                {item.Id}
+              </a>
+            </td>
+            <td class="h-full text-left text-secondary-500">
+              <a
+                href={`/item/${item.Id}`}
+                target="_blank"
+                class="grid items-center grid-cols-10"
+              >
+                <div class="content-center col-span-2 p-1 border border-dashed rounded-lg size-8 border-secondary-400 justify-self-center">
+                  <Image
+                    class="w-auto mx-auto max-h-6"
+                    src={`/images/item/${item.Image}.webp`}
+                    alt={`${item.Name}s`}
+                    width={24}
+                    height={24}
+                    onerror="this.onerror=null; this.src='/images/item/사과.webp'"
+                    loading={index > 12 ? "lazy" : "eager"}
+                  />
+                </div>
+                <span class="col-span-8">{`${item.Name}${item.Slots ? ` [ ${item.Slots} ]` : ""}`}</span>
+              </a>
+            </td>
+            <td class="hidden md:table-cell">{getItemTypeDisplay(item.Type)}</td>
+            <td class="hidden md:table-cell">{item.SubType}</td>
+            <td class="hidden md:table-cell">
+              {item.Weight ? item.Weight / 10 : 0}
+            </td>
+            <td class="hidden md:table-cell">{item.Buy}</td>
+            <td class="hidden md:table-cell">{item.Sell}</td>
           </tr>
-        ),
-        )
+        ))
       }
     </tbody>
   </table>
-</div>
+</ScrollProgress>

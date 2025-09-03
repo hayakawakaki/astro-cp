@@ -7,7 +7,7 @@ import { paginatedItemDB } from "@/rathena";
 const { serverName } = Astro.locals;
 
 const currentPage = Number(Astro.url.searchParams.get("page")) || 1;
-const pageData = await paginatedItemDB({ page: currentPage, pageSize: 30 });
+const pageData = await paginatedItemDB({ page: currentPage, pageSize: 100 });
 ---
 
 <title>{serverName} \ Item Database</title>
