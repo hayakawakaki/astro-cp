@@ -212,10 +212,12 @@ const dotClasses = computed(() => {
     stone: "bg-stone-500",
   };
 
-  return clsx(
-    dotSizes[props.size],
-    dotColors[dotColor],
-    "rounded-full flex-shrink-0",
+  return twMerge(
+    clsx(
+      "rounded-full flex-shrink-0",
+      dotSizes[props.size],
+      dotColors[dotColor],
+    ),
   );
 });
 

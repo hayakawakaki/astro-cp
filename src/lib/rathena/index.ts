@@ -1,7 +1,8 @@
 export {
   getItemInfo,
+  getItemTypeDisplay,
   getMobInfo,
-  getTradeRestrictions,
+  getTradeRestrictionsDisplay,
   paginatedItemDB,
   paginatedMobDB,
   searchItem,
@@ -27,6 +28,7 @@ export type {
   ItemNoUse,
   ItemStack,
   ItemTrade,
+  ItemType,
   ItemYAMLReturn,
   JobNames,
   JobType,

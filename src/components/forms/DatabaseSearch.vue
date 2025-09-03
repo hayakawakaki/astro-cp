@@ -104,6 +104,7 @@ watch(inputData, debounce);
   <div ref="dropdownRef" class="relative">
     <label
       class="flex items-center px-2 border rounded-md gap-x-2 border-primary-200 focus-within:outline-1 focus-within:outline-primary-300"
+      :class="inputClass"
     >
       <span class="sr-only">{{ props.placeholder }}</span>
       <svg
@@ -126,8 +127,7 @@ watch(inputData, debounce);
       <input
         ref="inputRef"
         v-model="inputData"
-        class="text-sm font-medium bg-transparent outline-none md:text-base placeholder:font-medium"
-        :class="inputClass"
+        class="text-sm font-medium bg-transparent outline-none size-full md:text-base placeholder:font-medium"
         type="search"
         :placeholder="props.placeholder"
         @keydown="onKeydown"
