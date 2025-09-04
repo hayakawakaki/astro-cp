@@ -48,19 +48,35 @@ export async function _createItemDatabase(): Promise<ItemDatabase> {
 
   yamlDB.forEach((item) => {
     const result = yaml.load(item) as ItemYAMLReturn;
-    // Add default values and description/image from iteminfo
-    const processed = result.Body.map((value) => {
-      const itemId = _setItemDefaults(value);
-      const clientInfo = itemInfoMap.get(itemId.Id);
 
-      if (clientInfo) {
-        itemId.Description = _processDescription(clientInfo.identifiedDescriptionName) || ["No description added."];
-        itemId.Image = clientInfo.identifiedResourceName.toLowerCase() || "NoImage";
+    result.Body.forEach((value) => {
+      const index = itemDB.findIndex(item => item.Id === value.Id);
+
+      if (index >= 0) {
+        const data = { ...itemDB[index], ..._setItemDefaults(value) };
+
+        // Lua value won't change, no need to fetch it again
+        itemDB[index] = data as ItemDatabaseFormat;
       }
+      else {
+        const itemId = _setItemDefaults(value);
+        const clientInfo = itemInfoMap.get(itemId.Id);
 
-      return itemId;
+        // Add default values and description/image from iteminfo
+        if (clientInfo) {
+          itemId.Description = _processDescription(clientInfo.identifiedDescriptionName);
+          itemId.Image = clientInfo.identifiedResourceName.toLowerCase();
+          itemId.ClientName = clientInfo.identifiedDisplayName;
+        }
+        else {
+          itemId.Description = ["No description."];
+          itemId.Image = "unknown";
+          itemId.ClientName = itemId.Name;
+        }
+
+        itemDB.push(itemId);
+      }
     });
-    itemDB.push(...processed);
   });
 
   // Need sort here for multiple yaml support and pagination
@@ -76,7 +92,7 @@ export async function _createItemDatabase(): Promise<ItemDatabase> {
   return _itemDB;
 }
 
-// = Helper for default values since defaults are handled in the rathena src
+// Helper for default values since defaults are handled in the rathena src
 function _setItemDefaults(item: ItemDatabaseFormat): ItemDatabaseFormat {
   const data = {
     ...item,
@@ -107,6 +123,11 @@ function _parseIteminfo(ast: luaparse.Chunk, targetMap: ItemInfoLUA) {
   table.fields.forEach((field) => {
     if (field.type === "TableKey") {
       const itemId = (field.key as luaparse.NumericLiteral).value;
+
+      // should return existing Id
+      if (targetMap.get(itemId))
+        return;
+
       const itemData: Partial<ItemInfoInput> = {};
 
       (field.value as luaparse.TableConstructorExpression).fields.forEach((prop) => {
@@ -114,7 +135,7 @@ function _parseIteminfo(ast: luaparse.Chunk, targetMap: ItemInfoLUA) {
           const propName = (prop.key as luaparse.Identifier).name;
 
           // don't need other data aside from these two
-          if (propName === "identifiedResourceName" || propName === "identifiedDescriptionName") {
+          if (propName === "identifiedResourceName" || propName === "identifiedDescriptionName" || propName === "identifiedDisplayName") {
             const propValue = prop.value;
 
             switch (propValue.type) {
@@ -152,8 +173,17 @@ function _parseIteminfo(ast: luaparse.Chunk, targetMap: ItemInfoLUA) {
 
 function _processDescription(set: string[]) {
   const patterns = [
-    { pattern: /\^([0-9A-F]{6})(.*?)\^000000/gi, replacement: "<span style='color: #$1'>$2</span>" },
-    { pattern: /\^000000/g, replacement: "" },
+    { pattern: /\^([0-9A-F]{6})(.*?)\^000000/gi, replacement: "<span style='color: #$1'>$2</span>" }, // Add client's color styling
+    { pattern: /<TIPBOX>(.*?)<INFO>(.*?)<\/INFO><\/TIPBOX>/g, replacement: "<span class='text-blue-400'>$1</span>" }, // Remove tipbox
+    { // Replace <navi> to be a copyable text when clicked
+      pattern: /<NAVI>(.*?)<INFO>([^,]*),([^,]*),([^,]*),([^,]*),([^,]*),([^,]*),([^<]*)<\/INFO><\/NAVI>/g,
+      replacement:
+        "<span class='text-nowrap cursor-pointer underline underline-offset-2 text-blue-400'"
+        + "x-data @click=\"$store.util.copyText('/navi $2 $3/$4')\">"
+        + "</svg>"
+        + "$1"
+        + "</span>",
+    },
   ];
 
   const coloredDescription = set.map((item) => {

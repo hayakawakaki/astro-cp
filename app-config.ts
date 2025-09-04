@@ -24,7 +24,7 @@ const appConfig: AppConfig = {
   },
   // Database
   ItemDatabaseYML: ["item_db_equip.yml", "item_db_etc.yml", "item_db_usable.yml"],
-  ItemDatabaseLUA: ["iteminfo.lua", "iteminfo_KR.lua"],
+  ItemDatabaseLUA: ["iteminfo.lua", "iteminfo_KR.lua", "iteminfo_US.lua"],
   MobDatabaseYML: ["mob_db.yml"],
 
   // UI Related
