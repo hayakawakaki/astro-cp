@@ -7,4 +7,9 @@ export default () => {
     signIn,
     signOut,
   });
+  Alpine.store("util", {
+    copyText: (text: string) => {
+      navigator.clipboard.writeText(text);
+    },
+  });
 };

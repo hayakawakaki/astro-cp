@@ -1,6 +1,7 @@
 ---
 import ItemPage from "~theme/pages/item/Page";
 
+import Title from "@/components/Title.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { paginatedItemDB } from "@/rathena";
 
@@ -13,5 +14,6 @@ const pageData = await paginatedItemDB({ page: currentPage, pageSize: 100 });
 <title>{serverName} \ Item Database</title>
 
 <BaseLayout>
+  <Title label="Item Database Page" />
   <ItemPage pageData={pageData} currentPage={currentPage} />
 </BaseLayout>

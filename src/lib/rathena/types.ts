@@ -185,6 +185,7 @@ type ItemDatabaseInput = {
   Script?: string;
   EquipScript?: string;
   UnEquipScript?: string;
+  ClientName?: string;
   Image?: string;
   Description?: string[];
 };
