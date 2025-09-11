@@ -4,13 +4,14 @@ import { Image } from "astro:assets";
 import type { MobDatabaseFormat } from "@/rathena";
 
 import { getItemInfo } from "@/rathena";
-import BentoGrid from "@/ui/bento/BentoGrid.astro";
-import BentoItem from "@/ui/bento/BentoItem.astro";
 
 const { mobData } = Astro.props;
 const data = mobData as MobDatabaseFormat;
 
 function attackDisplay(): `${number}~${number}` {
+  if (!data.Attack && !data.Attack2) {
+    return "1~1";
+  }
   if (!data.Attack2) {
     return `${data.Attack}~${data.Attack}`;
   }
@@ -21,22 +22,25 @@ function attackDisplay(): `${number}~${number}` {
 }
 
 const tableData: { label: string; output: string }[] = [
-  { label: "Size", output: data.Size },
-  { label: "Race", output: data.Race },
-  { label: "Element", output: `${data.Element} ${data.ElementLevel}` },
-  { label: "Level", output: String(data.Level) },
-  { label: "HP", output: String(data.Hp.toLocaleString("en")) },
-  { label: "Speed", output: String(data.WalkSpeed) },
-  { label: "STR", output: String(data.Str) },
-  { label: "AGI", output: String(data.Agi) },
-  { label: "VIT", output: String(data.Vit) },
-  { label: "INT", output: String(data.Int) },
-  { label: "DEX", output: String(data.Dex) },
-  { label: "LUK", output: String(data.Luk) },
+  { label: "Size", output: data.Size || "Medium" },
+  { label: "Race", output: data.Race || "Formless" },
+  {
+    label: "Element",
+    output: `${data.Element || "Neutral"} ${data.ElementLevel || 1}`,
+  },
+  { label: "Level", output: String(data.Level || 1) },
+  { label: "HP", output: String(data.Hp?.toLocaleString("en") || 1) },
+  { label: "Speed", output: String(data.WalkSpeed || 1000) },
+  { label: "STR", output: String(data.Str || 1) },
+  { label: "AGI", output: String(data.Agi || 1) },
+  { label: "VIT", output: String(data.Vit || 1) },
+  { label: "INT", output: String(data.Int || 1) },
+  { label: "DEX", output: String(data.Dex || 1) },
+  { label: "LUK", output: String(data.Luk || 1) },
   { label: "Attack", output: attackDisplay() },
   {
     label: "DEF/MDEF",
-    output: `${String(data.Defense)}/${String(data.MagicDefense)}`,
+    output: `${String(data.Defense || 1)}/${String(data.MagicDefense || 1)}`,
   },
   {
     label: "RES/MRES",
@@ -45,59 +49,82 @@ const tableData: { label: string; output: string }[] = [
 ];
 ---
 
-<BentoGrid class="auto-rows-[var(--spacing-bento)] gap-2 lg:gap-4">
-  <BentoItem
-    baseCol={12}
-    baseRow={5}
-    class="flex flex-col items-center h-full py-2 font-medium border gap-y-2 border-primary-200 rounded-2xl md:row-span-5 md:col-span-6 md:col-start-4 lg:col-start-3 lg:row-span-4 lg:col-span-4"
-  >
-    <Image
-      width={250}
-      height={250}
-      src=`/images/mob/${data.AegisName}.avif`
-      alt={`${data.Name}'s Sprite`}
-      class="flex-1 object-scale-down w-auto min-h-0"
-    />
-    <h2 class="text-xl text-nowrap">{data.Name}</h2>
-  </BentoItem>
-  <BentoItem
-    baseCol={12}
-    baseRow={7}
-    class="relative flex flex-col items-center h-full py-2 mt-4 font-medium border lg:mt-0 lg:py-4 rounded-2xl border-primary-200 md:row-span-5 lg:row-span-6 lg:col-span-4 lg:col-start-3"
-  >
-    <h3
-      class="absolute content-center text-xl -translate-x-1/2 bg-background left-1/2 -top-3.5"
+<div class="space-x-4 space-y-8 lg:columns-3">
+  <section class="w-full break-inside-avoid">
+    <h3 class="text-3xl font-medium text-center">- Mob Sprite -</h3>
+    <div
+      class="flex flex-col items-center justify-center border h-80 gap-y-v-space border-primary-300 rounded-2xl"
     >
-      Status
-    </h3>
-    <section class="grid w-full h-full grid-cols-3 grid-rows-5">
-      {
-        tableData.map(item => (
-          <div class="content-center col-span-1 text-center border-b border-primary-200 [&:nth-last-child(-n+3)]:border-b-0">
-            <p class="text-sm font-normal text-zinc-500">{item.label}</p>
-            <p>{item.output}</p>
-          </div>
-        ))
-      }
-    </section>
-  </BentoItem>
-  {
-    data.Drops && (
-      <BentoItem
-        baseCol={12}
-        class="w-full h-full py-2 mt-4 font-medium lg:col-span-3 lg:row-start-1 lg:col-start-7 lg:mt-0 lg:py-0"
-      >
-        <section class="relative grid justify-between grid-cols-1 auto-rows-[2.5rem] md:auto-rows-[2.5rem] border rounded-2xl border-primary-200 [&>div]:not-last:border-b [&>div]:not-last:border-b-primary-200">
-          <h3 class="absolute content-center text-xl -translate-x-1/2 left-1/2 -top-3.5 bg-background border-0">
-            Drops
-          </h3>
-          {data.Drops.map(async (drop) => {
+      <Image
+        width={250}
+        height={250}
+        src=`/images/mob/${data.AegisName}.avif`
+        alt={`${data.Name}'s Sprite`}
+        class="object-scale-down w-auto max-h-32"
+      />
+      <h2 class="text-xl font-medium text-center text-nowrap">{data.Name}</h2>
+    </div>
+  </section>
+  <section class="w-full break-inside-avoid">
+    <h3 class="text-3xl font-medium text-center">- Mob Stats -</h3>
+    <div class="border border-primary-300 rounded-2xl">
+      <table class="w-full text-center">
+        <tr class="h-16 py-1 border-b border-primary-300">
+          {
+            tableData.slice(0, 3).map(item => (
+              <td class="size-24">
+                <p class="text-sm font-normal text-zinc-500">{item.label}</p>
+                <p class="font-medium">{item.output}</p>
+              </td>
+            ))
+          }
+        </tr>
+        <tr class="border-b border-primary-300">
+          {
+            tableData.slice(3, 6).map(item => (
+              <td class="size-24">
+                <p class="text-sm font-normal text-zinc-500">{item.label}</p>
+                <p class="font-medium">{item.output}</p>
+              </td>
+            ))
+          }
+        </tr>
+        <tr class="border-b border-primary-300">
+          {
+            tableData.slice(6, 9).map(item => (
+              <td class="size-24">
+                <p class="text-sm font-normal text-zinc-500">{item.label}</p>
+                <p class="font-medium">{item.output}</p>
+              </td>
+            ))
+          }
+        </tr>
+        <tr>
+          {
+            tableData.slice(9, 12).map(item => (
+              <td class="size-24">
+                <p class="text-sm font-normal text-zinc-500">{item.label}</p>
+                <p class="font-medium">{item.output}</p>
+              </td>
+            ))
+          }
+        </tr>
+      </table>
+    </div>
+  </section>
+  <section class="w-full break-inside-avoid">
+    <h3 class="text-3xl font-medium text-center">- Mob Drops -</h3>
+    {
+      data.Drops
+    ? (
+        <div class="border divide-y border-primary-300 rounded-2xl divide-primary-300">
+          {data.Drops?.map(async (drop) => {
             const name = await getItemInfo(drop.Item, "Name");
             const image = await getItemInfo(drop.Item, "Image");
-            const url = await getItemInfo(drop.Item, "AegisName");
+            const url = await getItemInfo(drop.Item, "Id");
             return (
-              <div class="flex items-center justify-between row-span-1 px-2">
-                <a class="flex items-center h-full gap-2" href={`/item/${url}`}>
+              <div class="flex items-center justify-between px-2 py-2">
+                <a class="h-full" href={`/item/${url}`} target="_blank">
                   <Image
                     class="inline-block object-none max-h-6"
                     width={24}
@@ -106,7 +133,7 @@ const tableData: { label: string; output: string }[] = [
                     alt={`${name}'s Sprite'`}
                     loading="lazy"
                   />
-                  <span class="text-sm font-medium break-words text-blue-700">
+                  <span class="text-sm font-medium text-blue-700 break-words">
                     {name}
                   </span>
                 </a>
@@ -114,8 +141,11 @@ const tableData: { label: string; output: string }[] = [
               </div>
             );
           })}
-        </section>
-      </BentoItem>
-    )
-  }
-</BentoGrid>
+        </div>
+      )
+    : (
+        <p class="py-1 text-xl text-center text-red-500">No drops.</p>
+      )
+    }
+  </section>
+</div>
