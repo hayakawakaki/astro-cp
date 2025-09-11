@@ -121,10 +121,10 @@ const tableData: { label: string; output: string }[] = [
           {data.Drops?.map(async (drop) => {
             const name = await getItemInfo(drop.Item, "Name");
             const image = await getItemInfo(drop.Item, "Image");
-            const url = await getItemInfo(drop.Item, "AegisName");
+            const url = await getItemInfo(drop.Item, "Id");
             return (
               <div class="flex items-center justify-between px-2 py-2">
-                <a class="h-full" href={`/item/${url}`}>
+                <a class="h-full" href={`/item/${url}`} target="_blank">
                   <Image
                     class="inline-block object-none max-h-6"
                     width={24}
