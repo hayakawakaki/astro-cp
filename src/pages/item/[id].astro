@@ -1,8 +1,8 @@
 ---
-import ItemInfo from "~theme/components/ItemInfo";
+import ItemIdPage from "~theme/pages/item/Id";
 
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { getItemInfo, getTradeRestrictions, whoDrops } from "@/lib/rathena";
+import { getItemInfo, getTradeRestrictionsDisplay, whoDrops } from "@/lib/rathena";
 
 const { serverName } = Astro.locals;
 const { id } = Astro.params;
@@ -14,13 +14,13 @@ if (!itemData) {
     statusText: "This item ID doesn't exist.",
   });
 }
-const tradeRestrictions = getTradeRestrictions(itemData.Trade);
+const tradeRestrictions = getTradeRestrictionsDisplay(itemData.Trade);
 const dropData = await whoDrops(itemData.Id);
 ---
 
 
-<title>{serverName} \ Item Database \ {itemData.Name}</title>
+<title>{serverName} \ Item \ {itemData.Name}</title>
 
 <BaseLayout>
-  <ItemInfo itemData={itemData} tradeRestriction={tradeRestrictions} dropData={dropData} />
+  <ItemIdPage itemData={itemData} tradeRestriction={tradeRestrictions} dropData={dropData} />
 </BaseLayout>

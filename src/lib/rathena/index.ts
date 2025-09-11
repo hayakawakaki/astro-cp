@@ -1,10 +1,14 @@
 export {
+  getItemData,
   getItemInfo,
+  getItemKeys,
+  getItemTypeDisplay,
   getMobInfo,
-  getTradeRestrictions,
+  getTradeRestrictionsDisplay,
   paginatedItemDB,
   paginatedMobDB,
-  searchMobs,
+  searchItem,
+  searchMob,
   whoDrops,
 } from "./db-utils";
 export { serverStatus } from "./server-status";
@@ -26,6 +30,7 @@ export type {
   ItemNoUse,
   ItemStack,
   ItemTrade,
+  ItemType,
   ItemYAMLReturn,
   JobNames,
   JobType,
@@ -45,6 +50,7 @@ export type {
   OnlineCount,
   RaceGroupRecord,
   ServerStatusReturn,
+  TradeDisplay,
   WeaponSubType,
   WhoDropFormat,
 } from "./types";
