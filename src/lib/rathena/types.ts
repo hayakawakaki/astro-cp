@@ -154,6 +154,19 @@ export type ItemTrade = {
   NoAuction?: boolean;
 };
 
+export type TradeDisplay = Record<keyof Omit<ItemTrade, "Override">, string>;
+
+type ItemEquipment = {
+  EquipLevelMin?: number;
+  EquipLevelMax?: number;
+  Slots?: number;
+  Refineable?: boolean;
+  Gradable?: boolean;
+  Attack?: number;
+  MagicAttack?: number;
+  Defense?: number;
+};
+
 type ItemDatabaseInput = {
   Id: number;
   AegisName: string;
@@ -161,20 +174,9 @@ type ItemDatabaseInput = {
   Buy?: number;
   Sell?: number;
   Weight?: number;
-  Attack?: number;
-  MagicAttack?: number;
-  Defense?: number;
-  Range?: number;
-  Slots?: number;
   Jobs?: JobType | JobType[];
   Classes?: ClassType | ClassType[];
   Gender?: GenderType;
-  Locations?: LocationType | LocationType[];
-  WeaponLevel?: number;
-  EquipLevelMin?: number;
-  EquipLevelMax?: number;
-  Refineable?: boolean;
-  Gradable?: boolean;
   View?: number;
   AliasName?: string;
   Flags?: ItemFlags;
@@ -204,11 +206,42 @@ export type ItemType
    | "ShadowGear"
    | "Cash";
 
+type WeaponFormat
+  = ItemDatabaseInput
+    & ItemEquipment
+    & {
+      Type: "Weapon";
+      SubType: WeaponSubType;
+      WeaponLevel: 1 | 2 | 3 | 4 | 5;
+      Range: number;
+      Locations: Extract<LocationType, "Right_Hand" | "Left_Hand" | "Both_Hand">;
+    };
+
+type ArmorFormat
+  = ItemDatabaseInput
+    & ItemEquipment
+    & {
+      Type: "Armor";
+      SubType: "None";
+      ArmorLevel: 1 | 2;
+      Locations: Exclude<LocationType, "Right_Hand" | "Both_Hand" | "Ammo">;
+    };
+
+type CardFormat
+  = ItemDatabaseInput
+    & {
+      Type: "Card";
+      SubType: CardSubType;
+      Location: LocationType;
+    };
+
 export type ItemDatabaseFormat
-  = | (ItemDatabaseInput & { Type: "Weapon"; SubType: WeaponSubType })
+  = | WeaponFormat
+    | ArmorFormat
+    | CardFormat
     | (ItemDatabaseInput & { Type: "Ammo"; SubType: AmmoSubType })
-    | (ItemDatabaseInput & { Type: "Card"; SubType?: CardSubType })
-    | (ItemDatabaseInput & { Type: "Healing" | "Usable" | "Etc" | "Armor" | "PetEgg" | "PetArmor" | "DelayConsume" | "ShadowGear" | "Cash"; SubType: "None" });
+    | (ItemDatabaseInput & { Type: "Usable"; SubType?: "None"; EquipLevelMin: number })
+    | (ItemDatabaseInput & { Type: "Healing" | "Etc" | "PetEgg" | "PetArmor" | "DelayConsume" | "ShadowGear" | "Cash"; SubType: "None" });
 
 export type ItemYAMLReturn = {
   Body: ItemDatabaseFormat[];

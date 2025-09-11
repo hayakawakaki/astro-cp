@@ -2,6 +2,7 @@
 import type { ItemDatabaseFormat, WhoDropFormat } from "@/rathena";
 
 import ItemCard from "@/components/rathena/ItemCard.vue";
+import { getItemData, getMobInfo } from "@/rathena";
 
 type Props = {
   itemData: ItemDatabaseFormat;
@@ -10,23 +11,82 @@ type Props = {
 };
 
 const { itemData, dropData } = Astro.props;
+
+const data = getItemData(itemData);
+
+const mobList = dropData && Array.from(dropData);
 ---
 
-<title>Item Database - {itemData.Name}</title>
-
-<div class="grid h-full grid-cols-6 grid-rows-6 gap-4 ">
-  <div class="col-span-4">
-  <ItemCard itemData={itemData} client:load />
-  </div>
-  <div class="col-span-2 row-span-6 border border-black">
-    {itemData.Description?.map(item => <p set:html={item} />)}
-  </div>
-  <div class="flex flex-col col-span-4 row-span-5 border border-black">
+<div class="md:columns-2 xl:columns-3 space-y-8 space-x-4">
+  <section class="space-y-2 break-inside-avoid">
+    <h3 class="text-3xl font-medium text-center">- Item Data -</h3>
+    <table class="w-full border text-center border-primary-300">
+      <tbody>
+        {
+          data.map(item => (
+            <tr>
+              <th class="border w-[10ch] md:w-[16ch] h-12 border-primary-300 py-1 text-sm">
+                {item.label}
+              </th>
+              <td class="border border-primary-300 py-1">
+                {!Array.isArray(item.value)
+              ? (
+                  item.value
+                )
+              : (
+                  <div class="flex flex-col justify-center items-center">
+                    {item.value.map(od => (
+                      <span>{od}</span>
+                    ))}
+                  </div>
+                )}
+              </td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </section>
+  <section
+    class="space-y-1 text-center break-inside-avoid xl:break-before-column"
+  >
+    <h3 class="text-3xl font-medium text-center">- Drop Data -</h3>
     {
-      dropData
-      && Array.from(dropData)
-          .slice(0, 10)
-          .map(item => <span>{item.mobId}</span>)
+      mobList.length > 0
+      ? (
+        <table class="w-full border border-primary-300 min-h-12">
+          <tbody>
+            {mobList
+              .sort((a, b) => b.dropRate - a.dropRate)
+              .slice(0, 20)
+              .map(drop => (
+                <tr class="text-sm lg:text-base">
+                  <th class="border border-primary-300 h-12">
+                    <a
+                      class="grid grid-cols-8 gap-x-2 items-center"
+                      href={`/mob/${drop.mobId}`}
+                    >
+                      <span class="col-span-2">{drop.mobId}</span>
+                      <span class="col-span-6 text-left self-center text-blue-700 px-1">
+                        {getMobInfo(drop.mobId, "Name")}
+                      </span>
+                    </a>
+                  </th>
+                  <td class="border border-primary-300 min-w-[8ch]">
+                    {drop.dropRate.toFixed(2)}%
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
+      )
+    : (
+        <p class="py-1 text-xl text-red-500">No monster drops this item.</p>
+      )
     }
-  </div>
+  </section>
+  <section class="space-y-1 break-inside-avoid break-before-column">
+    <h3 class="text-3xl font-medium text-center">- Client Data -</h3>
+    <ItemCard itemData={itemData} class="mx-auto" />
+  </section>
 </div>

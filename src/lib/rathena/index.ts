@@ -1,5 +1,7 @@
 export {
+  getItemData,
   getItemInfo,
+  getItemKeys,
   getItemTypeDisplay,
   getMobInfo,
   getTradeRestrictionsDisplay,
@@ -48,6 +50,7 @@ export type {
   OnlineCount,
   RaceGroupRecord,
   ServerStatusReturn,
+  TradeDisplay,
   WeaponSubType,
   WhoDropFormat,
 } from "./types";

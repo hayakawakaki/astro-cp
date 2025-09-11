@@ -53,7 +53,7 @@ const { items, ...pageControl } = pageData;
       class="sticky top-12 text-sm uppercase shadow-[0_1px_0_0] shadow-primary-300"
     >
       <tr class="z-20 divide-x h-7 divide-primary-300 bg-secondary-200 *:px-1">
-        <th class="w-32">ID</th>
+        <th class="w-20 md:w-32">ID</th>
         <th class="w-auto md:w-[30rem]">Name</th>
         <th class="hidden w-32 md:table-cell">Type</th>
         <th class="hidden w-32 md:table-cell">Subtype</th>
@@ -65,26 +65,26 @@ const { items, ...pageControl } = pageData;
     <tbody class="font-medium divide-y divide-primary-300">
       {
         pageItems.map((item, index) => (
-          <tr class="divide-x h-10 divide-primary-300 *:px-1">
+          <tr class="divide-x h-14 lg:h-10 divide-primary-300 *:px-1">
             <td class="text-secondary-500">
               <a href={`/item/${item.Id}`} target="_blank" class="w-full">
                 {item.Id}
               </a>
             </td>
-            <td class="h-full text-left text-secondary-500">
+            <td class="h-full p-1 text-left text-secondary-500">
               <a
                 href={`/item/${item.Id}`}
                 target="_blank"
                 class="grid items-center grid-cols-10"
               >
-                <div class="content-center col-span-2 p-1 border border-dashed rounded-lg size-8 border-secondary-400 justify-self-center">
+                <div class="inline-grid col-span-2 p-1 border border-dashed rounded-lg size-8 border-secondary-400 justify-self-center place-items-center">
                   <Image
-                    class="w-auto mx-auto max-h-6"
+                    class="w-auto max-h-6"
                     src={`/images/item/${item.Image}.webp`}
                     alt={`${item.Name}s`}
                     width={24}
                     height={24}
-                    onerror="this.onerror=null; this.src='/images/item/사과.webp'"
+                    onerror="this.onerror=null; this.src='/images/item/unknown.webp'"
                     loading={index > 12 ? "lazy" : "eager"}
                   />
                 </div>

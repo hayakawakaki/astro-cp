@@ -7,15 +7,16 @@ import type {
   ItemDatabaseFormat,
   ItemInfoInput,
   ItemInfoLUA,
-  ItemTrade,
   ItemType,
   ItemYAMLReturn,
+  TradeDisplay,
 } from "@/rathena";
 
 import config from "~/app-config";
 
 import { _loadItemDB, _loadItemInfo } from "./db-loader";
 
+// TODO
 const _itemDB: ItemDatabase = new Map(); // Item Id lookup
 const _itemNameDB: ItemDatabase = new Map(); // Item name lookup
 const _dropDatabase: DropDatabase = new Map(); // For reverse lookup
@@ -96,20 +97,48 @@ export async function _createItemDatabase(): Promise<ItemDatabase> {
 function _setItemDefaults(item: ItemDatabaseFormat): ItemDatabaseFormat {
   const data = {
     ...item,
-    Buy: item.Buy ?? 0,
+    Buy: item.Buy || 0,
     Sell: item.Sell || (item.Buy && Math.floor(item.Buy / 2)) || 0,
-    Weight: item.Weight || 0,
+    Weight: item.Weight ? item.Weight / 10 : 0,
     Trade: item.Trade,
   };
   switch (item.Type) {
     case "Weapon":
-      return { ...data, Type: "Weapon", SubType: item.SubType };
+      return {
+        ...data,
+        Type: "Weapon",
+        SubType: item.SubType || "1hAxe",
+        Range: item.Range || 1,
+        Slots: item.Slots || 0,
+        WeaponLevel: item.WeaponLevel || 1,
+        EquipLevelMin: item.EquipLevelMin || 1,
+        Refineable: item.Refineable || false,
+        Gradable: item.Gradable || false,
+        Locations: item.Locations || "Right_Hand",
+      };
+    case "Armor":
+      return {
+        ...data,
+        Type: "Armor",
+        SubType: "None",
+        Slots: item.Slots || 0,
+        ArmorLevel: item.ArmorLevel || 1,
+        EquipLevelMin: item.EquipLevelMin || 1,
+        Refineable: item.Refineable || false,
+        Gradable: item.Gradable || false,
+        Locations: item.Locations || "Armor",
+      };
     case "Ammo":
-      return { ...data, Type: "Ammo", SubType: item.SubType };
+      return { ...data, Type: "Ammo", SubType: item.SubType || "Arrow" };
     case "Card":
-      return { ...data, Type: "Card", SubType: item.SubType };
+      return { ...data, Type: "Card", SubType: item.SubType || "Normal", Location: item.Location };
     default:
-      return { ...data, Type: item.Type, SubType: "None" };
+      if (item.Type !== "Usable") {
+        return { ...data, Type: item.Type, SubType: "None" };
+      }
+      else {
+        return { ...data, Type: item.Type, SubType: "None", EquipLevelMin: item.EquipLevelMin || 1 };
+      }
   }
 }
 
@@ -174,7 +203,7 @@ function _parseIteminfo(ast: luaparse.Chunk, targetMap: ItemInfoLUA) {
 function _processDescription(set: string[]) {
   const patterns = [
     { pattern: /\^([0-9A-F]{6})(.*?)\^000000/gi, replacement: "<span style='color: #$1'>$2</span>" }, // Add client's color styling
-    { pattern: /<TIPBOX>(.*?)<INFO>(.*?)<\/INFO><\/TIPBOX>/g, replacement: "<span class='text-blue-400'>$1</span>" }, // Remove tipbox
+    { pattern: /<TIPBOX>(.*?)<INFO>(.*?)<\/INFO><\/TIPBOX>/g, replacement: "<span class='text-blue-400'>$1</span>" }, // Remove tipbox, TODO: add tipbox support
     { // Replace <navi> to be a copyable text when clicked
       pattern: /<NAVI>(.*?)<INFO>([^,]*),([^,]*),([^,]*),([^,]*),([^,]*),([^,]*),([^<]*)<\/INFO><\/NAVI>/g,
       replacement:
@@ -216,7 +245,7 @@ export async function _addDrop(item: number | string, mobId: number, dropRate: n
   if (!itemId || !_itemDB.has(itemId))
     return;
 
-  _dropDatabase.get(itemId)?.add({ mobId, dropRate });
+  _dropDatabase.get(itemId)?.add({ mobId, dropRate: dropRate / 10000 * 100 });
 }
 
 // Just pass the value and check if it's string or number to know which cache to get data from
@@ -239,7 +268,7 @@ export async function _getDropDatabase(): Promise<DropDatabase> {
   return _dropDatabase;
 }
 
-export const _tradeDisplay: Record<keyof Omit<ItemTrade, "Override">, string> = {
+export const _tradeDisplay: TradeDisplay = {
   NoDrop: "No Drop",
   NoTrade: "No Trade",
   TradePartner: "Trade Partner",
