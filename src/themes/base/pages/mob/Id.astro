@@ -24,7 +24,10 @@ function attackDisplay(): `${number}~${number}` {
 const tableData: { label: string; output: string }[] = [
   { label: "Size", output: data.Size || "Medium" },
   { label: "Race", output: data.Race || "Formless" },
-  { label: "Element", output: `${data.Element || "Neutral"} ${data.ElementLevel || 1}` },
+  {
+    label: "Element",
+    output: `${data.Element || "Neutral"} ${data.ElementLevel || 1}`,
+  },
   { label: "Level", output: String(data.Level || 1) },
   { label: "HP", output: String(data.Hp?.toLocaleString("en") || 1) },
   { label: "Speed", output: String(data.WalkSpeed || 1000) },
@@ -49,7 +52,9 @@ const tableData: { label: string; output: string }[] = [
 <div class="space-x-4 space-y-8 lg:columns-3">
   <section class="w-full break-inside-avoid">
     <h3 class="text-3xl font-medium text-center">- Mob Sprite -</h3>
-    <div class="flex flex-col items-center justify-center border h-80 gap-y-v-space border-primary-300 rounded-2xl">
+    <div
+      class="flex flex-col items-center justify-center border h-80 gap-y-v-space border-primary-300 rounded-2xl"
+    >
       <Image
         width={250}
         height={250}
@@ -65,76 +70,82 @@ const tableData: { label: string; output: string }[] = [
     <div class="border border-primary-300 rounded-2xl">
       <table class="w-full text-center">
         <tr class="h-16 py-1 border-b border-primary-300">
-        {
-          tableData.slice(0, 3).map(item => (
-            <td class="size-24">
-              <p class="text-sm font-normal text-zinc-500">{item.label}</p>
-              <p class="font-medium">{item.output}</p>
-            </td>
-          ))
-        }
+          {
+            tableData.slice(0, 3).map(item => (
+              <td class="size-24">
+                <p class="text-sm font-normal text-zinc-500">{item.label}</p>
+                <p class="font-medium">{item.output}</p>
+              </td>
+            ))
+          }
         </tr>
         <tr class="border-b border-primary-300">
-        {
-          tableData.slice(3, 6).map(item => (
-            <td class="size-24">
-              <p class="text-sm font-normal text-zinc-500">{item.label}</p>
-              <p class="font-medium">{item.output}</p>
-            </td>
-          ))
-        }
+          {
+            tableData.slice(3, 6).map(item => (
+              <td class="size-24">
+                <p class="text-sm font-normal text-zinc-500">{item.label}</p>
+                <p class="font-medium">{item.output}</p>
+              </td>
+            ))
+          }
         </tr>
         <tr class="border-b border-primary-300">
-        {
-          tableData.slice(6, 9).map(item => (
-            <td class="size-24">
-              <p class="text-sm font-normal text-zinc-500">{item.label}</p>
-              <p class="font-medium">{item.output}</p>
-            </td>
-          ))
-        }
+          {
+            tableData.slice(6, 9).map(item => (
+              <td class="size-24">
+                <p class="text-sm font-normal text-zinc-500">{item.label}</p>
+                <p class="font-medium">{item.output}</p>
+              </td>
+            ))
+          }
         </tr>
         <tr>
-        {
-          tableData.slice(9, 12).map(item => (
-            <td class="size-24">
-              <p class="text-sm font-normal text-zinc-500">{item.label}</p>
-              <p class="font-medium">{item.output}</p>
-            </td>
-          ))
-        }
+          {
+            tableData.slice(9, 12).map(item => (
+              <td class="size-24">
+                <p class="text-sm font-normal text-zinc-500">{item.label}</p>
+                <p class="font-medium">{item.output}</p>
+              </td>
+            ))
+          }
         </tr>
       </table>
     </div>
   </section>
   <section class="w-full break-inside-avoid">
     <h3 class="text-3xl font-medium text-center">- Mob Drops -</h3>
-    <div class="border divide-y border-primary-300 rounded-2xl divide-primary-300">
     {
-      data.Drops?.map(async (drop) => {
-        const name = await getItemInfo(drop.Item, "Name");
-        const image = await getItemInfo(drop.Item, "Image");
-        const url = await getItemInfo(drop.Item, "AegisName");
-        return (
-          <div class="flex items-center justify-between px-2 py-2">
-            <a class="h-full" href={`/item/${url}`}>
-              <Image
-                class="inline-block object-none max-h-6"
-                width={24}
-                height={24}
-                src={`/images/item/${image}.webp`}
-                alt={`${name}'s Sprite'`}
-                loading="lazy"
-              />
-              <span class="text-sm font-medium text-blue-700 break-words">
-                {name}
-              </span>
-            </a>
-            <p>{`${((drop.Rate / 10000) * 100).toFixed(2)}%`}</p>
-          </div>
-        );
-      })
+      data.Drops
+? (
+        <div class="border divide-y border-primary-300 rounded-2xl divide-primary-300">
+          {data.Drops?.map(async (drop) => {
+            const name = await getItemInfo(drop.Item, "Name");
+            const image = await getItemInfo(drop.Item, "Image");
+            const url = await getItemInfo(drop.Item, "AegisName");
+            return (
+              <div class="flex items-center justify-between px-2 py-2">
+                <a class="h-full" href={`/item/${url}`}>
+                  <Image
+                    class="inline-block object-none max-h-6"
+                    width={24}
+                    height={24}
+                    src={`/images/item/${image}.webp`}
+                    alt={`${name}'s Sprite'`}
+                    loading="lazy"
+                  />
+                  <span class="text-sm font-medium text-blue-700 break-words">
+                    {name}
+                  </span>
+                </a>
+                <p>{`${((drop.Rate / 10000) * 100).toFixed(2)}%`}</p>
+              </div>
+            );
+          })}
+        </div>
+      )
+: (
+        <p class="py-1 text-xl text-center text-red-500">No drops.</p>
+      )
     }
-    </div>
   </section>
 </div>
