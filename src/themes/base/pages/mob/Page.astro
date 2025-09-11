@@ -5,8 +5,8 @@ import type { MobDatabaseFormat } from "@/rathena";
 import type { PaginationReturn } from "@/utils/pagination";
 
 import DatabaseSearch from "@/components/forms/DatabaseSearch.vue";
-import VSpace from "@/components/VSpace.astro";
-import Button from "@/ui/Button.vue";
+import Pagination from "@/ui/Pagination.vue";
+import ScrollProgress from "@/ui/ScrollProgress.vue";
 
 type Props = {
   pageData: PaginationReturn<MobDatabaseFormat>;
@@ -15,13 +15,32 @@ type Props = {
 
 const { pageData, currentPage } = Astro.props;
 
-const maxPage = pageData.totalPages;
+const pageItems = pageData.items;
+const { items, ...pageControl } = pageData;
+
+function attackDisplay(atk1: number, atk2?: number): `${number}~${number}` {
+  if (!atk1 && !atk2) {
+    return `${atk1}~${atk1}`;
+  }
+  if (!atk2) {
+    return `${atk1}~${atk1}`;
+  }
+  if (atk1 > atk2) {
+    return `${atk2}~${atk1}`;
+  }
+  return `${atk1}~${atk2}`;
+}
 ---
 
-<VSpace />
-<div class="grid grid-cols-20">
-  <aside
-    class="col-span-20 w-full flex justify-between items-center gap-2 px-2 py-1 sticky top-[var(--spacing-header-padding)] left-0 h-14 bg-background border z-10 border-primary-200"
+<ScrollProgress
+  color="secondary"
+  size="sm"
+  position="bottom"
+  class="border select-none h-body border-primary-300"
+  client:load
+>
+  <div
+    class="sticky top-0 z-20 flex items-center justify-between gap-x-2 px-2 pr-2 border-r min-h-12 border-primary-300 bg-background shadow-primary-300 shadow-[0_1px_0_0]"
   >
     <DatabaseSearch
       client:load
@@ -30,104 +49,93 @@ const maxPage = pageData.totalPages;
       baseURL="/mob"
       placeholder="Search Mob"
       maxResults={10}
-      inputClass="w-24 h-10 md:w-60 focus:placeholder:opacity-0"
+      inputClass="w-full h-8 md:w-72 focus:placeholder:opacity-0"
     />
-
-    <div class="flex items-center h-10 grow md:grow-0" x-data="{value: ''}">
-      <Button
-        class="w-10 cursor-pointer rounded-tl-md rounded-bl-md"
-        variant="solid"
-        color="secondary"
-        disabled={!pageData.hasPrev}
-        @click="window.location.href = '/mob?page=' + (currentPage - 1)"
-      >
-        <span>«</span>
-      </Button>
-
-      <label
-        class="h-full border border-primary-200 max-w-32 focus-within:border-primary-300"
-      >
-        <span class="sr-only">Current Page</span>
-        <input
-          type="number"
-          name="pageInput"
-          x-model="value"
-          class="content-center w-full h-full text-sm font-medium text-center bg-transparent placeholder:text-font focus:placeholder:opacity-0 outline-0"
-          placeholder={`${currentPage}`}
-          @keyup="if (parseInt(value) > maxPage) value = maxPage"
-          @keyup.enter="window.location.href = '/mob?page=' + value"
-        />
-      </label>
-      <Button
-        class="w-10 cursor-pointer rounded-tr-md rounded-br-md"
-        variant="solid"
-        color="secondary"
-        disabled={!pageData.hasNext}
-        @click="window.location.href = '/mob?page=' + (currentPage + 1)"
-      >
-        <span>»</span>
-      </Button>
-    </div>
-  </aside>
-  <div
-    class="sticky left-0 text-md md:text-lg font-medium top-[calc(var(--spacing-header-padding)+3.5rem)] grid h-8 border border-t-0 text-center grid-cols-subgrid col-span-20 bg-background border-primary-200 *:border-primary-200 *:not-last:border-r *:h-full *:content-center"
-  >
-    <div class="col-span-6 text-center md:col-span-4">Sprite</div>
-    <p class="hidden text-center md:block md:col-span-2">Mob ID</p>
-    <div class="col-span-9 text-center md:col-span-4">Name</div>
-    <div class="hidden text-center md:block md:col-span-2">Size</div>
-    <div class="hidden text-center md:block md:col-span-3">Race</div>
-    <div class="hidden text-center md:block md:col-span-2">Element</div>
-    <div class="col-span-5 text-center md:col-span-3">Details</div>
+    <Pagination
+      targetURL="mob"
+      pageData={pageControl}
+      currentPage={currentPage}
+      color="secondary"
+      size="sm"
+      client:load
+    />
   </div>
-  <div
-    class="grid auto-rows-[5rem] *:content-center *:text-center *:not-last:border-r grid-cols-subgrid col-span-20 border border-b-0 border-primary-200 text-sm font-medium border-t-0 *:border-b *:border-primary-200"
-  >
-    {
-      pageData.items.map((item, index) => (
-        <Fragment>
-          <div class="h-full col-span-6 md:col-span-4 border-primary-200">
-            <Image
-              width={250}
-              height={250}
-              src={`/images/mob/${item.AegisName}.avif`}
-              alt={`${item.Name} Sprite`}
-              loading={index > 5 ? "lazy" : "eager"}
-              class="object-contain w-auto max-h-full mx-auto"
-              onerror="this.onerror=null; this.src='/images/mob/poring.avif'"
-            />
-          </div>
-          <p class="hidden md:block md:col-span-2 border-primary-200">
-            {item.Id}
-          </p>
-          <p class="h-full col-span-9 text-center md:col-span-4 border-primary-200">
-            {item.Name}
-          </p>
-          <p class="hidden md:block md:col-span-2 border-primary-200">
-            {item.Size}
-          </p>
-          <p class="hidden md:block md:col-span-3 border-primary-200">
-            {item.Race}
-          </p>
-          <p class="hidden md:block md:col-span-2 border-primary-200">{`${item.Element} ${item.ElementLevel}`}</p>
-          <div class="grid w-full col-span-5 md:col-span-3 place-items-center">
-            <Button
-              variant="solid"
-              color="secondary"
-              class="h-12 text-center rounded-lg w-18 md:h-12 md:w-24 lg:w-32"
-              href={`/mob/${item.Id}`}
-              target="_blank"
-            >
-              View Details
-            </Button>
-          </div>
-        </Fragment>
-      ))
-    }
-  </div>
-</div>
+  <table class="w-full text-sm text-center">
+    <thead
+      class="sticky top-12 text-sm uppercase shadow-[0_1px_0_0] shadow-primary-300"
+    >
+      <tr class="z-20 divide-x h-7 divide-primary-300 bg-secondary-200 *:px-1">
+        <th class="w-18">Sprite</th>
+        <th class="w-18">Mob ID</th>
+        <th class="w-auto md:w-[30rem]">Name</th>
+        <th class="hidden w-20 md:table-cell">Size</th>
+        <th class="hidden w-20 md:table-cell">Element</th>
+        <th class="hidden w-20 md:table-cell">Level</th>
+        <th class="hidden w-30 md:table-cell">HP</th>
+        <th class="hidden w-30 lg:table-cell">Attack</th>
+        <th class="hidden w-20 lg:table-cell">DEF/MDEF</th>
+        <th class="hidden w-20 lg:table-cell">Speed</th>
+        <th class="hidden w-20 lg:table-cell">Range</th>
+        <th class="hidden w-16 xl:table-cell">STR</th>
+        <th class="hidden w-16 xl:table-cell">AGI</th>
+        <th class="hidden w-16 xl:table-cell">VIT</th>
+        <th class="hidden w-16 xl:table-cell">INT</th>
+        <th class="hidden w-16 xl:table-cell">DEX</th>
+        <th class="hidden w-16 xl:table-cell">LUK</th>
 
-<script is:inline define:vars={{ maxPage, currentPage }}>
-  window.maxPage = maxPage;
-  window.currentPage = currentPage;
-</script>
+      </tr>
+    </thead>
+    <tbody class="font-medium divide-y divide-primary-300">
+      {
+        pageItems.map((item, index) => (
+          <tr class="divide-x divide-primary-300 *:px-1">
+            <td class="text-secondary-500 py-1">
+              <div class="h-16 content-center">
+                <Image
+                  width={64}
+                  height={64}
+                  src={`/images/mob/${item.AegisName}.avif`}
+                  alt={`${item.Name} Sprite`}
+                  loading={index > 5 ? "lazy" : "eager"}
+                  class="object-contain w-auto max-h-full mx-auto"
+                  onerror="this.onerror=null; this.src='/images/mob/poring.avif'"
+                />
+              </div>
+            </td>
+            <td class=" text-secondary-500">
+              <a
+                href={`/mob/${item.Id}`}
+                target="_blank"
+              >
+                <span>{item.Id}</span>
+              </a>
+            </td>
+            <td class=" text-secondary-500">
+              <a
+                href={`/mob/${item.Id}`}
+                target="_blank"
+              >
+                <span>{item.Name}</span>
+              </a>
+            </td>
+            <td class="hidden md:table-cell">{item.Size || "Medium"}</td>
+            <td class="hidden md:table-cell">{`${item.Element || "Neutral"} ${item.ElementLevel || 1}`}</td>
+            <td class="hidden md:table-cell">{item.Level || 1}</td>
+            <td class="hidden md:table-cell">{item.Hp?.toLocaleString() || 10}</td>
+            <td class="hidden lg:table-cell">{attackDisplay(item.Attack || 0, item?.Attack2 || 0)}</td>
+            <td class="hidden lg:table-cell">{`${item.Defense || 0}/${item.MagicDefense || 0}`}</td>
+            <td class="hidden lg:table-cell">{item.WalkSpeed || 1}</td>
+            <td class="hidden lg:table-cell">{item.AttackRange || 1}</td>
+            <td class="hidden xl:table-cell">{item.Str || 1}</td>
+            <td class="hidden xl:table-cell">{item.Agi || 1}</td>
+            <td class="hidden xl:table-cell">{item.Vit || 1}</td>
+            <td class="hidden xl:table-cell">{item.Int || 1}</td>
+            <td class="hidden xl:table-cell">{item.Dex || 1}</td>
+            <td class="hidden xl:table-cell">{item.Luk || 1}</td>
+
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+</ScrollProgress>
