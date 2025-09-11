@@ -116,7 +116,7 @@ const tableData: { label: string; output: string }[] = [
     <h3 class="text-3xl font-medium text-center">- Mob Drops -</h3>
     {
       data.Drops
-? (
+    ? (
         <div class="border divide-y border-primary-300 rounded-2xl divide-primary-300">
           {data.Drops?.map(async (drop) => {
             const name = await getItemInfo(drop.Item, "Name");
@@ -143,7 +143,7 @@ const tableData: { label: string; output: string }[] = [
           })}
         </div>
       )
-: (
+    : (
         <p class="py-1 text-xl text-center text-red-500">No drops.</p>
       )
     }
