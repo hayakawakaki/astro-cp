@@ -456,6 +456,7 @@ export type ServerStatusReturn = {
   loginStatus: boolean;
   charStatus: boolean;
   mapStatus: boolean;
+  webStatus: boolean;
 } & OnlineCount;
 
 export type GetDBInfo<T> = keyof T | undefined;

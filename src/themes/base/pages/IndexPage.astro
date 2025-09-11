@@ -11,6 +11,7 @@ const {
   loginStatus,
   charStatus,
   mapStatus,
+  webStatus,
   totalOnlineCount,
   onlineCount,
   vendorCount,
@@ -19,6 +20,13 @@ const {
 } = await serverStatus.getStatus();
 
 const { serverName, user } = Astro.locals;
+
+const serverStat = [
+  { label: "Map", status: mapStatus },
+  { label: "Char", status: charStatus },
+  { label: "Login", status: loginStatus },
+  { label: "Web", status: webStatus },
+];
 ---
 
 <BentoGrid class="min-h-body h-full auto-rows-[var(--spacing-bento)] gap-2">
@@ -98,39 +106,22 @@ const { serverName, user } = Astro.locals;
     />
     <h3 class="text-xl font-semibold">Server Status</h3>
     <div class="flex items-center justify-center gap-x-2">
-      <Badge
-        variant="outline"
-        color="gray"
-        size="md"
-        class="font-semibold rounded-2xl"
-        dot
-        dotColor={mapStatus ? "green" : "red"}
-        dotPosition="left"
-      >
-        Map
-      </Badge>
-      <Badge
-        variant="outline"
-        color="gray"
-        size="md"
-        class="font-semibold rounded-2xl"
-        dot
-        dotColor={charStatus ? "green" : "red"}
-        dotPosition="left"
-      >
-        Char
-      </Badge>
-      <Badge
-        variant="outline"
-        color="gray"
-        size="md"
-        class="font-semibold rounded-2xl"
-        dot
-        dotColor={loginStatus ? "green" : "red"}
-        dotPosition="left"
-      >
-        Login
-      </Badge>
+      {
+        serverStat.map(server => (
+          <Badge
+            variant="outline"
+            color="gray"
+            size="md"
+            class="font-semibold rounded-2xl"
+            dot
+            dotColor={server.status ? "green" : "red"}
+            dotPosition="left"
+          >
+          {server.label}
+          </Badge>
+        ),
+        )
+      }
     </div>
   </BentoItem>
   <BentoItem
@@ -149,18 +140,20 @@ const { serverName, user } = Astro.locals;
     <h3 class="text-xl font-semibold">Online Counter</h3>
     <div class="flex flex-wrap items-center justify-center gap-2">
       <Badge variant="subtle" size="lg" color="green" class="font-semibold">
-        Total : {totalOnlineCount}</Badge
-      >
+        Total : {totalOnlineCount}
+      </Badge>
       <Badge variant="subtle" size="lg" color="yellow" class="font-semibold">
-        Gepard : {uniqueCount}</Badge
-      >
+        Gepard : {uniqueCount}
+      </Badge>
       <Badge variant="subtle" size="lg" color="indigo" class="font-semibold">
-        Online : {onlineCount}</Badge
-      >
+        Online : {onlineCount}
+      </Badge>
       <Badge variant="subtle" size="lg" color="purple" class="font-semibold">
-        Vendor : {vendorCount}</Badge
-      >
-      <Badge size="lg" color="red" class="font-semibold">GM : {gmCount}</Badge>
+        Vendor : {vendorCount}
+      </Badge>
+      <Badge size="lg" color="red" class="font-semibold">
+        GM : {gmCount}
+      </Badge>
     </div>
   </BentoItem>
 </BentoGrid>

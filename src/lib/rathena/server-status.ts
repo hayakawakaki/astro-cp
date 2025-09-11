@@ -176,10 +176,11 @@ async function _getOnlineCount(isMapOnline: boolean): Promise<OnlineCount> {
 }
 
 async function _getServerStatus(): Promise<ServerStatusReturn> {
-  const [loginStatus, charStatus, mapStatus] = await Promise.all([
+  const [loginStatus, charStatus, mapStatus, webStatus] = await Promise.all([
     _checkServerPort(Number(env.LOGIN_PORT)),
     _checkServerPort(Number(env.CHAR_PORT)),
     _checkServerPort(Number(env.MAP_PORT)),
+    _checkServerPort(Number(env.WEB_PORT)),
   ]);
 
   const counts = await _getOnlineCount(mapStatus);
@@ -188,6 +189,7 @@ async function _getServerStatus(): Promise<ServerStatusReturn> {
     loginStatus,
     charStatus,
     mapStatus,
+    webStatus,
     ...counts,
   };
 }

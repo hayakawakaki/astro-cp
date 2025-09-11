@@ -8,6 +8,7 @@ const EnvSchema = z.object({
   MAP_PORT: z.string(),
   CHAR_PORT: z.string(),
   LOGIN_PORT: z.string(),
+  WEB_PORT: z.string(),
   DB_HOST: z.string().default("127.0.0.1"),
   DB_USERNAME: z.string(),
   DB_PASSWORD: z.string(),
