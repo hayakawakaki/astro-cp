@@ -3,7 +3,7 @@ import { expand } from "dotenv-expand";
 import { z, ZodError } from "zod";
 
 const EnvSchema = z.object({
-  // Host Schemas
+  // App Required Schemas
   SERVER_HOST: z.string().default("127.0.0.1"),
   MAP_PORT: z.string(),
   CHAR_PORT: z.string(),
@@ -13,7 +13,7 @@ const EnvSchema = z.object({
   DB_USERNAME: z.string(),
   DB_PASSWORD: z.string(),
   DB_NAME: z.string(),
-
+  ADMIN_ID: z.string(),
   // Optional Schemas
   DISCORD_CLIENT_ID: z.string().optional(),
   DISCORD_CLIENT_SECRET: z.string().optional(),
