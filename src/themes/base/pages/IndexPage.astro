@@ -3,8 +3,6 @@ import { Image } from "astro:assets";
 
 import { serverStatus } from "@/lib/rathena";
 import Badge from "@/ui/Badge.vue";
-import BentoGrid from "@/ui/bento/BentoGrid.astro";
-import BentoItem from "@/ui/bento/BentoItem.astro";
 import Button from "@/ui/Button.vue";
 
 const {
@@ -29,11 +27,9 @@ const serverStat = [
 ];
 ---
 
-<BentoGrid class="min-h-body h-full auto-rows-[var(--spacing-bento)] gap-2">
-  <BentoItem
-    baseCol={12}
-    baseRow={8}
-    class="relative *:z-0 overflow-hidden flex flex-col items-center justify-center gap-4 p-4 text-center bg-primary-100 rounded-3xl lg:col-span-8 lg:row-span-6"
+<div class="grid grid-cols-12 min-h-body h-full auto-rows-[var(--spacing-bento)] gap-2">
+  <section
+    class="col-span-12 row-span-8 relative *:z-0 overflow-hidden flex flex-col items-center justify-center gap-4 p-4 text-center bg-primary-100 rounded-3xl lg:col-span-8 lg:row-span-6"
   >
     <Image
       src="/logo.png"
@@ -66,7 +62,7 @@ const serverStat = [
       >
       {
         user?.id
-? (
+      ? (
           <Button
             href="/account"
             variant="solid"
@@ -77,7 +73,7 @@ const serverStat = [
             View Account
           </Button>
         )
-: (
+      : (
           <Button
             href="/login"
             variant="solid"
@@ -90,11 +86,9 @@ const serverStat = [
         )
       }
     </div>
-  </BentoItem>
-  <BentoItem
-    baseCol={12}
-    baseRow={3}
-    class="relative flex flex-col items-center justify-center p-4 overflow-hidden text-center *:z-0 bg-secondary-100 rounded-3xl gap-y-2 lg:col-span-4 lg:row-span-3 lg:justify-center"
+  </section>
+  <section
+    class="col-span-12 row-span-3 relative flex flex-col items-center justify-center p-4 overflow-hidden text-center *:z-0 bg-secondary-100 rounded-3xl gap-y-2 lg:col-span-4 lg:row-span-3 lg:justify-center"
   >
     <Image
       src="/background/check.webp"
@@ -123,11 +117,9 @@ const serverStat = [
         )
       }
     </div>
-  </BentoItem>
-  <BentoItem
-    baseCol={12}
-    baseRow={4}
-    class="relative overflow-hidden flex flex-col items-center *:z-0 justify-center p-4 text-center bg-accent-50 rounded-3xl gap-y-2 lg:col-span-4 lg:row-span-3 lg:justify-center"
+  </section>
+  <section
+    class="col-span-12 row-span-4 relative overflow-hidden flex flex-col items-center *:z-0 justify-center p-4 text-center bg-accent-50 rounded-3xl gap-y-2 lg:col-span-4 lg:row-span-3 lg:justify-center"
   >
     <Image
       src="/background/online.webp"
@@ -155,5 +147,5 @@ const serverStat = [
         GM : {gmCount}
       </Badge>
     </div>
-  </BentoItem>
-</BentoGrid>
+  </section>
+</div>
