@@ -1,5 +1,15 @@
 ---
 import AccountPage from "~theme/pages/AccountPage";
+
+import Title from "@/components/Title.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+const { serverName } = Astro.locals;
 ---
 
-<AccountPage />
+<title>{serverName} \ Account</title>
+
+<BaseLayout>
+  <Title label="Account Page" />
+  <AccountPage />
+</BaseLayout>
