@@ -10,7 +10,8 @@
       "@/rathena": ["./src/lib/rathena"],
       "@/ui/*": ["./src/components/ui/*"],
       "~/*": ["./*"]
-    }
+    },
+    "strict": true
   },
   "include": [
     ".astro/types.d.ts",

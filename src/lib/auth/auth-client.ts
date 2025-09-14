@@ -54,4 +54,6 @@ async function PromotetoUser(userId: string) {
   });
 }
 
+export type User = typeof authClient.$Infer.Session.user;
+export type Session = typeof authClient.$Infer.Session.session;
 export { promoteToAdmin, promoteToModerator, PromotetoUser, signIn, signOut };
