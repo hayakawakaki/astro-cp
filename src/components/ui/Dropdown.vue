@@ -12,10 +12,11 @@ type Props = {
   divide?: boolean;
 };
 
-const props = withDefaults(defineProps<Props>(), {
-  arrow: false,
-  divide: false,
-});
+const {
+  arrow = false,
+  divide = false,
+  ...props
+} = defineProps<Props>();
 
 const open = ref(false);
 const dropdownRef = ref<HTMLElement>();

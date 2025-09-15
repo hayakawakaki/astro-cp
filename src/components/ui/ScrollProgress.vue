@@ -14,11 +14,12 @@ type ScrollProgress = {
   position?: "top" | "bottom";
 };
 
-const props = withDefaults(defineProps<ScrollProgress>(), {
-  color: "green",
-  size: "md",
-  position: "top",
-});
+const {
+  color = "green",
+  size = "md",
+  position = "top",
+  ...props
+} = defineProps<ScrollProgress>();
 
 const scrollContainer = useTemplateRef("scrollContainer");
 
@@ -41,7 +42,7 @@ const scrollProgress = computed(() => {
 
 const progressBarClass = computed(() => {
   const base = "fixed left-0 transition-width duration-200 ease-out z-90";
-  const position = props.position === "top" ? "top-0" : "bottom-0";
+  const pbPosition = position === "top" ? "top-0" : "bottom-0";
 
   const sizes = {
     xs: "h-1",
@@ -82,9 +83,9 @@ const progressBarClass = computed(() => {
   return twMerge(
     clsx(
       base,
-      sizes[props.size],
-      colors[props.color],
-      position,
+      sizes[size],
+      colors[color],
+      pbPosition,
     ),
   );
 });

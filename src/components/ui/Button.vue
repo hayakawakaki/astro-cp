@@ -11,10 +11,9 @@ type ButtonBase = {
   size?: UISize;
   class?: string;
   id?: string;
-  [key: string]: any;
 };
 
-type Button
+type ButtonProps
   = ButtonBase & {
     href?: string;
     action?: never;
@@ -33,11 +32,12 @@ defineOptions({
   inheritAttrs: false,
 });
 
-const props = withDefaults(defineProps<Button>(), {
-  variant: "solid",
-  color: "primary",
-  size: "md",
-});
+const {
+  variant = "solid",
+  color = "primary",
+  size = "md",
+  ...props
+} = defineProps<ButtonProps>();
 
 const attrs = useAttrs();
 
@@ -166,8 +166,8 @@ const buttonClasses = computed(() => {
   return twMerge(
     clsx(
       base,
-      sizes[props.size],
-      variants[props.variant][props.color],
+      sizes[size],
+      variants[variant][color],
       props.class,
     ),
   );

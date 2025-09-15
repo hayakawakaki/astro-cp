@@ -31,15 +31,16 @@ defineOptions({
   inheritAttrs: false,
 });
 
-const props = withDefaults(defineProps<Badge>(), {
-  variant: "solid",
-  size: "md",
-  color: "gray",
-  dot: false,
-} as const satisfies Partial<Badge>);
+const {
+  variant = "solid",
+  size = "md",
+  color = "gray",
+  dot = false,
+  ...props
+} = defineProps<Badge>();
 
-const dotColor = props.dot ? props.dotColor : "green";
-const dotPosition = props.dot ? props.dotPosition : "left";
+const dotColor = props.dotColor || "green";
+const dotPosition = props.dotPosition || "left";
 
 const attrs = useAttrs();
 
@@ -168,8 +169,8 @@ const badgeClasses = computed(() => {
   return twMerge(
     clsx(
       base,
-      sizes[props.size],
-      variants[props.variant]?.[props.color],
+      sizes[size],
+      variants[variant][color],
       props.class,
     ),
   );
@@ -215,7 +216,7 @@ const dotClasses = computed(() => {
   return twMerge(
     clsx(
       "rounded-full flex-shrink-0",
-      dotSizes[props.size],
+      dotSizes[size],
       dotColors[dotColor],
     ),
   );
