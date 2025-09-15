@@ -5,11 +5,23 @@ import Title from "@/components/Title.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 
 const { serverName } = Astro.locals;
+
+const { user } = Astro.locals;
+
+if (!user) {
+  return new Response(null, {
+    status: 401,
+    statusText: "Unauthenticated user",
+    headers: {
+      location: "/login",
+    },
+  });
+}
 ---
 
 <title>{serverName} \ Account</title>
 
 <BaseLayout>
-  <Title label="Account Page" />
+  <Title label="Account Dashboard" />
   <AccountPage />
 </BaseLayout>

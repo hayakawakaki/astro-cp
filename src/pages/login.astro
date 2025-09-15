@@ -1,0 +1,15 @@
+---
+import LoginPage from "~theme/pages/LoginPage";
+
+import Title from "@/components/Title.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+const { serverName } = Astro.locals;
+---
+
+<title>{serverName} \ Account</title>
+
+<BaseLayout>
+  <Title label="Login Page" />
+  <LoginPage />
+</BaseLayout>
