@@ -40,7 +40,7 @@ catch (error) {
     });
     const err = new Error(errorMessage);
     err.stack = "";
-    throw e;
+    throw err;
   }
   else {
     console.error(error);
