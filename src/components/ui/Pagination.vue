@@ -17,11 +17,12 @@ type Pagination = {
   class?: string;
 };
 
-const props = withDefaults(defineProps<Pagination>(), {
-  color: "primary",
-  size: "md",
-  variant: "solid",
-});
+const {
+  color = "primary",
+  size = "md",
+  variant = "solid",
+  ...props
+} = defineProps<Pagination>();
 
 const sizes = {
   xs: "h-7",
@@ -53,7 +54,7 @@ function handleInput() {
       <span>«</span>
     </Button>
 
-    <label class="border border-primary-200 max-w-32 focus-within:border-primary-300" :class="sizes[props.size]">
+    <label class="border border-primary-200 max-w-32 focus-within:border-primary-300" :class="sizes[size]">
       <span class="sr-only">Current Page Number</span>
       <input
         v-model.number="pageInput"

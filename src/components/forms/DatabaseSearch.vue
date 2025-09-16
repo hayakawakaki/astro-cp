@@ -21,11 +21,12 @@ type Slots<T> = {
   display: (props: { item: T }) => VNode[];
 };
 
-const props = withDefaults(defineProps<SearchProps>(), {
-  placeholder: "Search",
-  minChars: 3,
-  maxResults: 5,
-});
+const {
+  placeholder = "Search",
+  minChars = 3,
+  maxResults = 5,
+  ...props
+} = defineProps<SearchProps>();
 
 defineSlots<Slots<T>>();
 
@@ -51,11 +52,11 @@ const debounce = useDebounceFn(async () => {
     return;
   }
 
-  if (inputData.value.length < props.minChars)
+  if (inputData.value.length < minChars)
     return;
 
   try {
-    const res = await fetch(`${props.endpoint}?q=${encodeURIComponent(inputData.value)}&limit=${props.maxResults}`);
+    const res = await fetch(`${props.endpoint}?q=${encodeURIComponent(inputData.value)}&limit=${maxResults}`);
     const data = await res.json();
     results.value = data;
   }
@@ -106,7 +107,7 @@ watch(inputData, debounce);
       class="flex items-center px-2 border rounded-md gap-x-2 border-primary-200 focus-within:outline-1 focus-within:outline-primary-300"
       :class="inputClass"
     >
-      <span class="sr-only">{{ props.placeholder }}</span>
+      <span class="sr-only">{{ placeholder }}</span>
       <svg
         class="h-4 opacity-50 cursor-pointer"
         xmlns="http://www.w3.org/2000/svg"
