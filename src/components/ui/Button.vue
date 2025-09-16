@@ -16,7 +16,6 @@ type ButtonBase = {
 type ButtonProps
   = ButtonBase & {
     href?: string;
-    action?: never;
     disabled?: never;
     type?: never;
     target?: "_blank" | "_self" | "_parent" | "_top";
