@@ -1,4 +1,5 @@
 import type { SocialProvider } from "better-auth/social-providers";
+import type { Component } from "vue";
 
 export type NavLink
 = | {
@@ -44,7 +45,7 @@ export type AppConfig = {
   ServerName: string;
   ServerInfo: ServerInfo;
   Theme: string;
-  AuthProviders: SocialProvider[];
+  AuthProviders: { provider: SocialProvider; icon: Component }[];
   NavItem: ConfigNav;
   ItemDatabaseYML: string[];
   ItemDatabaseLUA: string[];

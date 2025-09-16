@@ -1,9 +1,15 @@
 import type { AppConfig } from "@/types/app-config.types";
 
+import { DiscordIcon, GithubIcon, GoogleIcon } from "@/components/icons";
+
 const appConfig: AppConfig = {
   // General
   Theme: "base",
-  AuthProviders: ["discord"],
+  AuthProviders: [
+    { provider: "discord", icon: DiscordIcon },
+    { provider: "google", icon: GoogleIcon },
+    { provider: "github", icon: GithubIcon },
+  ],
   ServerName: "AtelierCP",
   ServerStatusOption: {
     vipUserLevel: 5,
