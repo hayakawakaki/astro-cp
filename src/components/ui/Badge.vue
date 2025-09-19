@@ -13,7 +13,6 @@ type BadgeBase = {
   color?: UIColor;
   class?: string;
   id?: string;
-  [key: string]: any;
 };
 
 type Badge = BadgeBase & {
