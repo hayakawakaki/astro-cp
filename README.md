@@ -1,47 +1,54 @@
-# Astro Starter Kit: Minimal
+# AstroCP
+
+A control panel for [rAthena](https://github.com/rathena/rathena), built on Typescript and Astro.
+
+> **This project is no longer active.** It was superseded by another CP project of mine [go-racp](https://github.com/hayakawakaki/go-racp).
+
+## Features
+
+- **Item and monster databases** with pagination, live search and detail pages, built by merging rAthena's YAML databases with the client's `iteminfo.lua`
+- **Server Telemetry** with port checks and online player counts with proper caching
+- **OAuth sign-in** (Discord, Google) with `user`, `moderator` and `admin` roles
+- **Master accounts**: one website login can own several in-game accounts
+- **Themes**: pages import views from `~theme/...`, resolved to the active theme with a fallback to `base`. Theme components can be written in any frontend library Astro supports (Vue, React, Svelte, Preact, Solid)
+- **Validated environment variables**: `.env` is parsed against a Zod schema at startup, and missing values fail fast with a list of what's absent
+- **One config file** (`app-config.ts`) for server name, rates, navigation, theme and data sources
+
+## Tech stack
+
+| Area | Tools |
+| :-- | :-- |
+| Framework | Astro 5 (SSR, Node adapter) |
+| UI | Vue 3, Alpine.js, VueUse |
+| Styling | Tailwind CSS 4 |
+| Language | TypeScript |
+| Database | MySQL with Drizzle ORM |
+| Auth | Better Auth |
+| Validation | Zod |
+| Data parsing | `js-yaml`, `luaparse` |
+| Testing | Vitest |
+| Tooling | pnpm, ESLint, Husky, GitHub Actions |
+
+## Getting started
+
+Requires Node.js 22, pnpm 10 and a MySQL database with the rAthena schema.
 
 ```sh
-pnpm create astro@latest -- --template minimal
+git clone https://github.com/hayakawakaki/astro-cp.git
+cd astro-cp
+pnpm install
+cp .env.example .env   # then fill in the values
+mysql -u <user> -p <database> < sql-files/cp-tables.sql
+pnpm dev
 ```
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/minimal)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/minimal)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/minimal/devcontainer.json)
+The site runs at `http://localhost:4321`.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Commands
 
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
-
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
-
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                | Action                                           |
-| :--------------------- | :----------------------------------------------- |
-| `pnpm install`         | Installs dependencies                            |
-| `pnpm dev`             | Starts local dev server at `localhost:4321`      |
-| `pnpm build`           | Build your production site to `./dist/`          |
-| `pnpm preview`         | Preview your build locally, before deploying     |
-| `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `pnpm astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+| Command | Action |
+| :-- | :-- |
+| `pnpm dev` | Start the dev server |
+| `pnpm build` | Build for production |
+| `pnpm lint` | Run ESLint |
+| `pnpm test` | Run the tests |
